@@ -1,0 +1,33 @@
+1. Open: C:\xampp\apache\conf\extra\httpd-vhosts.conf
+
+Add lines:
+<VirtualHost *:80>
+       DocumentRoot "C:/xampp/htdocs/"
+       ServerName localhost
+</VirtualHost>
+
+<VirtualHost *:80>
+       DocumentRoot "C:/xampp/htdocs/html/JAT/skullframework/_skull/"
+       ServerName skull.com
+</VirtualHost>
+<VirtualHost *:80>
+       DocumentRoot "C:/xampp/htdocs/html/JAT/skullframework/cms/"
+       ServerName cms.com
+</VirtualHost>
+
+2. Right click notepad and select Run as administrator then Ctrl + O to open C:\Windows\System32\drivers\etc\hosts
+
+Add lines:
+        127.0.0.1       skull.com
+        127.0.0.1       cms.com
+
+3. Restart Apache
+
+4. Open: C:\xampp\htdocs\html\JAT\skullframework\cms\.htaccess
+
+Find: RewriteRule (.*) - [E=build:v0.0.0]
+Edit: v0.0.0 Your choice of build to use.
+
+5. Open browser and visit cms.com
+
+6. If has errors check: C:\xampp\htdocs\html\JAT\skullframework\cms\v0.0.0\_spec\func\config.php

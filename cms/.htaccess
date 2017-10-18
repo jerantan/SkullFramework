@@ -1,0 +1,14 @@
+DirectoryIndex jtan.php
+
+RewriteEngine On
+RewriteRule (.*) - [E=build:v0.0.0]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*[^/])$ $1/ [L]
+
+RewriteCond %{REQUEST_FILENAME} !-f [OR]
+RewriteCond %{REQUEST_FILENAME} index.php
+RewriteRule ^(.*)$ %{ENV:build}/_spec/func/route.php?uri=$1
+
+php_value post_max_size 300M
+php_value upload_max_filesize 300M
