@@ -22,7 +22,7 @@ $config = array(
 								'main' 		=> 		'orange',
 								'font' 		=> 		'white',
 								'hove' 		=> 		'black',
-								'opac' 		=> 		'0.5'
+								'opac' 		=> 		'0.5' // 0.5 or 1
 							)
 );
 ?>

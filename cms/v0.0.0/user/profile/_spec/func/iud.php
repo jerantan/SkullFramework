@@ -10,7 +10,7 @@ switch($proc){
 		}
 	
 		$sql = new sql;
-		$sql->table = $table;
+		$sql->table = $this->module;
 		$sql->field_value = "name = '$name', username = '$username' $password, updated = '".date."'";
 		$sql->clause = "id = '$id'";
 		$sql->update();

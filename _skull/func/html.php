@@ -17,7 +17,7 @@ class html extends proc{
 				<div class="row no_margin">
 					<?php $this->clear(); ?>
 					
-					<form action="<?php $this->link('main'); ?>">
+					<form action="<?php $this->link('main/'); ?>">
 						<button type="submit" class="close">&times;</button>
 					</form>
 					
@@ -34,7 +34,7 @@ class html extends proc{
 					
 					<?php $this->hr(); ?>
 					
-					<form action="<?php $this->link('main'); ?>">
+					<form action="<?php $this->link('main/'); ?>">
 						<?php $this->button('submit', 'Close', 'btn-default float_right'); ?>
 					</form>
 					
@@ -740,7 +740,7 @@ class html extends proc{
 	function inject($widget){
 		$path = str_replace('index.php', '', $widget);
 		$full = $path.'plug/custom/theme';
-		$url = str_replace(root, domain.build.'/', $full);
+		$url = $this->url($full);
 		if(file_exists($full.'.js')){ ?><script> inject('<?php echo $url; ?>', 'js'); </script><?php }
 		if(file_exists($full.'.css')){ ?><script> inject('<?php echo $url; ?>', 'css'); </script><?php }
 	}

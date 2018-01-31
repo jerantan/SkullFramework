@@ -8,7 +8,7 @@
 define('request_uri', $_REQUEST['uri']);
 // Redirect If Index
 if(strpos(request_uri, 'index.php') !== false)
-header('location: /'.str_replace('index.php/', '', request_uri));
+header('location: '.domain.str_replace('index.php/', '', request_uri));
 // /Redirect If Index
 define('type', (!request_uri || file_exists(root.request_uri.'index.php'))? 1 : 0);
 $proc = (isset($_POST['proc']))? $_POST['proc'] : '';
@@ -226,7 +226,7 @@ class skull{
 	}
 	
 	function link($url){
-		echo '/'.$url;
+		echo domain.$url;
 	}
 	
 	function variable($label){
@@ -469,7 +469,7 @@ class skull{
 	}
 
 	function url($dir){
-		return str_replace(root, domain, $dir);
+		return str_replace(root, domain.build.'/', $dir);
 	}
 
 	function path($by, $table, $id){
@@ -544,7 +544,10 @@ class skull{
 		$path = "_spec/widg/$name/index.php";
 		$widget = root.$this->uri.$path;
 		$widget = (file_exists($widget))? $widget : root.$path;
-		if(file_exists($widget)) if($name != 'header') $this->inject($widget); require_once $widget;
+		if(file_exists($widget)){
+			if($name != 'header') $this->inject($widget);
+			require_once $widget;
+		}
 	}
 	/* ------------------------------------------------------------------------------------------------ */
 }

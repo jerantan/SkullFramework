@@ -56,6 +56,7 @@ function form1_open(table, request){
 		success: function(response){
 			$('.form1_title').html('Setup');
 			$('.form1_load_div').html(response);
+			form_height_load();
 		}
 	});
 }
@@ -96,6 +97,7 @@ function form2_open(table, request, act, form, variable, type, id = ''){
 		success: function(response){
 			$('.form2_title').html('Instant ('+ucfirst(table)+' Form)');
 			$('.form2_load_div').html(response);
+			form_height_load();
 		}
 	});
 }
@@ -135,6 +137,7 @@ function form3_open(table, request, act, form, variable, type, id = ''){
 		success: function(response){
 			$('.form3_title').html('Instant ('+ucfirst(table)+' Form)');
 			$('.form3_load_div').html(response);
+			form_height_load();
 		}
 	});
 }
@@ -187,20 +190,18 @@ function form_select(table, request, act, form, variable, type, id){
 }
 
 function form_height(form){
+	var div_point = 129; // Form start 114 added 15 for margin.
 	var div_height = $('.'+form+'_content_div').height();
 	var margin_top = 50;
 	var margin_bottom = 20;
-	var additional_height = 30;
-	var window_height = $(window).height() - (margin_top + margin_bottom);
+	var window_height = $(window).height() - (div_point + margin_bottom);
 	
-	if(div_height + additional_height < window_height){
+	if(div_height < window_height){
 		$('.'+form+'_content_div').removeAttr('style');
-		$('.'+form+'_main_back_div').attr('style', 'height: '+(div_height + (window_height - div_height) + (margin_top + margin_bottom))+'px');
-		$('.'+form+'_back_div').attr('style', 'height: '+(div_height + (window_height - div_height))+'px');
+		$('.'+form+'_back_div').attr('style', 'top: '+margin_top+'px; bottom: '+margin_bottom+'px');
 	} else {
-		$('.'+form+'_content_div').attr('style', 'position: absolute; top: 15px; right: 0; left: 0');
-		$('.'+form+'_main_back_div').attr('style', 'height: '+(div_height + additional_height)+'px');
-		$('.'+form+'_back_div').attr('style', 'height: '+(div_height + additional_height)+'px; top: 0');
+		$('.'+form+'_content_div').attr('style', 'position: absolute; top: 0; right: 0; left: 0');
+		$('.'+form+'_back_div').attr('style', 'top: 0; bottom: 0');
 	}
 }
 
