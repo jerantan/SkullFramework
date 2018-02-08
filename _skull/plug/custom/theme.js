@@ -2,7 +2,7 @@
 var email = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
 // Modal Form
-/* ------------------------------------------------------------------------------------------------ */	
+/* ------------------------------------------------------------------------------------------------ */
 function form_open(table, request, act, id = ''){
 	$('.form_main_div').show();
 	$('.form_main_div').attr('id', table+'_form_main_div');
@@ -293,6 +293,140 @@ function format(type, val){
 	return prefix+val+suffix;
 }
 
+// Upload
+/* ------------------------------------------------------------------------------------------------ */
+function file_remove(form, variable, id, type, animate){
+	file_arr[variable][id] = '';
+	if(animate){
+		$('#'+variable+'_prev_'+id).delay(js_delay).fadeOut(js_fadeout);
+		setTimeout(function(){
+			$('#'+variable+'_prev_'+id).remove();
+			if(type){
+				if(!file_arr[variable].filter(string).length && !uip_count[variable]){
+					$('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field.');
+					$('#'+form+'_form #'+variable+'_err_main_div').css('top', '22px');
+				}
+			}
+			form_height_load();
+		}, 3000);
+	} else {
+		$('#'+variable+'_prev_'+id).remove();
+		if(type){
+			if(!file_arr[variable].filter(string).length && !uip_count[variable]){
+				$('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field.');
+				$('#'+form+'_form #'+variable+'_err_main_div').css('top', '22px');
+			}
+		}
+		form_height_load();
+	}
+}
+
+function single_upload(_table, request, form, variable, _response_id, id, by){
+	$('#'+form+'_notice_main_div').html(js_notice_fine).delay().fadeIn();
+	table = _table;
+	response_id = _response_id;
+	file_upload(form, request, variable, id, by);
+}
+
+function multi_upload(){
+	for(n = 0; n < upload_var.length; n++){
+		variable = upload_var[n];
+		by = upload_by[variable];
+		for(count = 0; count < file_arr[variable].length; count++){
+			if(file_arr[variable][count]){
+				file_upload(form, request, variable, count, by);
+			}
+		}
+	}
+}
+
+function file_upload(form, request, variable, id, by){
+	if(!$.isArray(file_arr[variable][id])){ // This means if the object is not upload-in-progress
+		uip_count[variable]++; // This is upload-in-progress add count
+
+		$('#'+variable+'_prev_'+id+' .progress-bar').html('0%');
+		$('#'+variable+'_prev_'+id+' .progress-bar').css('width', '0%');
+		
+		$('#'+variable+'_prev_'+id+' .progress').show();
+		$('#'+variable+'_prev_'+id+' .cancel').show();
+		
+		file_form = new FormData();
+		file_form.append('proc', 'copy');
+		file_form.append('by', by);
+		file_form.append('table', table);
+		file_form.append('id', response_id);
+		file_form.append('file_upload', file_arr[variable][id]);
+
+		file_arr[variable][id] = new Array(file_arr[variable][id], 1); // This is to set the object as upload-in-progress
+		
+		$.ajax({
+			url: js_domain+request,
+			type: 'post',
+			data: file_form,
+			processData: false, // important
+			contentType: false, // important
+			xhr: function(){
+				myXhr = $.ajaxSettings.xhr();
+				if(myXhr.upload){
+					myXhr.upload.addEventListener('progress', function(e){
+						progress = Math.round((e.loaded * 100) / e.total);
+						$('#'+variable+'_prev_'+id+' .progress-bar').html(progress+'%');
+						$('#'+variable+'_prev_'+id+' .progress-bar').css('width', progress+'%');
+					});
+				}
+				return myXhr;
+			},												
+			beforeSend: function(upload){				
+				$('#'+variable+'_prev_'+id+' .cancel').click(function(){
+					upload.abort();
+
+					if($.isArray(file_arr[variable][id])){ // This is to prevent loading many times. Enchancement: remove the appended FormData() after upload.abort.
+						uip_count[variable]--; // This is upload-in-progress minus count
+
+						if(act == 'add'){
+							if(!uip_count[variable]){
+								success();
+							}
+						} else {
+							$('#'+form+'_notice_main_div').delay().fadeOut();
+						}
+
+						$('#'+variable+'_prev_'+id+' .progress').hide();
+						$('#'+variable+'_prev_'+id+' .cancel').hide();
+
+						file_arr[variable][id] = file_arr[variable][id][0]; // This is to set the object as not upload-in-progress
+					}
+				});
+			},
+			success: function(response){
+				file_added(form, request, variable, id, response.trim());
+			}
+		});
+	}
+}
+
+function file_added(form, request, variable, id, val){
+	uip_count[variable]--; // This is upload-in-progress minus count
+	file_arr[variable][id] = '';
+
+	$('#'+variable+'_prev_'+id+' .upload').hide();
+	$('#'+variable+'_prev_'+id+' .remove').html('Delete');
+	$('#'+variable+'_prev_'+id+' .remove').attr('onclick', "del_box('"+table+"', '"+request+"', '"+val+"', '"+response_id+"', 1)");
+
+	$('#'+variable+'_prev_'+id+' .progress').hide();
+	$('#'+variable+'_prev_'+id+' .cancel').hide();
+
+	$('#'+variable+'_prev_'+id).attr('id', val.replace('.', ''));
+
+	if(!uip_count[variable]){
+		if(act == 'add'){
+			success();
+		} else {
+			$('#'+form+'_notice_main_div').html(js_notice_ok).delay(js_delay).fadeOut(js_fadeout);
+		}
+	}
+}
+
 // Process
 /* ------------------------------------------------------------------------------------------------ */
 function load(table, request){
@@ -539,160 +673,3 @@ function inject(file, ext){
 	}
 	document.getElementsByTagName('head')[0].appendChild(element);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Upload
-	/* ------------------------------------------------------------------------------------------------ */
-	function file_remove(form, variable, id, type, animate){
-		file_arr[variable][id] = '';
-		if(animate){
-			$('#'+variable+'_prev_'+id).delay(js_delay).fadeOut(js_fadeout);
-			setTimeout(function(){
-				$('#'+variable+'_prev_'+id).remove();
-				if(type){
-					if(!file_arr[variable].filter(string).length && !uip_count[variable]){
-						$('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field.');
-						$('#'+form+'_form #'+variable+'_err_main_div').css('top', '22px');
-					}
-				}
-				form_height_load();
-			}, 3000);
-		} else {
-			$('#'+variable+'_prev_'+id).remove();
-			if(type){
-				if(!file_arr[variable].filter(string).length && !uip_count[variable]){
-					$('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field.');
-					$('#'+form+'_form #'+variable+'_err_main_div').css('top', '22px');
-				}
-			}
-			form_height_load();
-		}
-	}
-
-	function single_upload(_table, request, form, variable, _response_id, id, by){
-		$('#'+form+'_notice_main_div').html(js_notice_fine).delay().fadeIn();
-		table = _table;
-		response_id = _response_id;
-		file_upload(form, request, variable, id, by);
-	}
-
-	function multi_upload(){
-		for(n = 0; n < upload_var.length; n++){
-			variable = upload_var[n];
-			by = upload_by[variable];
-			for(count = 0; count < file_arr[variable].length; count++){
-				if(file_arr[variable][count]){
-					file_upload(form, request, variable, count, by);
-				}
-			}
-		}
-	}
-
-	function file_upload(form, request, variable, id, by){
-		if(!$.isArray(file_arr[variable][id])){ // This means if the object is not upload-in-progress
-			uip_count[variable]++; // This is upload-in-progress add count
-
-			$('#'+variable+'_prev_'+id+' .progress-bar').html('0%');
-			$('#'+variable+'_prev_'+id+' .progress-bar').css('width', '0%');
-			
-			$('#'+variable+'_prev_'+id+' .progress').show();
-			$('#'+variable+'_prev_'+id+' .cancel').show();
-			
-			file_form = new FormData();
-			file_form.append('proc', 'copy');
-			file_form.append('by', by);
-			file_form.append('table', table);
-			file_form.append('id', response_id);
-			file_form.append('file_upload', file_arr[variable][id]);
-
-			file_arr[variable][id] = new Array(file_arr[variable][id], 1); // This is to set the object as upload-in-progress
-			
-			$.ajax({
-				url: js_domain+request,
-				type: 'post',
-				data: file_form,
-				processData: false, // important
-				contentType: false, // important
-				xhr: function(){
-					myXhr = $.ajaxSettings.xhr();
-					if(myXhr.upload){
-						myXhr.upload.addEventListener('progress', function(e){
-							progress = Math.round((e.loaded * 100) / e.total);
-							$('#'+variable+'_prev_'+id+' .progress-bar').html(progress+'%');
-							$('#'+variable+'_prev_'+id+' .progress-bar').css('width', progress+'%');
-						});
-					}
-					return myXhr;
-				},												
-				beforeSend: function(upload){				
-					$('#'+variable+'_prev_'+id+' .cancel').click(function(){
-						upload.abort();
-
-						if($.isArray(file_arr[variable][id])){ // This is to prevent loading many times. Enchancement: remove the appended FormData() after upload.abort.
-							uip_count[variable]--; // This is upload-in-progress minus count
-
-							if(act == 'add'){
-								if(!uip_count[variable]){
-									success();
-								}
-							} else {
-								$('#'+form+'_notice_main_div').delay().fadeOut();
-							}
-
-							$('#'+variable+'_prev_'+id+' .progress').hide();
-							$('#'+variable+'_prev_'+id+' .cancel').hide();
-
-							file_arr[variable][id] = file_arr[variable][id][0]; // This is to set the object as not upload-in-progress
-						}
-					});
-				},
-				success: function(response){
-					file_added(form, request, variable, id, response.trim());
-				}
-			});
-		}
-	}
-
-	function file_added(form, request, variable, id, val){
-		uip_count[variable]--; // This is upload-in-progress minus count
-		file_arr[variable][id] = '';
-
-		$('#'+variable+'_prev_'+id+' .upload').hide();
-		$('#'+variable+'_prev_'+id+' .remove').html('Delete');
-		$('#'+variable+'_prev_'+id+' .remove').attr('onclick', "del_box('"+table+"', '"+request+"', '"+val+"', '"+response_id+"', 1)");
-
-		$('#'+variable+'_prev_'+id+' .progress').hide();
-		$('#'+variable+'_prev_'+id+' .cancel').hide();
-
-		$('#'+variable+'_prev_'+id).attr('id', val.replace('.', ''));
-
-		if(!uip_count[variable]){
-			if(act == 'add'){
-				success();
-			} else {
-				$('#'+form+'_notice_main_div').html(js_notice_ok).delay(js_delay).fadeOut(js_fadeout);
-			}
-		}
-	}
