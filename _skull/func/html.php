@@ -528,7 +528,11 @@ class html extends proc{
 									post_variable = '<?php echo (isset($_POST['variable']))? $_POST['variable'] : ''; ?>';
 									post_type = '<?php echo (isset($_POST['type']))? $_POST['type'] : ''; ?>';
 									// Result
-									success();
+									if(upload == 'true'){
+										multi_upload();
+									} else {
+										success();
+									}
 								}
 							});
 						}, <?php echo timeout; ?>);
@@ -582,7 +586,7 @@ class html extends proc{
 				<?php $this->notice($this->form); ?>
 				<script>	
 					$('#<?php echo $this->form; ?>_form').submit(function(){
-						submit = 'true';
+						submit = 'true'; upload = 'false';
 					});
 				</script>
 				<?php if($this->act){ ?>

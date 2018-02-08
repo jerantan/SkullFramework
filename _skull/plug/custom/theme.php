@@ -1,7 +1,7 @@
 <script>
 	var js_domain = '<?php echo domain; ?>';
 	var js_symbol = '<?php echo symbol; ?>';
-	var js_notice_fine = '<?php $this->notice_fine("fine"); ?>';
+	var js_notice_fine = '<?php $this->notice_fine(fine); ?>';
 	var js_notice_ok = '<?php $this->notice_ok("Success."); ?>';
 	var js_delay = '<?php echo delay; ?>';
 	var js_fadeout = '<?php echo fadeout; ?>';
@@ -9,6 +9,18 @@
 	var js_offset = '<?php echo offset; ?>';
 	var js_scroll = '<?php echo scroll; ?>';
 	var js_link = '<?php $this->link(''); ?>';
+
+	// Upload vars
+	upload_field = -1;
+	// Integer key Ex: upload_var[upload_field]
+	upload_var = new Array();
+	// String key Ex: file_arr[variable]
+	file_arr = new Array();
+	file_count = new Array();
+	upload_type_arr = new Array();
+	upload_list = new Array();
+	upload_by = new Array();
+	uip_count = new Array();
 </script>
 
 <style>

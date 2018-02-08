@@ -962,7 +962,7 @@ class field extends html{
 						foreach(array_reverse(glob($this->path($this->upload_by, $this->table, $this->id).'*.*')) as $target){
 							$filename = end(explode('/', $target));
 							$extension = end(explode('.', $filename));
-							$del_box = "del_box('$this->table', '$filename', '$this->id', 1)";
+							$del_box = "del_box('$this->table', '$this->request', '$filename', '$this->id', 1)";
 							$del_span = '';
 
 							$list_arr = explode(', ', image);
@@ -1014,8 +1014,7 @@ class field extends html{
 		?>
 			<script>
 				upload_field++;
-				upload_var['<?php echo $this->form; ?>'] = new Array();
-				upload_var['<?php echo $this->form; ?>'][upload_field] = '<?php echo $var; ?>';
+				upload_var[upload_field] = '<?php echo $var; ?>';
 
 				file_arr['<?php echo $var; ?>'] = new Array();
 				file_count['<?php echo $var; ?>'] = 0;
@@ -1088,7 +1087,7 @@ class field extends html{
 							html += preview;
 							<?php if($this->act == 'update'){ ?>
 								act = '<?php echo $this->act; ?>';
-								html_single_upload = "single_upload('<?php echo $this->table; ?>', '<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $this->id; ?>', "+count+", '<?php echo $this->upload_by; ?>')";
+								html_single_upload = "single_upload('<?php echo $this->table; ?>', '<?php echo $this->request; ?>', '<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $this->id; ?>', "+count+", '<?php echo $this->upload_by; ?>')";
 								html += '<span class="upload" onclick="'+html_single_upload+'">Upload</span>';
 							<?php } ?>
 							html_file_remove = "file_remove('<?php echo $this->form; ?>', '<?php echo $var; ?>', "+count+", '<?php echo $type; ?>')";
@@ -1121,11 +1120,15 @@ class field extends html{
 		?>
 			<script>
 				$('#<?php echo $this->form; ?>_form').submit(function(){
-					<?php if($type){ ?>
+					<?php if(!$type){ ?>
+						upload = 'true';
+					<?php } else { ?>
 						if(!file_arr['<?php echo $var; ?>'].filter(string).length){
 							<?php $this->focus($var); ?>
 							$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('Please fill out this field.');
 							$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').css('top', '22px');
+						} else {
+							upload = 'true';
 						}
 					<?php } ?>
 				});	

@@ -469,7 +469,7 @@ class skull{
 	}
 
 	function url($dir){
-		return str_replace(root, domain.build.'/', $dir);
+		return str_replace(dir, domain, $dir);
 	}
 
 	function path($by, $table, $id){
@@ -573,7 +573,6 @@ require_once root.$parse['uri'].spec;
 // Plug Constant
 require_once 'cons.php';
 /* ================================================================================================ */
-?>
 
 
 
@@ -583,7 +582,6 @@ require_once 'cons.php';
 
 
 
-<?php
 // Initialize
 /* ================================================================================================ */
 $skull = new $parse['class'];

@@ -87,12 +87,13 @@ class proc extends skull{
 	}
 
 	function delete(){
+		$proc = $_POST['proc'];
 		$table = $_POST['table'];
 		$id = $_POST['id'];
 		$val = $_POST['val'];
-		/*$by = '';
+		$by = '';
 
-		require_once $path_view.$table.'/'.$path_iud;
+		require_once root.$this->uri.iud;
 
 		if($by){
 			if(!$val){
@@ -113,7 +114,7 @@ class proc extends skull{
 					}
 				}
 			}
-		}*/
+		}
 
 		if(!$val){
 			$sql = new sql;
@@ -147,7 +148,7 @@ class proc extends skull{
 		$this->chosen_field($var, $arr['val'], $arr['opt'], $sel);
 	}
 
-	function replicate(){
+	function copy(){
 		$by = $_POST['by'];
 		$table = $_POST['table'];
 		$id = $_POST['id'];
@@ -158,7 +159,7 @@ class proc extends skull{
 		$find = array('-', ' ', ':');
 		$filename = str_replace($find, '', date).substr(microtime(), 2, 6).'.'.$extension;
 		$destination = $this->path($by, $table, $id);
-		mkdir($destination, 0777, true);
+		if(!file_exists($destination)) mkdir($destination, 0777, true);
 		move_uploaded_file($tmppath, $destination.$filename);
 		$this->compress($extension, $destination.$filename);
 		echo $filename;

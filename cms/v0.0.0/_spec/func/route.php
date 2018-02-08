@@ -1,4 +1,5 @@
 <?php
+define('dir', $_SERVER['DOCUMENT_ROOT']);
 define('build', getenv('build'));
 define('skull_root', getenv('skull_root'));
 define('skull_domain', getenv('skull_domain'));

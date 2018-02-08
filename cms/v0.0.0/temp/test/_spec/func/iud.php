@@ -33,5 +33,8 @@ switch($proc){
 		$sql->clause = "id = '$id'";
 		$sql->update();
 	break;
+	case 'delete':
+		$by = 'entry';
+	break;
 }
 ?>
