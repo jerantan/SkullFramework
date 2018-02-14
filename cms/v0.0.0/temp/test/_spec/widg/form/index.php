@@ -24,18 +24,27 @@ $this->form_open($this->table);
 		$this->dropdown_required('Level', $arr, $arr, $this->val($result['level'], $arr[0]));
 	$this->div_close();
 	// Test functions
-		/*$this->div_open(12, 12);
-			$this->chosen('User');
+		$this->div_open(12, 12);
+			$this->chosen('User', $this->id);
 		$this->div_close();
 		$this->div_open(12, 12);
-			$this->chosen_required('Another : User');
-		$this->div_close();*/
+			$this->chosen_required('Another : User', $this->id);
+		$this->div_close();
 
 		$this->div_open(12, 12);
 			$this->upload_type = 'image, audio, video';
 			$this->upload_by = 'entry';
 			$this->upload('Photo', 1);
 		$this->div_close();
+		$this->clear();
+		$this->clear();
+		$this->clear();
+		$this->clear();
+		$this->clear();
+		$this->clear();
+		$this->clear();
+		$this->clear();
+		$this->clear();
 	// /Test functions
 	$this->submit();
 $this->form_close();

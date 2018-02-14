@@ -268,14 +268,15 @@ class field extends html{
 	function focus($var){
 		?>
 			if(submit != 'false'){
-				if(!form_current()){
+				var form_name = form_current();
+				if(!form_name){
 					$('html').animate({
-						scrollTop: $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').offset().top - <?php echo offset; ?>
-					}, <?php echo scroll; ?>, function(){ $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').focus(); });
+						scrollTop: $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').offset().top - js_offset
+					}, js_scroll, function(){ $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').focus(); });
 				} else {
-					$('.'+form+'_main_div').animate({
-						scrollTop: $('.'+form+'_main_div').scrollTop() - $('.'+form+'_main_div').offset().top + $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').offset().top - <?php echo offset; ?>
-					}, <?php echo scroll; ?>, function(){ $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').focus(); });
+					$('.'+form_name+'_main_div').animate({
+						scrollTop: $('.'+form_name+'_main_div').scrollTop() - $('.'+form_name+'_main_div').offset().top + $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').offset().top - js_offset
+					}, js_scroll, function(){ $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').focus(); });
 				}
 			}
 			submit = 'false';
@@ -514,7 +515,7 @@ class field extends html{
 		}
 	}
 	
-	/* Usage : chosen('Customer', $result['customer']); or chosen('Another : Customer', $result['another_customer']); */
+	/* Usage : chosen('Customer', $result['id']); or chosen('Another : Customer', $result['another_id']); */
 	function chosen($label, $sel = ''){
 		$this->field_frame_open($label);
 			$var = $this->variable($label);
@@ -525,7 +526,7 @@ class field extends html{
 		$this->field_frame_close($var);
 	}
 
-	/* Usage : chosen_required('Customer', $result['customer']); or chosen_required('Another : Customer', $result['another_customer']); */
+	/* Usage : chosen_required('Customer', $result['id']); or chosen_required('Another : Customer', $result['another_id']); */
 	function chosen_required($label, $sel = ''){
 		$this->field_frame_open($label, 1);
 			$var = $this->variable($label);
@@ -1120,17 +1121,15 @@ class field extends html{
 		?>
 			<script>
 				$('#<?php echo $this->form; ?>_form').submit(function(){
-					<?php if(!$type){ ?>
-						upload = 'true';
-					<?php } else { ?>
-						if(!file_arr['<?php echo $var; ?>'].filter(string).length){
+					if(!file_arr['<?php echo $var; ?>'].filter(string).length){
+						<?php if($type){ ?>
 							<?php $this->focus($var); ?>
 							$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('Please fill out this field.');
 							$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').css('top', '22px');
-						} else {
-							upload = 'true';
-						}
-					<?php } ?>
+						<?php } ?>
+					} else {
+						upload = 'true';
+					}
 				});	
 			</script>
 		<?php

@@ -163,9 +163,7 @@ function form_active(form){
 }
 
 function form_current(){
-	if(form_active('')){
-		form = '';
-	}
+	var form = '';
 	if(form_active('form')){
 		form = 'form';
 	}
@@ -182,9 +180,10 @@ function form_current(){
 }
 
 function form_select(table, request, act, form, variable, type, id){
-	if(form_current() == 'form'){
+	var form_name = form_current();
+	if(form_name == 'form'){
 		form2_open(table, request, act, form, variable, type, id);
-	} else if(form_current() == 'form2'){
+	} else if(form_name == 'form2'){
 		form3_open(table, request, act, form, variable, type, id);
 	}
 }
@@ -206,11 +205,9 @@ function form_height(form){
 }
 
 function form_height_load(){
-	if(form_current()){
-		form_height('form');
-		form_height('form1');
-		form_height('form2');
-		form_height('form3');
+	var form_name = form_current();
+	if(form_name){
+		form_height(form_name);
 		$('.form_load_div .option').tooltip('show');
 	}
 }
@@ -383,9 +380,11 @@ function file_upload(form, request, variable, id, by){
 					if($.isArray(file_arr[variable][id])){ // This is to prevent loading many times. Enchancement: remove the appended FormData() after upload.abort.
 						uip_count[variable]--; // This is upload-in-progress minus count
 
-						if(act == 'add'){
+						if(act == 'insert'){
 							if(!uip_count[variable]){
-								success();
+								setTimeout(function(){
+									success();
+								}, js_timeout);
 							}
 						} else {
 							$('#'+form+'_notice_main_div').delay().fadeOut();
@@ -419,8 +418,10 @@ function file_added(form, request, variable, id, val){
 	$('#'+variable+'_prev_'+id).attr('id', val.replace('.', ''));
 
 	if(!uip_count[variable]){
-		if(act == 'add'){
-			success();
+		if(act == 'insert'){
+			setTimeout(function(){
+				success();
+			}, js_timeout);
 		} else {
 			$('#'+form+'_notice_main_div').html(js_notice_ok).delay(js_delay).fadeOut(js_fadeout);
 		}
@@ -612,13 +613,14 @@ function chosen_load(table, request, act, sel, form, variable, type){
 }
 
 function scroll(id){
-	if(!form_current()){
+	var form_name = form_current();
+	if(!form_name){
 		$('html').animate({
 			scrollTop: $('#'+id).offset().top - js_offset
 		}, js_scroll);
 	} else {
-		$('.'+form+'_main_div').animate({
-			scrollTop: $('.'+form+'_main_div').scrollTop() - $('.'+form+'_main_div').offset().top + $('#'+id).offset().top - js_offset
+		$('.'+form_name+'_main_div').animate({
+			scrollTop: $('.'+form_name+'_main_div').scrollTop() - $('.'+form_name+'_main_div').offset().top + $('#'+id).offset().top - js_offset
 		}, js_scroll);
 	}
 }
@@ -635,7 +637,8 @@ function success(){
 			window.location = js_link+url;
 		}, js_timeout);
 	} else {
-		if(form_current() == 'form'){
+		var form_name = form_current();
+		if(form_name == 'form'){
 			setTimeout(function(){
 				if(act == 'insert'){
 					form_open(table, request, act);
@@ -643,10 +646,10 @@ function success(){
 					form_open(table, request, act, response_id);
 				}
 			}, js_timeout);
-		} else if(form_current() == 'form2'){
+		} else if(form_name == 'form2'){
 			chosen_load(table, request, '', response_id, post_form, post_variable, post_type);
 			form2_close();
-		} else if(form_current() == 'form3'){
+		} else if(form_name == 'form3'){
 			chosen_load(table, request, '', response_id, post_form, post_variable, post_type);
 			form3_close();
 		}
