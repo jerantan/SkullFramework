@@ -242,26 +242,28 @@ class field extends html{
 
 	function ajax_unique_val($var, $trim, $type = ''){
 		?>
-			$.ajax({
-				url: '<?php echo domain.$this->request; ?>',
-				<?php if($type){ ?>async: false,<?php } ?>
-				type: 'post',
-				data: {
-					proc: 'unique',
-					table: '<?php echo $this->form; ?>',
-					field: '<?php echo $trim; ?>',
-					val: $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val(),
-					id: '<?php echo $this->id; ?>'
-				},
-				success: function(response){
-					if(response.substr(-1) > 0){
-						<?php if($type){ $this->focus($var); } ?>
-						$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('Please fill out this field again this <?php echo $this->trim($trim); ?> is already taken.');
-					} else {
-						$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('');
+			if(typeof timer != 'undefined'){ clearTimeout(timer); } timer = setTimeout(function(){
+				$.ajax({
+					url: '<?php echo domain.$this->request; ?>',
+					<?php if($type){ ?>async: false,<?php } ?>
+					type: 'post',
+					data: {
+						proc: 'unique',
+						table: '<?php echo $this->form; ?>',
+						field: '<?php echo $trim; ?>',
+						val: $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val(),
+						id: '<?php echo $this->id; ?>'
+					},
+					success: function(response){
+						if(response.substr(-1) > 0){
+							<?php if($type){ $this->focus($var); } ?>
+							$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('Please fill out this field again this <?php echo $this->trim($trim); ?> is already taken.');
+						} else {
+							$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('');
+						}
 					}
-				}
-			});
+				});
+			}, js_timeout);
 		<?php
 	}
 

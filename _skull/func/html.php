@@ -634,7 +634,7 @@ class html extends proc{
 			<div id="<?php echo $this->table; ?>_search_main_div" class="row search_main_div">
 				<div class="col-md-4 col-sm-6 float_center">
 					<div class="input-group">
-						<input type="text" value="<?php echo $val; ?>" id="<?php echo $this->table; ?>_search_field" class="form-control input-sm search_field" onkeyup="search('<?php echo $this->table; ?>', '<?php echo $this->request; ?>')" placeholder="Search . . .">
+						<input type="text" value="<?php echo $val; ?>" id="<?php echo $this->table; ?>_search_field" class="form-control input-sm search_field" onkeyup="if(typeof timer != 'undefined'){ clearTimeout(timer); } timer = setTimeout(function(){ search('<?php echo $this->table; ?>', '<?php echo $this->request; ?>'); }, js_timeout)" placeholder="Search . . .">
 						<div class="input-group-addon pointer"><i class="glyphicon glyphicon-search"></i></div>
 					</div>
 				</div>
