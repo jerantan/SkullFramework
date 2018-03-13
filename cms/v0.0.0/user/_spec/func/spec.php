@@ -1,9 +1,9 @@
 <?php
 class user extends spec{
 	function init(){
-		$sql = new sql;
-		$sql->data = $sql->query("SHOW TABLES LIKE 'user'");
-		if(!$sql->fetch()){
+		$sql = $this->sql;
+		$data = $sql->query("SHOW TABLES LIKE 'user'");
+		if(!$sql->fetch($data)){
 			$query = 'CREATE TABLE IF NOT EXISTS `user` (
 				`id` int(11) AUTO_INCREMENT PRIMARY KEY,
 				`name` varchar(50) NOT NULL,

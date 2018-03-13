@@ -1,11 +1,11 @@
 <?php
 require_once 'plug/custom/theme.php';
-$sql = new sql;
+$sql = $this->sql;
 $sql->field = 'name, username, level, active';
 $sql->table = $this->table;
 $sql->clause = "where id = '".$this->id."'";
-$sql->select();
-$result = $sql->fetch();
+$data = $sql->select();
+$result = $sql->fetch($data);
 $this->form_option($result['name']);
 $this->form_open($this->table);
 	$this->div_open(3, 4);

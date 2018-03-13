@@ -9,7 +9,7 @@ switch($proc){
 			$password = ", password = md5('".$_POST['password']."')";
 		}
 	
-		$sql = new sql;
+		$sql = $this->sql;
 		$sql->table = $this->module;
 		$sql->field_value = "name = '$name', username = '$username' $password, updated = '".date."'";
 		$sql->clause = "id = '$id'";

@@ -6,14 +6,14 @@ class proc extends skull{
 		$val = $_POST['val'];
 		$pass = $_POST['pass'];
 
-		$sql = new sql;
+		$sql = $this->sql;
 		$sql->field = 'id, active';
 		$sql->table = $table;
 		$sql->clause = "where $field = '$val' and password = md5('$pass')";
-		$sql->select();
+		$data = $sql->select();
 
-		if($sql->count()){
-			$result = $sql->fetch();
+		if($sql->count($data)){
+			$result = $sql->fetch($data);
 			$_SESSION[session] = $result['id'];
 			echo $result['active'];
 		} else {
@@ -66,7 +66,7 @@ class proc extends skull{
 			$val = '0';
 		}
 		
-		$sql = new sql;
+		$sql = $this->sql;
 		$sql->table = $table;
 		$sql->field_value = "active = '$val'";
 		$sql->clause = "id = '$id'";
@@ -117,7 +117,7 @@ class proc extends skull{
 		}
 
 		if(!$val){
-			$sql = new sql;
+			$sql = $this->sql;
 			$sql->table = $table;
 			$sql->clause = "id = '$id'";
 			$sql->delete();
@@ -130,12 +130,12 @@ class proc extends skull{
 		$val = $_POST['val'];
 		$id = $_POST['id'];
 		
-		$sql = new sql;
+		$sql = $this->sql;
 		$sql->field = $field;
 		$sql->table = $table;
 		$sql->clause = "where $field = '$val' and id != '$id'";
-		$sql->select();
-		echo $sql->count();
+		$data = $sql->select();
+		echo $sql->count($data);
 	}
 
 	function choose(){

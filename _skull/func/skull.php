@@ -124,20 +124,20 @@ class sql extends db{
 		$this->open();
 	}
 
-	function query($query){
-		return mysql_query($query);
+	function query($sql){
+		return mysql_query($sql);
+	}
+
+	function fetch($data){
+		return mysql_fetch_array($data);
+	}
+	
+	function count($data){
+		return mysql_num_rows($data);
 	}
 	
 	function select(){
-		return $this->data = $this->query("select $this->field from $this->table $this->clause");
-	}
-	
-	function fetch(){
-		return mysql_fetch_array($this->data);
-	}
-	
-	function count(){
-		return mysql_num_rows($this->data);
+		return $data = $this->query("select $this->field from $this->table $this->clause");
 	}
 	
 	function insert(){
@@ -147,6 +147,12 @@ class sql extends db{
 	function id(){
 		return mysql_insert_id();
 	}
+
+	function next_id(){
+        $data = $this->query("show table status where name = '".$this->table."'");
+        $result = $this->fetch($data);
+        return $result['Auto_increment'];
+    }
 	
 	function update(){
 		$this->query("update $this->table set $this->field_value where $this->clause");
@@ -155,12 +161,6 @@ class sql extends db{
 	function delete(){
 		$this->query("delete from $this->table where $this->clause");
 	}
-	
-	function next_id(){
-        $this->data = $this->query("show table status where name = '".$this->table."'");
-        $data = $this->fetch();
-        return $data['Auto_increment'];
-    }
 	
 	function __destruct(){
 		$this->close();
@@ -193,13 +193,13 @@ class skull{
 	}
 
 	function name_arr($table){
-		$sql = new sql;
+		$sql = $this->sql;
 		$sql->field = 'id, name';
 		$sql->table = $table;
 		$sql->clause = 'order by name';
-		$sql->select();
+		$data = $sql->select();
 
-		while($result = $sql->fetch()){
+		while($result = $sql->fetch($data)){
 			$result_val[] = $result['id'];
 			$result_opt[] = $result['name'];
 		}
@@ -265,12 +265,12 @@ class skull{
 		$back = $start / $limit - 1;
 		$next = $start / $limit + 1;
 		
-		$sql = new sql;
+		$sql = $this->sql;
 		$sql->field = $this->table.'.id';
 		$sql->table = $this->table;
 		$sql->clause = $clause;
-		$sql->select();
-		$total = $sql->count();
+		$data = $sql->select();
+		$total = $sql->count($data);
 
 		/*if($start == $total){ // Temporarily commented out, this will be clarify in delete functionality.
 			$start = $start - $limit;
@@ -282,12 +282,12 @@ class skull{
 			$field = ", $field";
 		}
 		
-		$sql1 = new sql;
+		$sql1 = $this->sql;
 		$sql1->field = $this->table.".id $field";
 		$sql1->table = $this->table;
 		$sql1->clause = "$clause limit $start, $limit";
 		$list = $sql1->select();
-		$count = $sql1->count();
+		$count = $sql1->count($list);
 
 		$pages = ceil($total / $limit);
 		$arr = array(
@@ -300,10 +300,6 @@ class skull{
 			'pages' => $pages
 		);
 		$this->paging = $arr;
-	}
-	
-	function fetch($list){
-		return mysql_fetch_array($list);
 	}
 	
 	function format($format, $val){
@@ -346,7 +342,7 @@ class skull{
     function inc_val($val, $table){
 		if($this->act == 'insert' || $val != ''){
 			if($val == ''){
-				$sql = new sql;
+				$sql = $this->sql;
 				$sql->table = $table;
 				return $sql->next_id();
 			} else {
@@ -368,16 +364,16 @@ class skull{
 	}
 	
 	function field(){
-		$sql = new sql;
+		$sql = $this->sql;
 		$sql->field = 'table_name, field_name';
 		$sql->table = 'field';
 		$sql->clause = "where table_name = '".$this->table."' && active";
-		$sql->select();
+		$data = $sql->select();
 		
 		$this->field_orig_arr = array();
 		$this->field_arr = array();
 
-		while($result = $sql->fetch()){
+		while($result = $sql->fetch($data)){
 			$result_table_name = $result['table_name'];
 			$result_field_name = $result['field_name'];
 			

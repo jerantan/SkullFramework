@@ -278,7 +278,7 @@ class html extends proc{
 				}
 			$this->tr_close();
 			$count = $this->paging['start'] + 1;
-			while($result = $this->fetch($this->paging['list'])){
+			while($result = $this->sql->fetch($this->paging['list'])){
 				$this->tr_open();
 					$this->td($count++);
 						foreach($this->field_orig_arr as $field_name){
@@ -328,12 +328,12 @@ class html extends proc{
 				echo '<div class="none">No Record Found.</div>';
 			}
 			
-			$sql = new sql;
+			$sql = $this->sql;
 			$sql->field = $this->table.'.id';
 			$sql->table = $this->table;
 			$sql->clause = $clause;
-			$sql->select();
-			$total = $sql->count();
+			$data = $sql->select();
+			$total = $sql->count($data);
 			
 			$display .= ' (Filtered From '.$total.' Total Entr'.$this->suffix($total, 'y', 'ies').')';
 		}

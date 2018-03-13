@@ -7,7 +7,7 @@ switch($proc){
 		$password = md5($_POST['password']);
 		$level = $_POST['level'];
 	
-		$sql = new sql;
+		$sql = $this->sql;
 		$sql->table = $table;
 		$sql->field = 'name, username, password, level, active, added';
 		$sql->value = "'$name', '$username', '$password', '$level', '$active', '".date."'";
@@ -27,7 +27,7 @@ switch($proc){
 		
 		$level = $_POST['level'];
 	
-		$sql = new sql;
+		$sql = $this->sql;
 		$sql->table = $table;
 		$sql->field_value = "name = '$name', username = '$username' $password, level = '$level', active = '$active', updated = '".date."'";
 		$sql->clause = "id = '$id'";
