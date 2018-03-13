@@ -17,7 +17,7 @@ $var = $this->variable($label);
 			<span onclick="cancel('<?php echo $this->form; ?>')">
 				<?php $this->button('reset', 'Clear', 'btn-default'); ?>
 			</span>
-			<?php $this->button('submit', 'Signin', 'btn_prop margin_left'); ?>
+			<?php $this->button('submit', 'Sign in', 'btn_prop margin_left'); ?>
 		<?php $this->div_close(); ?>
 	<?php $this->form_close(); ?>
 <?php $this->content_close(); ?>

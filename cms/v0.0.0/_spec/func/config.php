@@ -12,6 +12,7 @@ $config = array(
 	'dbuser' 		=> 		'root',
 	'dbpass' 		=> 		'',
 	'dbname' 		=> 		'jat_skulldb',
+	'tbl'			=>		'user', // table used for sign in
 
 	'image' 		=> 		'jpeg, jpg, png, gif, bmp',
 	'audio' 		=> 		'mp3, ogg, wav',

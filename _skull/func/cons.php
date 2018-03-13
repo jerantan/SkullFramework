@@ -55,11 +55,17 @@ define('term', $config['term']);
 // Currency
 define('symbol', $config['symbol']);
 
+// Environment
+define('env', $config['env']);
+
 // DB Connection
 define('dbhost', $config['dbhost']);
 define('dbuser', $config['dbuser']);
 define('dbpass', $config['dbpass']);
 define('dbname', $config['dbname']);
+
+// Sign in Table
+define('tbl', $config['tbl']);
 
 // Upload Format
 define('image', $config['image']);

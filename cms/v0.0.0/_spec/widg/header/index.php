@@ -60,7 +60,7 @@
 						<?php } ?>
 						<li><?php $this->a('user/manager/', 'User Manager'); ?></li>
 						<?php if($this->userdata['active']){ ?>
-							<li><a href="" onclick="signout(); return false">Signout</a></li>
+							<li><a href="" onclick="signout(); return false">Sign out</a></li>
 						<?php } ?>
 					</ul>
 				</li>

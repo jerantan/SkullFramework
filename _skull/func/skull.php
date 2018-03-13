@@ -111,7 +111,7 @@ class db{
 	}
 	
 	function open(){
-		mysql_select_db(dbname, $this->con()) || die('Database connection error...');
+		mysql_select_db(dbname, $this->con()) || $this->query('CREATE DATABASE '.dbname) && header('location: '.domain.tbl.'/');
 	}
 	
 	function close(){
@@ -123,10 +123,13 @@ class sql extends db{
 	function __construct(){
 		$this->open();
 	}
+
+	function query($query){
+		return mysql_query($query);
+	}
 	
 	function select(){
-		// echo "select $this->field from $this->table $this->clause<br>";
-		return $this->data = mysql_query("select $this->field from $this->table $this->clause");
+		return $this->data = $this->query("select $this->field from $this->table $this->clause");
 	}
 	
 	function fetch(){
@@ -138,7 +141,7 @@ class sql extends db{
 	}
 	
 	function insert(){
-		mysql_query("insert into $this->table($this->field) values($this->value)");
+		$this->query("insert into $this->table($this->field) values($this->value)");
 	}
 	
 	function id(){
@@ -146,16 +149,16 @@ class sql extends db{
 	}
 	
 	function update(){
-		mysql_query("update $this->table set $this->field_value where $this->clause");
+		$this->query("update $this->table set $this->field_value where $this->clause");
 	}
 	
 	function delete(){
-		mysql_query("delete from $this->table where $this->clause");
+		$this->query("delete from $this->table where $this->clause");
 	}
 	
 	function next_id(){
-        $result = mysql_query("show table status where name = '".$this->table."'");
-        $data = mysql_fetch_array($result);
+        $this->data = $this->query("show table status where name = '".$this->table."'");
+        $data = $this->fetch();
         return $data['Auto_increment'];
     }
 	
@@ -168,10 +171,6 @@ class skull{
 	public $table;
 	public $act;
 	public $id;
-
-	function __construct(){
-		$this->userdata();
-	}
 
 	function session(){
 		if(isset($_SESSION[session])){
