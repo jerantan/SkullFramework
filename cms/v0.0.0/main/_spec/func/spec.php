@@ -1,5 +1,5 @@
 <?php
-class main extends spec{
+class specs extends spec{
 	
 }
 ?>

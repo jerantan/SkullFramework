@@ -3,16 +3,8 @@
 /* ================================================================================================ */
 // error_reporting(0);
 
-// Request URI
-/* ------------------------------------------------------------------------------------------------ */
-define('request_uri', $_REQUEST['uri']);
-// Redirect If Index
-if(strpos(request_uri, 'index.php') !== false)
-header('location: '.domain.str_replace('index.php/', '', request_uri));
-// /Redirect If Index
-define('type', (!request_uri || file_exists(root.request_uri.'index.php'))? 1 : 0);
+// Identify if it's Load or Request
 $proc = (isset($_POST['proc']))? $_POST['proc'] : '';
-/* ------------------------------------------------------------------------------------------------ */
 
 // Browser Restriction
 /* ------------------------------------------------------------------------------------------------ */
@@ -96,6 +88,43 @@ if(!$proc){
 	}
 }
 /* ------------------------------------------------------------------------------------------------ */
+
+// Request URI
+/* ------------------------------------------------------------------------------------------------ */
+define('request_uri', $_REQUEST['uri']);
+
+// Redirect If Index
+if(strpos(request_uri, 'index.php') !== false)
+header('location: '.domain.str_replace('index.php/', '', request_uri));
+// /Redirect If Index
+
+// Identify if Status 200 or 404
+define('type', (!request_uri || file_exists(root.request_uri.'index.php'))? 1 : 0);
+
+// URI Parser
+function parse(){
+	if(!request_uri || !type){
+		$module = 'main';
+		$page = '';
+	} else {
+		$parse_arr = explode('/', request_uri);
+		$module = $parse_arr[0];
+		$page = $parse_arr[1];
+	}
+	$uri = ($page)? $module.'/'.$page.'/' : $module.'/';
+	return array('module' => $module, 'page' => $page, 'uri' => $uri);
+}
+/* ------------------------------------------------------------------------------------------------ */
+
+// Initiate Parser
+/* ================================================================================================ */
+/* ================================================================================================ */
+/* ================================================================================================ */
+/* =================================== */ $parse = parse(); /* ==================================== */
+/* ================================================================================================ */
+/* ================================================================================================ */
+/* ================================================================================================ */
+// /Initiate Parser
 
 // Plug Config
 /* ------------------------------------------------------------------------------------------------ */
@@ -498,20 +527,6 @@ class skull{
 
 	// Build
 	/* ------------------------------------------------------------------------------------------------ */
-	function parse(){
-		if(!request_uri || !type){
-			$module = 'main';
-			$page = '';
-		} else {
-			$parse_arr = explode('/', request_uri);
-			$module = $parse_arr[0];
-			$page = $parse_arr[1];
-		}
-		$class = ($page)? $module.'_'.$page : $module;
-		$uri = ($page)? $module.'/'.$page.'/' : $module.'/';
-		return array('class' => $class, 'module' => $module, 'page' => $page, 'uri' => $uri);
-	}
-
 	function temp(){
 		$view = $this->view();
 		$temp = root.$this->uri.temp;
@@ -562,7 +577,8 @@ require_once 'field.php';
 
 // Plug Spec
 require_once root.spec;
-$parse = skull::parse(); // Parse URL
+
+// Plug Specs
 require_once root.$parse['uri'].spec;
 
 // Plug Constant
@@ -579,7 +595,7 @@ require_once 'cons.php';
 
 // Initialize
 /* ================================================================================================ */
-$skull = new $parse['class'];
+$skull = new specs;
 $skull->module = $parse['module'];
 $skull->page = $parse['page'];
 $skull->uri = $parse['uri'];

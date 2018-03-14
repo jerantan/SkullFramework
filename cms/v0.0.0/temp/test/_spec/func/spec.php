@@ -1,5 +1,5 @@
 <?php
-class temp_test extends spec{
+class specs extends spec{
 	
 }
 ?>

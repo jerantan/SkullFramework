@@ -1,5 +1,5 @@
 <?php
-class user extends spec{
+class specs extends spec{
 	function init(){
 		$sql = $this->sql;
 		$data = $sql->query("SHOW TABLES LIKE 'user'");

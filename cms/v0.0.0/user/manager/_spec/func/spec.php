@@ -1,5 +1,5 @@
 <?php
-class user_manager extends spec{
+class specs extends spec{
 	
 }
 ?>

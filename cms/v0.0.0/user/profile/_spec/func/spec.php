@@ -1,5 +1,5 @@
 <?php
-class user_profile extends spec{
+class specs extends spec{
 	
 }
 ?>
