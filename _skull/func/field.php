@@ -268,17 +268,18 @@ class field extends html{
 	}
 
 	function focus($var){
+		$add = (isset($this->chosen))? '_chosen input' : '';
 		?>
 			if(submit != 'false'){
 				var form_name = form_current();
 				if(!form_name){
 					$('html').animate({
 						scrollTop: $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').offset().top - js_offset
-					}, js_scroll, function(){ $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').focus(); });
+					}, js_scroll, function(){ $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field<?php echo $add; ?>').focus(); });
 				} else {
 					$('.'+form_name+'_main_div').animate({
 						scrollTop: $('.'+form_name+'_main_div').scrollTop() - $('.'+form_name+'_main_div').offset().top + $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').offset().top - js_offset
-					}, js_scroll, function(){ $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').focus(); });
+					}, js_scroll, function(){ $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field<?php echo $add; ?>').focus(); });
 				}
 			}
 			submit = 'false';
@@ -537,7 +538,9 @@ class field extends html{
 				$this->chosen_addon($var, 1);
 			$this->group_frame_close();
 			// Validation
-			$this->alpha_submit_val($var);
+			$this->chosen = 1;
+				$this->alpha_submit_val($var);
+			$this->chosen;
 		$this->field_frame_close($var);
 	}
 
