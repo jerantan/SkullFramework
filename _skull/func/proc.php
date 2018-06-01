@@ -61,9 +61,9 @@ class proc extends skull{
 		$id = $_POST['id'];
 		
 		if(!$val){
-			$val = '1';
+			$val = 1;
 		} else {
-			$val = '0';
+			$val = 0;
 		}
 		
 		$sql = $this->sql;

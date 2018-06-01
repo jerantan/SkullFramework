@@ -1,6 +1,6 @@
 <script>
 	$('#<?php echo $this->form; ?>_form').submit(function(){
-		if(submit == 'true'){
+		if(submit == true){
 			$('#<?php echo $this->form; ?>_notice_main_div').html('<?php $this->notice_fine(fine); ?>').delay().fadeIn();
 			setTimeout(function(){
 				$.ajax({

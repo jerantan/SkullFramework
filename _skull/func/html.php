@@ -500,7 +500,7 @@ class html extends proc{
 			
 			<script>
 				$('#<?php echo $this->form; ?>_form').submit(function(){
-					if(submit == 'true'){
+					if(submit == true){
 						$('#<?php echo $this->form; ?>_notice_main_div').html('<?php $this->notice_fine(fine); ?>').delay().fadeIn();
 						setTimeout(function(){
 							$.ajax({
@@ -528,7 +528,7 @@ class html extends proc{
 									post_variable = '<?php echo (isset($_POST['variable']))? $_POST['variable'] : ''; ?>';
 									post_type = '<?php echo (isset($_POST['type']))? $_POST['type'] : ''; ?>';
 									// Result
-									if(upload == 'true'){
+									if(upload == true){
 										multi_upload();
 									} else {
 										success();
@@ -586,7 +586,7 @@ class html extends proc{
 				<?php $this->notice($this->form); ?>
 				<script>	
 					$('#<?php echo $this->form; ?>_form').submit(function(){
-						submit = 'true'; upload = 'false';
+						submit = true; upload = false;
 					});
 				</script>
 				<?php if($this->act){ ?>
@@ -597,9 +597,24 @@ class html extends proc{
 		<?php
 	}
 	
-	function form_close(){
+	function form_close($focus){
 		?>
 			</form>
+			<script>
+				var focus = <?php echo $focus; ?>;
+				var form_name = form_current();
+				if(focus == 0){
+					$('.'+form_name+'_load_div .input_field:first').focus();
+				} else {
+					setTimeout(function(){
+						if(focus == 1){
+							$('.'+form_name+'_load_div .chosen-container input:first').focus();
+						} else {
+							$('.'+form_name+'_load_div .cke_skin_kama:first').focus();
+						}
+					}, js_timeout);
+				}
+			</script>
 		<?php
 	}
 

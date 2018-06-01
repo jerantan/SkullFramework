@@ -43,7 +43,7 @@ if(!$proc){
 		} elseif(preg_match('/Netscape/i', $u_agent)){ 
 			$bname = 'Netscape'; 
 			$ub = 'Netscape'; 
-		} 
+		}
 
 		// Finally get the correct version number
 		$known = array('Version', $ub, 'other');

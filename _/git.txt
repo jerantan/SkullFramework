@@ -1,0 +1,14 @@
+*** Create branch from a tag.
+git branch f_branch-name v0.0.0
+
+---
+Rules:
+*** Branch name should starts with 'f_' and follows with a brief description of
+changes separeted with '-' and starts with 'i_' if it is an integration branch
+(a branch that merged from multiple branches) e.g. f_details-of-changes or
+i_branch-name-1-branch-name-2.
+
+*** Tag should always formated as v#.#.# or v##.##.##
+*** Tag numbers always increment with 1 but this is base on changes made,
+First # - large changes. Second # - meduim changes. Third # - small changes.
+---

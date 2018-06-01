@@ -270,19 +270,19 @@ class field extends html{
 	function focus($var){
 		$add = (isset($this->chosen))? '_chosen input' : '';
 		?>
-			if(submit != 'false'){
+			if(submit != false){
 				var form_name = form_current();
 				if(!form_name){
 					$('html').animate({
-						scrollTop: $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').offset().top - js_offset
+						scrollTop: $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field<?php echo $add; ?>').offset().top - js_offset
 					}, js_scroll, function(){ $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field<?php echo $add; ?>').focus(); });
 				} else {
 					$('.'+form_name+'_main_div').animate({
-						scrollTop: $('.'+form_name+'_main_div').scrollTop() - $('.'+form_name+'_main_div').offset().top + $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').offset().top - js_offset
+						scrollTop: $('.'+form_name+'_main_div').scrollTop() - $('.'+form_name+'_main_div').offset().top + $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field<?php echo $add; ?>').offset().top - js_offset
 					}, js_scroll, function(){ $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field<?php echo $add; ?>').focus(); });
 				}
 			}
-			submit = 'false';
+			submit = false;
 		<?php
 	}
 
@@ -363,22 +363,23 @@ class field extends html{
 
 	// CKEditor
 	/* ------------------------------------------------------------------------------------------------ */
-	function ckeditor_field($var, $val, $type){
+	function ckeditor_field($var, $val, $type = ''){
 		if($this->act != 'view'){
 		?>
-			<textarea name="<?php echo $var; ?>" id="<?php echo $this->form; ?>_form<?php echo $var; ?>_input_field" class="form-control input-sm input_field"><?php echo $val; ?></textarea>
-			<script src="../asset/plug/ckeditor/ckeditor.js"></script>
+			<textarea name="<?php echo $var; ?>" id="<?php echo $this->form; ?>_form_<?php echo $var; ?>_input_field" class="form-control input-sm input_field"><?php echo $val; ?></textarea>
 			<script>
-				CKEDITOR.replace('<?php echo $this->form; ?>_form<?php echo $var; ?>_input_field', {
+				delete CKEDITOR.instances.<?php echo $this->form; ?>_form_<?php echo $var; ?>_input_field;
+				
+				CKEDITOR.replace('<?php echo $this->form; ?>_form_<?php echo $var; ?>_input_field', {
 					uiColor: '<?php echo main; ?>'
 				});
 				
 				setTimeout(function(){
 					form_height_load();
-				}, <?php echo timeout; ?>);
+				}, js_timeout);
 				
 				<?php if($type){ ?>
-					var editor = CKEDITOR.instances.<?php echo $this->form; ?>_form<?php echo $var; ?>_input_field;
+					var editor = CKEDITOR.instances.<?php echo $this->form; ?>_form_<?php echo $var; ?>_input_field;
 					editor.on('contentDom', function(){
 						editor.document.on('keyup', function(){
 							if(!editor.getData()){
@@ -391,7 +392,7 @@ class field extends html{
 					
 					$('#<?php echo $this->form; ?>_form').submit(function(){
 						if(!editor.getData()){
-							<?php $this->focus($this->form.'_form'.$var); ?>
+							<?php $this->focus('cke_'.$this->form.'_form_'.$var); ?>
 							$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('Please fill out this field.');
 						} else {
 							editor.updateElement();
@@ -540,7 +541,7 @@ class field extends html{
 			// Validation
 			$this->chosen = 1;
 				$this->alpha_submit_val($var);
-			$this->chosen;
+			unset($this->chosen);
 		$this->field_frame_close($var);
 	}
 
@@ -1133,7 +1134,7 @@ class field extends html{
 							$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').css('top', '22px');
 						<?php } ?>
 					} else {
-						upload = 'true';
+						upload = true;
 					}
 				});	
 			</script>
