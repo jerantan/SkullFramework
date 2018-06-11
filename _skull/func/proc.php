@@ -76,14 +76,14 @@ class proc extends skull{
 	function insert(){
 		$proc = $_POST['proc'];
 		$table = $_POST['table'];
-		require_once root.$this->uri.iud;
+		include root.$this->uri.iud;
 	}
 
 	function update(){
 		$proc = $_POST['proc'];
 		$table = $_POST['table'];
 		$id = $_POST['id'];
-		require_once root.$this->uri.iud;
+		include root.$this->uri.iud;
 	}
 
 	function delete(){
@@ -93,7 +93,7 @@ class proc extends skull{
 		$val = $_POST['val'];
 		$by = '';
 
-		require_once root.$this->uri.iud;
+		include root.$this->uri.iud;
 
 		if($by){
 			if(!$val){

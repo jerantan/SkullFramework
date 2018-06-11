@@ -19,7 +19,7 @@ $var = $this->variable($label);
 			</span>
 			<?php $this->button('submit', 'Sign in', 'btn_prop margin_left'); ?>
 		<?php $this->div_close(); ?>
-	<?php $this->form_close(); ?>
+	<?php $this->form_close(0); ?>
 <?php $this->content_close(); ?>
 
 <?php if($this->msg){ ?>
@@ -36,4 +36,4 @@ $this->alpha_submit_val($var);
 $this->alpha_event_val('keyup', 'password');
 $this->alpha_submit_val('password');
 ?>
-<?php require_once 'plug/custom/theme.php'; ?>
+<?php include 'plug/custom/theme.php'; ?>

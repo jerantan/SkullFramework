@@ -89,6 +89,11 @@ if(!$proc){
 }
 /* ------------------------------------------------------------------------------------------------ */
 
+// Root Directory
+/* ------------------------------------------------------------------------------------------------ */
+define('base', str_replace('/'.build.'/', '/', root));
+/* ------------------------------------------------------------------------------------------------ */
+
 // Request URI
 /* ------------------------------------------------------------------------------------------------ */
 define('request_uri', $_REQUEST['uri']);
@@ -128,7 +133,7 @@ function parse(){
 
 // Plug Config
 /* ------------------------------------------------------------------------------------------------ */
-require_once root.'_spec/func/config.php';
+include root.'_spec/func/config.php';
 /* ------------------------------------------------------------------------------------------------ */
 
 session_start();
@@ -274,11 +279,7 @@ class skull{
 	}
 
 	function trim($label){
-		switch($label){
-			default:
-				$label = str_replace('another_', '', $label);
-			break;
-		}
+		$label = str_replace('another_', '', $label);
 		return $label;
 	}
 	
@@ -413,11 +414,7 @@ class skull{
 	}
 
 	function field_switch($field_name){
-		switch($field_name){
-			default:
-				$this->field_arr[] = $field_name;
-			break;
-		}
+		$this->field_arr[] = $field_name;
 	}
 
 	function field_list(){
@@ -461,11 +458,7 @@ class skull{
 	}
 
 	function like_clause_switch($field_name){
-		switch($field_name){
-			default:
-				$clause = "$field_name like '%".$this->search."%'";
-			break;
-		}
+		$clause = "$field_name like '%".$this->search."%'";
 		return $clause;
 	}
 
@@ -493,7 +486,7 @@ class skull{
 	}
 
 	function url($dir){
-		return str_replace(dir, domain, $dir);
+		return str_replace(base, domain, $dir);
 	}
 
 	function path($by, $table, $id){
@@ -531,13 +524,13 @@ class skull{
 		$view = $this->view();
 		$temp = root.$this->uri.temp;
 		$temp = (file_exists($temp))? $temp : root.temp;
-		require_once $temp;
+		include $temp;
 	}
 
 	function view(){
 		ob_start();
 		if(type){
-			require_once root.$this->uri.'index.php';
+			include root.$this->uri.'index.php';
 		} else {
 			echo '
 				<div style="font-family: times new roman">
@@ -556,7 +549,7 @@ class skull{
 		$widget = (file_exists($widget))? $widget : root.$path;
 		if(file_exists($widget)){
 			if($name != 'header') $this->inject($widget);
-			require_once $widget;
+			include $widget;
 		}
 	}
 	/* ------------------------------------------------------------------------------------------------ */
@@ -571,18 +564,18 @@ define('spec', '_spec/func/spec.php');
 define('iud', '_spec/func/iud.php');
 
 // Plug Library
-require_once 'proc.php';
-require_once 'html.php';
-require_once 'field.php';
+include 'proc.php';
+include 'html.php';
+include 'field.php';
 
 // Plug Spec
-require_once root.spec;
+include root.spec;
 
 // Plug Specs
-require_once root.$parse['uri'].spec;
+include root.$parse['uri'].spec;
 
 // Plug Constant
-require_once 'cons.php';
+include 'cons.php';
 /* ================================================================================================ */
 
 

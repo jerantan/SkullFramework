@@ -366,11 +366,11 @@ class field extends html{
 	function ckeditor_field($var, $val, $type = ''){
 		if($this->act != 'view'){
 		?>
-			<textarea name="<?php echo $var; ?>" id="<?php echo $this->form; ?>_form_<?php echo $var; ?>_input_field" class="form-control input-sm input_field"><?php echo $val; ?></textarea>
+			<textarea name="<?php echo $var; ?>" id="<?php echo $this->form.'_'.$var; ?>_input_field" class="form-control input-sm input_field"><?php echo $val; ?></textarea>
 			<script>
-				delete CKEDITOR.instances.<?php echo $this->form; ?>_form_<?php echo $var; ?>_input_field;
+				delete CKEDITOR.instances.<?php echo $this->form.'_'.$var; ?>_input_field;
 				
-				CKEDITOR.replace('<?php echo $this->form; ?>_form_<?php echo $var; ?>_input_field', {
+				CKEDITOR.replace('<?php echo $this->form.'_'.$var; ?>_input_field', {
 					uiColor: '<?php echo main; ?>'
 				});
 				
@@ -379,10 +379,10 @@ class field extends html{
 				}, js_timeout);
 				
 				<?php if($type){ ?>
-					var editor = CKEDITOR.instances.<?php echo $this->form; ?>_form_<?php echo $var; ?>_input_field;
-					editor.on('contentDom', function(){
-						editor.document.on('keyup', function(){
-							if(!editor.getData()){
+					var <?php echo $this->form.'_'.$var; ?> = CKEDITOR.instances.<?php echo $this->form.'_'.$var; ?>_input_field;
+					<?php echo $this->form.'_'.$var; ?>.on('contentDom', function(){
+						<?php echo $this->form.'_'.$var; ?>.document.on('keyup', function(){
+							if(!<?php echo $this->form.'_'.$var; ?>.getData()){
 								$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('Please fill out this field.');
 							} else {
 								$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('');
@@ -391,11 +391,11 @@ class field extends html{
 					});
 					
 					$('#<?php echo $this->form; ?>_form').submit(function(){
-						if(!editor.getData()){
+						if(!<?php echo $this->form.'_'.$var; ?>.getData()){
 							<?php $this->focus('cke_'.$this->form.'_form_'.$var); ?>
 							$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('Please fill out this field.');
 						} else {
-							editor.updateElement();
+							<?php echo $this->form.'_'.$var; ?>.updateElement();
 						}
 					});
 				<?php } ?>

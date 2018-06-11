@@ -8,11 +8,11 @@ RewriteRule (.*) - [E=build:v0.0.0]
 
 #Skull Vars
 RewriteRule (.*) - [E=skull_root:C:/_/JAT/skullframework/_skull/]
-RewriteRule (.*) - [E=skull_domain:http://skull.com/]
+RewriteRule (.*) - [E=skull_domain://skull.com/]
 
 #App Vars
 RewriteRule (.*) - [E=root:%{DOCUMENT_ROOT}%{ENV:build}/]
-RewriteRule (.*) - [E=domain:http://%{HTTP_HOST}/]
+RewriteRule (.*) - [E=domain://%{HTTP_HOST}/]
 #---------
 
 RewriteCond %{REQUEST_FILENAME} !-f

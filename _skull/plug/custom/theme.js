@@ -318,15 +318,16 @@ function file_remove(form, variable, id, type, animate){
 	}
 }
 
-function single_upload(_table, request, form, variable, _response_id, id, by){
-	$('#'+form+'_notice_main_div').html(js_notice_fine).delay().fadeIn();
+function single_upload(_table, request, _form, variable, _response_id, id, by){
 	table = _table;
+	form = _form;
 	response_id = _response_id;
+	$('#'+form+'_notice_main_div').html(js_notice_fine).delay().fadeIn();
 	file_upload(form, request, variable, id, by);
 }
 
 function multi_upload(){
-	for(n = 0; n < upload_var.length; n++){
+	for(var n = 0; n < upload_var.length; n++){
 		variable = upload_var[n];
 		by = upload_by[variable];
 		for(count = 0; count < file_arr[variable].length; count++){
@@ -418,13 +419,7 @@ function file_added(form, request, variable, id, val){
 	$('#'+variable+'_prev_'+id).attr('id', val.replace('.', ''));
 
 	if(!uip_count[variable]){
-		if(act == 'insert'){
-			setTimeout(function(){
-				success();
-			}, js_timeout);
-		} else {
-			$('#'+form+'_notice_main_div').html(js_notice_ok).delay(js_delay).fadeOut(js_fadeout);
-		}
+		success();
 	}
 }
 
@@ -631,29 +626,32 @@ function cancel(form){
 }
 
 function success(){
-	$('#'+form+'_notice_main_div').html(js_notice_ok).delay(js_delay).fadeOut(js_fadeout);												
+	$('#'+form+'_notice_main_div').html(js_notice_ok).delay(js_delay).fadeOut(js_fadeout);
 	if(url){
 		setTimeout(function(){
 			window.location = js_link+url;
 		}, js_timeout);
 	} else {
-		var form_name = form_current();
-		if(form_name == 'form'){
-			setTimeout(function(){
-				if(act == 'insert'){
-					form_open(table, request, act);
-				} else {
-					form_open(table, request, act, response_id);
-				}
-			}, js_timeout);
-		} else if(form_name == 'form2'){
-			chosen_load(table, request, '', response_id, post_form, post_variable, post_type);
-			form2_close();
-		} else if(form_name == 'form3'){
-			chosen_load(table, request, '', response_id, post_form, post_variable, post_type);
-			form3_close();
+		if(typeof submit != 'undefined'){
+			var form_name = form_current();
+			if(form_name == 'form'){
+				setTimeout(function(){
+					if(act == 'insert'){
+						form_open(table, request, act);
+					} else {
+						form_open(table, request, act, response_id);
+					}
+				}, js_timeout);
+			} else if(form_name == 'form2'){
+				chosen_load(table, request, '', response_id, post_form, post_variable, post_type);
+				form2_close();
+			} else if(form_name == 'form3'){
+				chosen_load(table, request, '', response_id, post_form, post_variable, post_type);
+				form3_close();
+			}
 		}
 		scroll(form+'_form');
+		delete submit; delete upload;
 	}
 }
 

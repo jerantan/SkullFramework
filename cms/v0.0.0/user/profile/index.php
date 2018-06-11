@@ -24,7 +24,7 @@ if(!$this->restricted(0)){
 			$this->div_close();
 			
 			$this->submit();
-		$this->form_close();
+		$this->form_close(0);
 	$this->content_close();
 }
 ?>

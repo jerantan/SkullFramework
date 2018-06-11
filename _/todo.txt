@@ -32,17 +32,19 @@ it change the height of all forms, this should be change to specific, identify w
 *** All module classes should have the same name. - Done.
 
 *** Fix setup guide and finalize setup process. - Done.
+
+*** Fix ckeditor because its not working. - Inprogress, search how to put the cursor on CKEditor. - Done.
 ---
 
 
 
 Todo:
 ---
-*** Fix ckeditor because its not working. - Inprogress, search how to put the cursor on CKEditor.
+*** Fix missing argument warnings. - Done.
 
-*** Fix file upload feature to make it working with multiple form because currently as far as I remember it is only working for multiple element inside the form.
+*** Fix ckeditor required field validation to make it working with multiple inside the form and also with multiple forms. - Done.
 
-*** Make this framework load only class methods, css and js for a specific widget or element if it is being used. Example if I dont use file upload element then the codes for file upload element should not be load. This is to optimize the page load.
+*** Replace all require_once with include because include is faster, require_once has checking logic if the file is already included. - Done.
 
 *** Check all functions like below, because it has switch but only using default case.
 function field_switch($field_name){
@@ -51,8 +53,19 @@ function field_switch($field_name){
 			$this->field_arr[] = $field_name;
 		break;
 	}
-}
+} - Done.
 
-*** Replace all require_once with include.
+*** Not scrolling up when form has image to upload, review why I make it like this. For now I guess its nice if this is scrolling up. - Done.
+
+*** Fix issue in function url and upload variable value when using same domain. - Done.
+
+*** Fix ckeditor, not working properly.
+
+*** Fix file upload feature to make it working with multiple forms because currently as far as I remember it is only working for multiple element inside the form.
+
+*** Make this framework load only class methods, css and js for a specific widget or element if it is being used. Example if I dont use file upload element then the codes for file upload element should not be load. This is to optimize the page load.
+
 *** Auto log out if user dont have activity on site.
+
+*** Create Documentation Page and link to Docs under Temp tab.
 ---

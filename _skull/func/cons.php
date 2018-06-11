@@ -8,7 +8,7 @@ define('site', $config['site']);
 /* ================================================================================================ */
 
 // Upload Directory
-define('upload', dir.'share/');
+define('upload', base.'share/');
 
 // Date Set
 define('date_time', 'Y-m-d H:i:s');

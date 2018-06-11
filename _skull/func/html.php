@@ -603,14 +603,19 @@ class html extends proc{
 			<script>
 				var focus = <?php echo $focus; ?>;
 				var form_name = form_current();
+				form_name = (form_name)? form_name+'_load' : 'content_main';
 				if(focus == 0){
-					$('.'+form_name+'_load_div .input_field:first').focus();
+					var input = $('.'+form_name+'_div .input_field:first');
+					input.focus();
+					var val = input.val();
+					input.val('');
+					input.val(val);
 				} else {
 					setTimeout(function(){
 						if(focus == 1){
-							$('.'+form_name+'_load_div .chosen-container input:first').focus();
+							$('.'+form_name+'_div .chosen-container input:first').focus();
 						} else {
-							$('.'+form_name+'_load_div .cke_skin_kama:first').focus();
+							$('.'+form_name+'_div .cke_skin_kama:first').focus();
 						}
 					}, js_timeout);
 				}

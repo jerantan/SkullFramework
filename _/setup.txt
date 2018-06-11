@@ -38,22 +38,22 @@ RewriteRule (.*) - [E=build:v0.0.0]
 #Use this if you're using different domain for Skull and App.
 #Skull Vars
 RewriteRule (.*) - [E=skull_root:C:/_/skullframework/_skull/]
-RewriteRule (.*) - [E=skull_domain:http://skull.com/]
+RewriteRule (.*) - [E=skull_domain://skull.com/]
 
 #App Vars
 RewriteRule (.*) - [E=root:%{DOCUMENT_ROOT}%{ENV:build}/]
-RewriteRule (.*) - [E=domain:http://%{HTTP_HOST}/]
+RewriteRule (.*) - [E=domain://%{HTTP_HOST}/]
 
 
 
 #Use this if you're using same domain for Skull and App.
 #Skull Vars
 RewriteRule (.*) - [E=skull_root:%{DOCUMENT_ROOT}skullframework/_skull/]
-RewriteRule (.*) - [E=skull_domain:http://%{HTTP_HOST}/skullframework/_skull/]
+RewriteRule (.*) - [E=skull_domain://%{HTTP_HOST}/skullframework/_skull/]
 
 #App Vars
 RewriteRule (.*) - [E=root:%{DOCUMENT_ROOT}skullframework/cms/%{ENV:build}/]
-RewriteRule (.*) - [E=domain:http://%{HTTP_HOST}/skullframework/cms/]
+RewriteRule (.*) - [E=domain://%{HTTP_HOST}/skullframework/cms/]
 #---------
 
 5. Open browser and visit cms.com

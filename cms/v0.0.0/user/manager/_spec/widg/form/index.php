@@ -23,5 +23,5 @@ $this->form_open($this->table);
 		$this->dropdown_required('Level', $arr, $arr, $this->val($result['level'], $arr[0]));
 	$this->div_close();
 	$this->submit();
-$this->form_close();
+$this->form_close(0);
 ?>
