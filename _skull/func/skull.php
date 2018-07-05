@@ -489,6 +489,29 @@ class skull{
 		return str_replace(base, domain, $dir);
 	}
 
+	function unlink($by, $table, $id, $val){
+		if($by){
+			if(!$val){
+				$destination = $this->path($by, $table, $id);
+				for(;;){
+					array_map('unlink', glob($destination.'*.*'));
+					rmdir($destination);
+					if(!file_exists($destination)){
+						break;
+					}
+				}
+			} else {
+				$target = $this->path($by, $table, $id).$val;
+				for(;;){
+					unlink($target);
+					if(!file_exists($target)){
+						break;
+					}
+				}
+			}
+		}
+	}
+
 	function path($by, $table, $id){
 		switch($by){
 			case 'entry':

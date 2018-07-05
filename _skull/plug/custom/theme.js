@@ -179,7 +179,7 @@ function form_current(){
 	return form;
 }
 
-function form_select(table, request, act, form, variable, type, id){
+function form_select(table, request, act, form, variable, type, id = ''){
 	var form_name = form_current();
 	if(form_name == 'form'){
 		form2_open(table, request, act, form, variable, type, id);
@@ -292,24 +292,25 @@ function format(type, val){
 
 // Upload
 /* ------------------------------------------------------------------------------------------------ */
-function file_remove(form, variable, id, type, animate){
-	file_arr[variable][id] = '';
+function file_remove(form, variable, id, type, animate = ''){
+	var _upload_obj = upload_obj[form][variable];
+	_upload_obj.file_arr[id] = '';
 	if(animate){
-		$('#'+variable+'_prev_'+id).delay(js_delay).fadeOut(js_fadeout);
+		$('#'+form+'_form #'+variable+'_prev_'+id).delay(js_delay).fadeOut(js_fadeout);
 		setTimeout(function(){
-			$('#'+variable+'_prev_'+id).remove();
+			$('#'+form+'_form #'+variable+'_prev_'+id).remove();
 			if(type){
-				if(!file_arr[variable].filter(string).length && !uip_count[variable]){
+				if(!_upload_obj.file_arr.filter(string).length && !_upload_obj.uip_count){
 					$('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field.');
 					$('#'+form+'_form #'+variable+'_err_main_div').css('top', '22px');
 				}
 			}
 			form_height_load();
-		}, 3000);
+		}, 2000);
 	} else {
-		$('#'+variable+'_prev_'+id).remove();
+		$('#'+form+'_form #'+variable+'_prev_'+id).remove();
 		if(type){
-			if(!file_arr[variable].filter(string).length && !uip_count[variable]){
+			if(!_upload_obj.file_arr.filter(string).length && !_upload_obj.uip_count){
 				$('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field.');
 				$('#'+form+'_form #'+variable+'_err_main_div').css('top', '22px');
 			}
@@ -319,6 +320,7 @@ function file_remove(form, variable, id, type, animate){
 }
 
 function single_upload(_table, request, _form, variable, _response_id, id, by){
+	url = '';
 	table = _table;
 	form = _form;
 	response_id = _response_id;
@@ -327,11 +329,11 @@ function single_upload(_table, request, _form, variable, _response_id, id, by){
 }
 
 function multi_upload(){
-	for(var n = 0; n < upload_var.length; n++){
-		variable = upload_var[n];
-		by = upload_by[variable];
-		for(count = 0; count < file_arr[variable].length; count++){
-			if(file_arr[variable][count]){
+	for(var variable in upload_obj[form]){
+		var _upload_obj = upload_obj[form][variable];
+		var by = _upload_obj.upload_by;
+		for(var count = 0; count < _upload_obj.file_arr.length; count++){
+			if(_upload_obj.file_arr[count]){
 				file_upload(form, request, variable, count, by);
 			}
 		}
@@ -339,23 +341,24 @@ function multi_upload(){
 }
 
 function file_upload(form, request, variable, id, by){
-	if(!$.isArray(file_arr[variable][id])){ // This means if the object is not upload-in-progress
-		uip_count[variable]++; // This is upload-in-progress add count
+	var _upload_obj = upload_obj[form][variable];
+	if(!$.isArray(_upload_obj.file_arr[id])){ // This means if the object is not upload-in-progress
+		_upload_obj.uip_count++; // This is upload-in-progress add count
 
-		$('#'+variable+'_prev_'+id+' .progress-bar').html('0%');
-		$('#'+variable+'_prev_'+id+' .progress-bar').css('width', '0%');
+		$('#'+form+'_form #'+variable+'_prev_'+id+' .progress-bar').html('0%');
+		$('#'+form+'_form #'+variable+'_prev_'+id+' .progress-bar').css('width', '0%');
 		
-		$('#'+variable+'_prev_'+id+' .progress').show();
-		$('#'+variable+'_prev_'+id+' .cancel').show();
+		$('#'+form+'_form #'+variable+'_prev_'+id+' .progress').show();
+		$('#'+form+'_form #'+variable+'_prev_'+id+' .cancel').show();
 		
 		file_form = new FormData();
 		file_form.append('proc', 'copy');
 		file_form.append('by', by);
 		file_form.append('table', table);
 		file_form.append('id', response_id);
-		file_form.append('file_upload', file_arr[variable][id]);
+		file_form.append('file_upload', _upload_obj.file_arr[id]);
 
-		file_arr[variable][id] = new Array(file_arr[variable][id], 1); // This is to set the object as upload-in-progress
+		_upload_obj.file_arr[id] = new Array(_upload_obj.file_arr[id], 1); // This is to set the object as upload-in-progress
 		
 		$.ajax({
 			url: js_domain+request,
@@ -368,21 +371,21 @@ function file_upload(form, request, variable, id, by){
 				if(myXhr.upload){
 					myXhr.upload.addEventListener('progress', function(e){
 						progress = Math.round((e.loaded * 100) / e.total);
-						$('#'+variable+'_prev_'+id+' .progress-bar').html(progress+'%');
-						$('#'+variable+'_prev_'+id+' .progress-bar').css('width', progress+'%');
+						$('#'+form+'_form #'+variable+'_prev_'+id+' .progress-bar').html(progress+'%');
+						$('#'+form+'_form #'+variable+'_prev_'+id+' .progress-bar').css('width', progress+'%');
 					});
 				}
 				return myXhr;
 			},												
 			beforeSend: function(upload){				
-				$('#'+variable+'_prev_'+id+' .cancel').click(function(){
+				$('#'+form+'_form #'+variable+'_prev_'+id+' .cancel').click(function(){
 					upload.abort();
 
-					if($.isArray(file_arr[variable][id])){ // This is to prevent loading many times. Enchancement: remove the appended FormData() after upload.abort.
-						uip_count[variable]--; // This is upload-in-progress minus count
+					if($.isArray(_upload_obj.file_arr[id])){ // This is to prevent loading many times. Enchancement: remove the appended FormData() after upload.abort.
+						_upload_obj.uip_count--; // This is upload-in-progress minus count
 
 						if(act == 'insert'){
-							if(!uip_count[variable]){
+							if(!_upload_obj.uip_count){
 								setTimeout(function(){
 									success();
 								}, js_timeout);
@@ -391,10 +394,10 @@ function file_upload(form, request, variable, id, by){
 							$('#'+form+'_notice_main_div').delay().fadeOut();
 						}
 
-						$('#'+variable+'_prev_'+id+' .progress').hide();
-						$('#'+variable+'_prev_'+id+' .cancel').hide();
+						$('#'+form+'_form #'+variable+'_prev_'+id+' .progress').hide();
+						$('#'+form+'_form #'+variable+'_prev_'+id+' .cancel').hide();
 
-						file_arr[variable][id] = file_arr[variable][id][0]; // This is to set the object as not upload-in-progress
+						_upload_obj.file_arr[id] = _upload_obj.file_arr[id][0]; // This is to set the object as not upload-in-progress
 					}
 				});
 			},
@@ -406,19 +409,20 @@ function file_upload(form, request, variable, id, by){
 }
 
 function file_added(form, request, variable, id, val){
-	uip_count[variable]--; // This is upload-in-progress minus count
-	file_arr[variable][id] = '';
+	var _upload_obj = upload_obj[form][variable];
+	_upload_obj.uip_count--; // This is upload-in-progress minus count
+	_upload_obj.file_arr[id] = '';
 
-	$('#'+variable+'_prev_'+id+' .upload').hide();
-	$('#'+variable+'_prev_'+id+' .remove').html('Delete');
-	$('#'+variable+'_prev_'+id+' .remove').attr('onclick', "del_box('"+table+"', '"+request+"', '"+val+"', '"+response_id+"', 1)");
+	$('#'+form+'_form #'+variable+'_prev_'+id+' .upload').hide();
+	$('#'+form+'_form #'+variable+'_prev_'+id+' .remove').html('Delete');
+	$('#'+form+'_form #'+variable+'_prev_'+id+' .remove').attr('onclick', "del_box('"+table+"', '"+request+"', '"+val+"', '"+response_id+"', 1)");
 
-	$('#'+variable+'_prev_'+id+' .progress').hide();
-	$('#'+variable+'_prev_'+id+' .cancel').hide();
+	$('#'+form+'_form #'+variable+'_prev_'+id+' .progress').hide();
+	$('#'+form+'_form #'+variable+'_prev_'+id+' .cancel').hide();
 
-	$('#'+variable+'_prev_'+id).attr('id', val.replace('.', ''));
+	$('#'+form+'_form #'+variable+'_prev_'+id).attr('id', val.replace('.', ''));
 
-	if(!uip_count[variable]){
+	if(!_upload_obj.uip_count){
 		success();
 	}
 }
@@ -545,7 +549,7 @@ function active(table, request, val, id){
 	});
 }
 
-function del_box(table, request, val, id, type){
+function del_box(table, request, val, id, type = ''){
 	$('.del_box_main_div').modal('show');
 	$('.del_box_val').html(val);
 

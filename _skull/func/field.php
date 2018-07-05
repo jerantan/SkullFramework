@@ -446,7 +446,7 @@ class field extends html{
 		?>
 			<option value=""></option>
 			<?php foreach($arr_val as $index => $val){ ?>
-				<option value="<?php echo $val; ?>" <?php if($sel == $val){ echo 'selected'; } ?>><?php echo $arr_opt[$index]; ?></option>
+				<option value="<?php echo $val; ?>" <?php if($sel == $val && $arr_opt[$index]){ echo 'selected'; } ?>><?php echo $arr_opt[$index]; ?></option>
 			<?php } ?>
 		<?php
 	}
@@ -950,7 +950,7 @@ class field extends html{
 		$this->field_frame_close($var);
 	}
 
-	// Upload // Fix: JS function placement and make js work for multiple upload field in the same form and also using multiple forms at the same page.
+	// Upload
 	/* ------------------------------------------------------------------------------------------------ */
 	function upload_field($var, $multi){
 		if($this->act != 'view'){
@@ -1016,51 +1016,53 @@ class field extends html{
 		<?php
 	}
 
-	// Here: Put var on the variables that needs to have scoping.
 	function upload_event_val($event, $var, $multi, $type = ''){
 		?>
 			<script>
-				upload_field++;
-				upload_var[upload_field] = '<?php echo $var; ?>';
-
-				file_arr['<?php echo $var; ?>'] = new Array();
-				file_count['<?php echo $var; ?>'] = 0;
-				upload_type_arr['<?php echo $var; ?>'] = '<?php echo $this->upload_type; ?>'.split(', ');
-				upload_list['<?php echo $var; ?>'] = '';
-				upload_by['<?php echo $var; ?>'] = '<?php echo $this->upload_by; ?>';
-				uip_count['<?php echo $var; ?>'] = 0; // This is upload-in-progress initial count
+				if(typeof upload_obj['<?php echo $this->form; ?>'] == 'undefined'){
+					upload_obj['<?php echo $this->form; ?>'] = {};
+				}
+				upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'] = {};
+				upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].file_arr = new Array;
+				upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].file_count = 0;
+				upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].upload_type_arr = '<?php echo $this->upload_type; ?>'.split(', ');
+				upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].upload_list = '';
+				upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].upload_by = '<?php echo $this->upload_by; ?>';
+				upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].uip_count = 0; // This is upload-in-progress initial count
 				
 				$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').<?php echo $event; ?>(function(event){
-					file = event.target.files;
-					for(count = file_count['<?php echo $var; ?>']; count < file.length + file_count['<?php echo $var; ?>']; count++){
-						filename = file[count - file_count['<?php echo $var; ?>']].name;
-						extension = filename.substr(filename.lastIndexOf('.') + 1);
+					var file = event.target.files;
+					for(var count = upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].file_count; count < file.length + upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].file_count; count++){
+						var filename = file[count - upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].file_count].name;
+						var extension = filename.substr(filename.lastIndexOf('.') + 1);
 						
-						file_arr['<?php echo $var; ?>'][count] = file[count - file_count['<?php echo $var; ?>']];
-						tmppath = URL.createObjectURL(file[count - file_count['<?php echo $var; ?>']]);
+						upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].file_arr[count] = file[count - upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].file_count];
+						var tmppath = URL.createObjectURL(file[count - upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].file_count]);
 						
 						<?php if(!$multi){ ?>
 							file_remove('<?php echo $this->form; ?>', '<?php echo $var; ?>', count - 1, '<?php echo $type; ?>');
 						<?php } ?>
 
-						html = '<div id="<?php echo $var; ?>_prev_'+count+'" class="col-md-2">';
+						var html; var list; var list_arr; var preview;
+
+						html  = '<div id="<?php echo $var; ?>_prev_'+count+'" class="col-md-2">';
 						html += '<br>';
 						html += '<div class="col-md-12 shadow" style="padding-top: 15px; padding-bottom: 15px">';
 						
-						if($.inArray('image', upload_type_arr['<?php echo $var; ?>']) >= 0){
+						if($.inArray('image', upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].upload_type_arr) >= 0){
 							list = '<?php echo image; ?>';
 							list_arr = list.split(', ');
-							upload_list['<?php echo $var; ?>'] += list+', ';
+							upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].upload_list += list+', ';
 							
 							if($.inArray(extension, list_arr) >= 0){
 								preview = '<div style="width: 100%; height: 150px; background: url('+tmppath+') no-repeat center; background-size: 100%"></div>';
 							}
 						}
 						
-						if($.inArray('audio', upload_type_arr['<?php echo $var; ?>']) >= 0){
+						if($.inArray('audio', upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].upload_type_arr) >= 0){
 							list = '<?php echo audio; ?>';
 							list_arr = list.split(', ');
-							upload_list['<?php echo $var; ?>'] += list+', ';
+							upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].upload_list += list+', ';
 							
 							if($.inArray(extension, list_arr) >= 0){
 								preview = '<div style="height: 150px; overflow: hidden; word-wrap: break-word">';
@@ -1072,10 +1074,10 @@ class field extends html{
 							}
 						}
 						
-						if($.inArray('video', upload_type_arr['<?php echo $var; ?>']) >= 0){
+						if($.inArray('video', upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].upload_type_arr) >= 0){
 							list = '<?php echo video; ?>';
 							list_arr = list.split(', ');
-							upload_list['<?php echo $var; ?>'] += list;
+							upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].upload_list += list;
 							
 							if($.inArray(extension, list_arr) >= 0){
 								preview = '<div style="height: 150px">';
@@ -1086,11 +1088,13 @@ class field extends html{
 							}
 						}
 
-						upload_list_arr = upload_list['<?php echo $var; ?>'].split(', ');
+						var upload_list_arr = upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].upload_list.split(', ');
 						if($.inArray(extension, upload_list_arr) < 0){
 							html += '<div class="err" style="width: 100%; height: 150px">WhOops! ".'+extension+'" is not allowed. This will be auto removed.</div>';
 							html += '<br>';
 						} else {
+							var html_single_upload; var html_file_remove;
+
 							html += preview;
 							<?php if($this->act == 'update'){ ?>
 								act = '<?php echo $this->act; ?>';
@@ -1107,7 +1111,7 @@ class field extends html{
 						
 						html += '</div>';
 						html += '</div>';
-						$('#<?php echo $var; ?>_prev').prepend(html);
+						$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_prev').prepend(html);
 
 						if($.inArray(extension, upload_list_arr) < 0){
 							file_remove('<?php echo $this->form; ?>', '<?php echo $var; ?>', count, '<?php echo $type; ?>', 1);
@@ -1115,7 +1119,7 @@ class field extends html{
 					}
 					
 					$(this).val('');
-					file_count['<?php echo $var; ?>'] = count;
+					upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].file_count = count;
 					form_height_load();
 					$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('');
 				});
@@ -1127,7 +1131,7 @@ class field extends html{
 		?>
 			<script>
 				$('#<?php echo $this->form; ?>_form').submit(function(){
-					if(!file_arr['<?php echo $var; ?>'].filter(string).length){
+					if(!upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].file_arr.filter(string).length){
 						<?php if($type){ ?>
 							<?php $this->focus($var); ?>
 							$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('Please fill out this field.');

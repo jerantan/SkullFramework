@@ -34,6 +34,8 @@ switch($proc){
 		$sql->update();
 	break;
 	case 'delete':
+		$by = 'setup';
+		$this->unlink($by, $table, $id, $val);
 		$by = 'entry';
 	break;
 }

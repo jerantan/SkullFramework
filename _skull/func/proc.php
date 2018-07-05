@@ -92,30 +92,8 @@ class proc extends skull{
 		$id = $_POST['id'];
 		$val = $_POST['val'];
 		$by = '';
-
 		include root.$this->uri.iud;
-
-		if($by){
-			if(!$val){
-				$destination = $this->path($by, $table, $id);
-				for(;;){
-					array_map('unlink', glob($destination.'*.*'));
-					rmdir($destination);
-					if(!file_exists($destination)){
-						break;
-					}
-				}
-			} else {
-				$target = $this->path($by, $table, $id).$val;
-				for(;;){
-					unlink($target);
-					if(!file_exists($target)){
-						break;
-					}
-				}
-			}
-		}
-
+		$this->unlink($by, $table, $id, $val);
 		if(!$val){
 			$sql = $this->sql;
 			$sql->table = $table;
