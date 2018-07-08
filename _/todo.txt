@@ -53,12 +53,7 @@ function field_switch($field_name){
 *** Not scrolling up when form has image to upload, review why I make it like this. For now I guess its nice if this is scrolling up. - Done.
 
 *** Fix issue in function url and upload variable value when using same domain. - Done.
----
 
-
-
-Todo:
----
 *** Chosen validation for required field is not working if action is update then chosen is empty.
 	Explanation: The field is empty bacause the value of the selected option is blank, but actually it has a selected option if you inspect the element, that is why required field is not working. But I fixed it anyway by updating the line below.
 	From 	: <?php if($sel == $val){ echo 'selected'; } ?>
@@ -69,8 +64,13 @@ Todo:
 
 *** Fix file upload feature to make it working with multiple forms because currently as far as I remember it is only working for multiple element inside the form. - Done.
 
-*** Auto log out if user dont have activity on site.
+*** Auto log out if user dont have activity on site. - Done.
+---
 
+
+
+Todo:
+---
 *** Make this framework load only class methods, css and js for a specific widget or element if it is being used. Example if I dont use file upload element then the codes for file upload element should not be load. This is to optimize the page load.
 
 *** Fix ckeditor, not working properly.

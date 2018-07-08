@@ -14,6 +14,25 @@
 	upload_obj = {};
 </script>
 
+<?php if($this->userdata['active']){ ?>
+	<script>
+		(function idleSignout(){
+			var t;
+			window.onload = resetTimer;
+			window.onmousemove = resetTimer;
+			window.onmousedown = resetTimer; // catches touchscreen presses
+			window.onclick = resetTimer;     // catches touchpad clicks
+			window.onscroll = resetTimer;    // catches scrolling with arrow keys
+			window.onkeypress = resetTimer;
+
+			function resetTimer() {
+				clearTimeout(t);
+				t = setTimeout(signout, 60000 * 30);  // time is in milliseconds
+			}
+		})();
+	</script>
+<?php } ?>
+
 <style>
 	html, body{ background: <?php echo html; ?>; }
 	.notice_prop{ background: <?php echo html; ?>; }
