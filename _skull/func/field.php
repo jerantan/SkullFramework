@@ -361,67 +361,6 @@ class field extends html{
 		$this->field_frame_close($var);
 	}
 
-	// CKEditor
-	/* ------------------------------------------------------------------------------------------------ */
-	function ckeditor_field($var, $val, $type = ''){
-		if($this->act != 'view'){
-		?>
-			<textarea name="<?php echo $var; ?>" id="<?php echo $this->form.'_'.$var; ?>_input_field" class="form-control input-sm input_field"><?php echo $val; ?></textarea>
-			<script>
-				delete CKEDITOR.instances.<?php echo $this->form.'_'.$var; ?>_input_field;
-				
-				CKEDITOR.replace('<?php echo $this->form.'_'.$var; ?>_input_field', {
-					uiColor: '<?php echo main; ?>'
-				});
-				
-				setTimeout(function(){
-					form_height_load();
-				}, js_timeout);
-				
-				<?php if($type){ ?>
-					var <?php echo $this->form.'_'.$var; ?> = CKEDITOR.instances.<?php echo $this->form.'_'.$var; ?>_input_field;
-					<?php echo $this->form.'_'.$var; ?>.on('contentDom', function(){
-						<?php echo $this->form.'_'.$var; ?>.document.on('keyup', function(){
-							if(!<?php echo $this->form.'_'.$var; ?>.getData()){
-								$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('Please fill out this field.');
-							} else {
-								$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('');
-							}
-						});
-					});
-					
-					$('#<?php echo $this->form; ?>_form').submit(function(){
-						if(!<?php echo $this->form.'_'.$var; ?>.getData()){
-							<?php $this->focus('cke_'.$this->form.'_form_'.$var); ?>
-							$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('Please fill out this field.');
-						} else {
-							<?php echo $this->form.'_'.$var; ?>.updateElement();
-						}
-					});
-				<?php } ?>
-			</script>
-		<?php
-		} else {
-			$this->view_field($var, $val);
-		}
-	}
-	
-	/* Usage : ckeditor('Content', $result['content']); or ckeditor('Another : Content', $result['another_content']); */
-	function ckeditor($label, $val){
-		$this->field_frame_open($label);
-			$var = $this->variable($label);
-			$this->ckeditor_field($var, $val);
-		$this->field_frame_close($var);
-	}
-	
-	/* Usage : ckeditor_required('Content', $result['content']); or ckeditor_required('Another : Content', $result['another_content']); */
-	function ckeditor_required($label, $val){
-		$this->field_frame_open($label, 1);
-			$var = $this->variable($label);
-			$this->ckeditor_field($var, $val, 1);
-		$this->field_frame_close($var);
-	}
-
 	// Dropdown
 	/* ------------------------------------------------------------------------------------------------ */
 	function dropdown_field($var, $arr_val, $arr_opt, $sel){

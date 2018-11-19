@@ -41,12 +41,6 @@ $this->form_open($this->table);
 			$this->upload_by = 'setup';
 			$this->upload_required('Another : Photo', 1);
 		$this->div_close();
-		// $this->div_open(12, 12);
-			// $this->ckeditor_required('Content', $result['name']);
-		// $this->div_close();
-		// $this->div_open(12, 12);
-			// $this->ckeditor_required('Another : Content', $result['name']);
-		// $this->div_close();
 	// /Test functions
 	$this->submit();
 $this->form_close(0);
@@ -86,12 +80,6 @@ $this->form_close(0);
 				$this->upload_by = 'setup';
 				$this->upload_required('Another : Photo', 1);
 			$this->div_close();
-			// $this->div_open(12, 12);
-				// $this->ckeditor('Content', $result['name']);
-			// $this->div_close();
-			// $this->div_open(12, 12);
-				// $this->ckeditor_required('Another : Content', $result['name']);
-			// $this->div_close();
 		// /Test functions
 		$this->div_open(12, 12);
 			$this->submit();
@@ -133,12 +121,6 @@ $this->content1_open(12, 12, 'Another User Form');
 				$this->upload_by = 'setup';
 				$this->upload_required('Another : Photo', 1);
 			$this->div_close();
-			// $this->div_open(12, 12);
-				// $this->ckeditor('Content', $result['name']);
-			// $this->div_close();
-			// $this->div_open(12, 12);
-				// $this->ckeditor_required('Another : Content', $result['name']);
-			// $this->div_close();
 		// /Test functions
 		$this->div_open(12, 12);
 			$this->submit();

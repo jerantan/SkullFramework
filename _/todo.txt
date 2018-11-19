@@ -71,11 +71,25 @@ function field_switch($field_name){
 
 Todo:
 ---
+*** Remove Ckeditor because of the following issues:
+		- Not working properly.
+		- Required field validation is not working.
+	Just have to add it manually if needed because this is a burden and a huge blocker on the Skull development.
+
 *** Make this framework load only class methods, css and js for a specific widget or element if it is being used. Example if I dont use file upload element then the codes for file upload element should not be load. This is to optimize the page load.
 
-*** Fix ckeditor, not working properly.
-
-*** Ckeditor triggered some error if you click chosen add button, it opens the modal form 2 but when you close it and click submit at the modal form 1 it refreshes the page and send the from values to address bar.
+*** Make the post and get values encripted. Make a process like an SSL approach.
 
 *** Create Documentation Page and link to Docs under Temp tab.
+---
+
+
+
+Enhancement:
+---
+*** Submit only if form has changes if none, just a div saying that no changes to save.
+
+*** Add url to anchor tags to identify the link before clicking.
+
+*** Enable modal form using url or even page refresh.
 ---

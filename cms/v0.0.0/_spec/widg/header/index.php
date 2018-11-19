@@ -29,8 +29,6 @@
 	<!-- Chosen -->
 	<script src="<?php echo skull_domain; ?>plug/chosen/chosen.jquery.min.js"></script>
 	<link href="<?php echo skull_domain; ?>plug/chosen/bootstrap-chosen.css" rel="stylesheet">
-	<!-- CKEditor -->
-	<script src="<?php echo skull_domain; ?>plug/ckeditor/ckeditor.js"></script>
 </head>
 <body>
 <div class="navbar navbar-default navbar-fixed-top" role="navigation">
