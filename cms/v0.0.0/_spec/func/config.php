@@ -1,8 +1,8 @@
 <?php
 $config = array(
 	'project' 		=> 		'Skull Framework',
-	'firm' 			=> 		'JAT Corp.',
-	'site' 			=> 		'http://jatcorp.com/',
+	'firm' 			=> 		'JTAN Corp',
+	'site' 			=> 		'//jtancorp.com/',
 	'timezone' 		=> 		'Asia/Manila',
 	'term'	 		=> 		'Manager',
 	'symbol' 		=> 		'₱',

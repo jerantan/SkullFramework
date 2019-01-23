@@ -65,31 +65,36 @@ function field_switch($field_name){
 *** Fix file upload feature to make it working with multiple forms because currently as far as I remember it is only working for multiple element inside the form. - Done.
 
 *** Auto log out if user dont have activity on site. - Done.
+
+*** Remove Ckeditor because of the following issues:
+		- Not working properly.
+		- Required field validation is not working.
+	Just have to add it manually if needed because this is a burden and a huge blocker on the Skull development. - Done.
 ---
 
 
 
 Todo:
 ---
-*** Remove Ckeditor because of the following issues:
-		- Not working properly.
-		- Required field validation is not working.
-	Just have to add it manually if needed because this is a burden and a huge blocker on the Skull development.
-
 *** Make this framework load only class methods, css and js for a specific widget or element if it is being used. Example if I dont use file upload element then the codes for file upload element should not be load. This is to optimize the page load.
 
-*** Make the post and get values encripted. Make a process like an SSL approach.
+The above leads to page load performance issue because of having too many injecting process that is why I realized to just inject only the major libraries (js and css) not every js and css of a specific element. - Done.
 
-*** Create Documentation Page and link to Docs under Temp tab.
----
+*** Enable SSL using 443 vhost setup. - Done.
 
+*** Make the post and get values encrypted. Make a process like an SSL approach. - Done.
 
+*** Add change event for required field validation in date_required. - Done.
 
-Enhancement:
----
-*** Submit only if form has changes if none, just a div saying that no changes to save.
+*** Submit only if form has changes if none, just a div saying that no changes to save. - Done.
+
+*** Place signout script accordingly to solve "Uncaught ReferenceError: signout is not defined" issue. - Done.
 
 *** Add url to anchor tags to identify the link before clicking.
 
 *** Enable modal form using url or even page refresh.
+
+*** Create a function for the repeated js like .submit and .keyup scripts so it won't be displayed in the page source one by one each element and place it on skull/theme.js.
+
+*** Create Documentation Page and link to Docs under Temp tab.
 ---

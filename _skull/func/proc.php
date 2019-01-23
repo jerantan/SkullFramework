@@ -3,8 +3,8 @@ class proc extends skull{
 	function signin(){
 		$table = $_POST['table'];
 		$field = $_POST['field'];
-		$val = $_POST['val'];
-		$pass = $_POST['pass'];
+		$val = $this->decrypt($_POST['val']);
+		$pass = $this->decrypt($_POST['pass']);
 
 		$sql = $this->sql;
 		$sql->field = 'id, active';
@@ -76,6 +76,7 @@ class proc extends skull{
 	function insert(){
 		$proc = $_POST['proc'];
 		$table = $_POST['table'];
+		$this->decipher();
 		include root.$this->uri.iud;
 	}
 
@@ -83,6 +84,7 @@ class proc extends skull{
 		$proc = $_POST['proc'];
 		$table = $_POST['table'];
 		$id = $_POST['id'];
+		$this->decipher();
 		include root.$this->uri.iud;
 	}
 
@@ -105,7 +107,7 @@ class proc extends skull{
 	function unique(){
 		$table = $_POST['table'];
 		$field = $_POST['field'];
-		$val = $_POST['val'];
+		$val = $this->decrypt($_POST['val']);
 		$id = $_POST['id'];
 		
 		$sql = $this->sql;

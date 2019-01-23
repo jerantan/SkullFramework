@@ -10,8 +10,8 @@
 						proc: 'signin',
 						table: '<?php echo $table; ?>',
 						field: '<?php echo $var; ?>',
-						val: $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val(),
-						pass: $('#<?php echo $this->form; ?>_form #password_input_field').val()
+						val: encrypt($('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val()),
+						pass: encrypt($('#<?php echo $this->form; ?>_form #password_input_field').val())
 					},
 					success: function(response){
 						switch(response.trim()){

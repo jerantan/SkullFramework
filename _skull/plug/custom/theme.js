@@ -633,7 +633,7 @@ function success(){
 	$('#'+form+'_notice_main_div').html(js_notice_ok).delay(js_delay).fadeOut(js_fadeout);
 	if(url){
 		setTimeout(function(){
-			window.location = js_link+url;
+			window.location = js_domain+url;
 		}, js_timeout);
 	} else {
 		if(typeof submit != 'undefined'){
@@ -663,18 +663,38 @@ function ucfirst(string){
 	return string.substring(0, 1).toUpperCase()+string.substring(1).toLowerCase();
 }
 
-function inject(file, ext){
-	var element;
+function inject(file){
+	var ext = file.substr(file.lastIndexOf('.') + 1);
+	var elem;
 	switch(ext){
 		case 'js':
-			element = document.createElement('script');
-    		element.src = file+'.'+ext;
+			elem = document.createElement('script');
+    		elem.src = file;
 		break;
 		case 'css':
-			element = document.createElement('link');
-    		element.href = file+'.'+ext;
-    		element.rel = 'stylesheet';
+			elem = document.createElement('link');
+    		elem.href = file;
+    		elem.rel = 'stylesheet';
 		break;
 	}
-	document.getElementsByTagName('head')[0].appendChild(element);
+	document.getElementsByTagName('head')[0].appendChild(elem);
+}
+
+function encrypt(str){
+	var alphanumeric = js_alphanumeric;
+	var rand = Math.floor((Math.random() * alphanumeric.length) + 2);
+	var mod = rand % 2;
+	if(mod) rand--;
+	rand_half = rand / 2;
+	var hash = '';
+	for(var char of str){
+		var index = alphanumeric.indexOf(char);
+		if(index >= 0){
+			var new_index = (index + rand) % alphanumeric.length;
+			hash += alphanumeric.substr(new_index, 1);
+		} else {
+			hash += char;
+		}
+	}
+	return btoa('<!--192'+rand_half+'168-->'+hash+'<!--0'+rand+'1-->');
 }

@@ -1,4 +1,5 @@
 <script>
+	var js_alphanumeric = '<?php echo alphanumeric; ?>';
 	var js_domain = '<?php echo domain; ?>';
 	var js_symbol = '<?php echo symbol; ?>';
 	var js_notice_fine = '<?php $this->notice_fine(fine); ?>';
@@ -8,29 +9,41 @@
 	var js_timeout = '<?php echo timeout; ?>';
 	var js_offset = '<?php echo offset; ?>';
 	var js_scroll = '<?php echo scroll; ?>';
-	var js_link = '<?php $this->link(''); ?>';
 
 	// Upload Obj
 	upload_obj = {};
 </script>
 
 <?php if($this->userdata['active']){ ?>
-	<script>
-		(function idleSignout(){
-			var t;
-			window.onload = resetTimer;
-			window.onmousemove = resetTimer;
-			window.onmousedown = resetTimer; // catches touchscreen presses
-			window.onclick = resetTimer;     // catches touchpad clicks
-			window.onscroll = resetTimer;    // catches scrolling with arrow keys
-			window.onkeypress = resetTimer;
-
-			function resetTimer() {
-				clearTimeout(t);
-				t = setTimeout(signout, 60000 * 30);  // time is in milliseconds
+<script>
+	function signout(){
+		$.ajax({
+			url: js_domain,
+			type: 'post',
+			data: {
+				proc: 'signout'
+			},
+			success: function(){
+				location.reload();
 			}
-		})();
-	</script>
+		});
+	}
+
+	(function idleSignout(){
+		var t;
+		window.onload = resetTimer;
+		window.onmousemove = resetTimer;
+		window.onmousedown = resetTimer; // catches touchscreen presses
+		window.onclick = resetTimer;     // catches touchpad clicks
+		window.onscroll = resetTimer;    // catches scrolling with arrow keys
+		window.onkeypress = resetTimer;
+
+		function resetTimer() {
+			clearTimeout(t);
+			t = setTimeout(signout, 60000 * 30);  // time is in milliseconds
+		}
+	})();
+</script>
 <?php } ?>
 
 <style>

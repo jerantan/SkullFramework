@@ -1,9 +1,21 @@
-1. Open: C:\xampp\apache\conf\extra\httpd-vhosts.conf
+1. Open C:\xampp\apache\conf\extra\httpd-vhosts.conf
 
 Add lines:
 <VirtualHost *:80>
        DocumentRoot "C:/_/JAT/skullframework/_skull/"
        ServerName skull.com
+       <Directory "C:/_/JAT/skullframework/_skull/">
+              Options Indexes FollowSymLinks Includes ExecCGI
+              AllowOverride All
+              Require all granted
+       </Directory>
+</VirtualHost>
+<VirtualHost *:443>
+       DocumentRoot "C:/_/JAT/skullframework/_skull/"
+       ServerName skull.com
+       SSLEngine On
+       SSLCertificateFile "C:/xampp/apache/conf/ssl.crt/server.crt"
+       SSLCertificateKeyFile "C:/xampp/apache/conf/ssl.key/server.key"
        <Directory "C:/_/JAT/skullframework/_skull/">
               Options Indexes FollowSymLinks Includes ExecCGI
               AllowOverride All
@@ -19,16 +31,28 @@ Add lines:
               Require all granted
        </Directory>
 </VirtualHost>
+<VirtualHost *:443>
+       DocumentRoot "C:/_/JAT/skullframework/cms/"
+       ServerName cms.com
+       SSLEngine On
+       SSLCertificateFile "C:/xampp/apache/conf/ssl.crt/server.crt"
+       SSLCertificateKeyFile "C:/xampp/apache/conf/ssl.key/server.key"
+       <Directory "C:/_/JAT/skullframework/cms/">
+              Options Indexes FollowSymLinks Includes ExecCGI
+              AllowOverride All
+              Require all granted
+       </Directory>
+</VirtualHost>
 
 2. Right click notepad and select Run as administrator then Ctrl + O to open C:\Windows\System32\drivers\etc\hosts
 
 Add lines:
-        127.0.0.1       skull.com
-        127.0.0.1       cms.com
+127.0.0.1       skull.com
+127.0.0.1       cms.com
 
 3. Restart Apache
 
-4. Open: C:\xampp\htdocs\html\JAT\skullframework\cms\.htaccess
+4. Open skullframework\cms\.htaccess
 
 #---------
 #Edit v0.0.0 which refers to the build of App you want to use.
@@ -56,6 +80,6 @@ RewriteRule (.*) - [E=root:%{DOCUMENT_ROOT}skullframework/cms/%{ENV:build}/]
 RewriteRule (.*) - [E=domain://%{HTTP_HOST}/skullframework/cms/]
 #---------
 
-5. Open browser and visit cms.com
+5. Open browser and visit http://cms.com or https://cms.com. These are both working because of enabling VirtualHost *:80 and VirtualHost *:443
 
-6. If has errors check: C:\xampp\htdocs\html\JAT\skullframework\cms\v0.0.0\_spec\func\config.php
+6. If has errors check skullframework\cms\v0.0.0\_spec\func\config.php

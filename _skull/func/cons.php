@@ -7,6 +7,9 @@ define('firm', $config['firm']);
 define('site', $config['site']);
 /* ================================================================================================ */
 
+// Alphanumeric
+define('alphanumeric', '0123456789AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz');
+
 // Upload Directory
 define('upload', base.'share/');
 

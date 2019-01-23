@@ -3,7 +3,7 @@ class html extends proc{
 	// Notice
 	/* ------------------------------------------------------------------------------------------------ */
 	function notice($id){ ?><div id="<?php echo $id; ?>_notice_main_div" class="notice_main_div"></div><?php }
-	function notice_err($msg){ ?><div class="notice_prop notice_div notice_err err"><i class="glyphicon glyphicon-remove-circle"></i> <?php echo $msg; ?></div><?php }
+	function notice_err($msg){ ?><div class="col-md-2 col-sm-3 col-xs-4 notice_prop notice_div notice_err err"><i class="glyphicon glyphicon-remove-circle"></i> <?php echo $msg; ?></div><?php }
 	function notice_ok($msg){ ?><div class="col-md-2 col-sm-3 col-xs-4 notice_prop notice_div notice_ok ok"><i class="glyphicon glyphicon-ok-circle"></i> <?php echo $msg; ?></div><?php }
 	function notice_info($msg){ ?><div class="notice_div notice_info info alert"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><i class="glyphicon glyphicon-info-sign"></i> <?php echo $msg; ?></div><?php }
 	function notice_fine($msg){ ?><div class="col-md-2 col-sm-3 col-xs-4 notice_prop notice_div notice_fine fine"><img src="<?php echo skull_domain; ?>img/loader.gif"> <?php echo $msg; ?></div><?php }
@@ -499,43 +499,67 @@ class html extends proc{
 			<?php $this->div_close(); ?>
 			
 			<script>
+				var FormValBefore = '';
+				setTimeout(function(){
+					$('#<?php echo $this->form; ?>_form .input_field').each(function(){
+						FormValBefore += $(this).val();
+					});
+				}, <?php echo timeout; ?>);
+
 				$('#<?php echo $this->form; ?>_form').submit(function(){
 					if(submit == true){
 						$('#<?php echo $this->form; ?>_notice_main_div').html('<?php $this->notice_fine(fine); ?>').delay().fadeIn();
-						setTimeout(function(){
-							$.ajax({
-								url: '<?php echo domain.$this->request; ?>',
-								type: 'post',
-								data: new FormData($('#<?php echo $this->form; ?>_form').get(0)),
-								processData: false,  // tell jQuery not to process the data
-								contentType: false,   // tell jQuery not to set contentType	
-								success: function(response){
-									// Redirection Page
-									url = '<?php echo $url; ?>';
-									// Module Vars
-									table = '<?php echo $this->table; ?>';
-									request = '<?php echo $this->request; ?>';
-									// Form Vars
-									act = '<?php echo $this->act; ?>';
-									form = '<?php echo $this->form; ?>';
-									<?php if($this->act == 'insert'){ ?>
-										response_id = response.trim();
-									<?php } else { ?>
-										response_id = '<?php echo $this->id; ?>';
-									<?php } ?>
-									// Post Form Vars
-									post_form = '<?php echo (isset($_POST['form']))? $_POST['form'] : ''; ?>';
-									post_variable = '<?php echo (isset($_POST['variable']))? $_POST['variable'] : ''; ?>';
-									post_type = '<?php echo (isset($_POST['type']))? $_POST['type'] : ''; ?>';
-									// Result
-									if(upload == true){
-										multi_upload();
-									} else {
-										success();
-									}
-								}
+
+						var FormValAfter = '';
+						$('#<?php echo $this->form; ?>_form .input_field').each(function(){
+							FormValAfter += $(this).val();
+						});
+
+						if(FormValBefore == FormValAfter && upload == false){
+							setTimeout(function(){
+								$('#<?php echo $this->form; ?>_notice_main_div').html('<?php $this->notice_err('No changes to save.'); ?>').delay(<?php echo delay; ?>).fadeOut(<?php echo fadeout; ?>);
+							}, <?php echo timeout; ?>);
+						} else {
+							var FormData = {};
+							$('#<?php echo $this->form; ?>_form input[type="hidden"]').each(function(){
+								FormData[$(this).attr('name')] = $(this).val();
 							});
-						}, <?php echo timeout; ?>);
+							$('#<?php echo $this->form; ?>_form .input_field').each(function(){
+								FormData[$(this).attr('name')] = encrypt($(this).val());
+							});
+							setTimeout(function(){
+								$.ajax({
+									url: '<?php echo domain.$this->request; ?>',
+									type: 'post',
+									data: FormData,	
+									success: function(response){
+										// Redirection Page
+										url = '<?php echo $url; ?>';
+										// Module Vars
+										table = '<?php echo $this->table; ?>';
+										request = '<?php echo $this->request; ?>';
+										// Form Vars
+										act = '<?php echo $this->act; ?>';
+										form = '<?php echo $this->form; ?>';
+										<?php if($this->act == 'insert'){ ?>
+											response_id = response.trim();
+										<?php } else { ?>
+											response_id = '<?php echo $this->id; ?>';
+										<?php } ?>
+										// Post Form Vars
+										post_form = '<?php echo (isset($_POST['form']))? $_POST['form'] : ''; ?>';
+										post_variable = '<?php echo (isset($_POST['variable']))? $_POST['variable'] : ''; ?>';
+										post_type = '<?php echo (isset($_POST['type']))? $_POST['type'] : ''; ?>';
+										// Result
+										if(upload == true){
+											multi_upload();
+										} else {
+											success();
+										}
+									}
+								});
+							}, <?php echo timeout; ?>);
+						}
 					}
 					return false;
 				});
@@ -765,8 +789,8 @@ class html extends proc{
 		$path = str_replace('index.php', '', $widget);
 		$full = $path.'plug/custom/theme';
 		$url = $this->url($full);
-		if(file_exists($full.'.js')){ ?><script> inject('<?php echo $url; ?>', 'js'); </script><?php }
-		if(file_exists($full.'.css')){ ?><script> inject('<?php echo $url; ?>', 'css'); </script><?php }
+		if(file_exists($full.'.js')){ ?><script> inject('<?php echo $url.'.js'; ?>'); </script><?php }
+		if(file_exists($full.'.css')){ ?><script> inject('<?php echo $url.'.css'; ?>'); </script><?php }
 	}
 }
 ?>

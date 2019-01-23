@@ -512,6 +512,38 @@ class skull{
 		}
 	}
 
+	function get_string($from, $to, $str){
+		$sub = substr($str, strpos($str, $from) + strlen($from), strlen($str));
+		return substr($sub, 0, strpos($sub, $to));
+	}
+
+	function decrypt($hash){
+		$hash = base64_decode($hash);
+		$key = $this->get_string('<!--0', '1-->', $hash);
+		$find = array('<!--192'.($key / 2).'168-->', '<!--0'.$key.'1-->');
+		$hash = str_replace($find, '', $hash);
+		$alphanumeric = alphanumeric;
+		$str = '';
+		for($i = 0; $i < strlen($hash); $i++){
+			$index = strpos($alphanumeric, $hash[$i]);
+			if($index !== false){
+				$new_index = ($index % strlen($alphanumeric)) - $key;
+				$str .= substr($alphanumeric, $new_index--, 1);
+			} else {
+				$str .= $hash[$i];
+			}
+		}
+		return $str;
+	}
+
+	function decipher(){
+		foreach($_POST as $key => $value){
+			if($key != 'proc' && $key != 'table' && $key != 'id' && !is_array($value)){
+				$_POST[$key] = $this->decrypt($value);
+			}
+		}
+	}
+
 	function path($by, $table, $id){
 		switch($by){
 			case 'entry':
@@ -530,6 +562,13 @@ class skull{
 			break;
 		}
 		return $path;
+	}
+
+	function plug($dir){
+		$path = "plug/$dir";
+		$plug = root.'_spec/'.$path;
+		$plug = (file_exists($plug))? $this->url($plug) : skull_domain.$path;
+		echo $plug;
 	}
 
 	function bottom(){

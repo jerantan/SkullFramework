@@ -251,7 +251,7 @@ class field extends html{
 						proc: 'unique',
 						table: '<?php echo $this->form; ?>',
 						field: '<?php echo $trim; ?>',
-						val: $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val(),
+						val: encrypt($('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val()),
 						id: '<?php echo $this->id; ?>'
 					},
 					success: function(response){
@@ -413,9 +413,18 @@ class field extends html{
 	/* ------------------------------------------------------------------------------------------------ */
 	function chosen_load($var, $sel, $type = ''){
 		?>
+			<script>
+				if(typeof chosen_plugged == 'undefined'){
+					chosen_plugged = true;
+					inject('<?php $this->plug('chosen/chosen.jquery.min.js'); ?>');
+					inject('<?php $this->plug('chosen/bootstrap-chosen.css'); ?>');
+				}
+			</script>
 			<span id="<?php echo $var; ?>_chosen_load_span"></span>
 			<script>
-				chosen_load('<?php echo $this->trim($var); ?>', '<?php echo $this->request; ?>', '<?php echo $this->act; ?>', '<?php echo $sel; ?>', '<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $type; ?>');
+				setTimeout(function(){
+					chosen_load('<?php echo $this->trim($var); ?>', '<?php echo $this->request; ?>', '<?php echo $this->act; ?>', '<?php echo $sel; ?>', '<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $type; ?>');
+				});
 			</script>
 		<?php
 	}
@@ -635,7 +644,7 @@ class field extends html{
 
 	// Date
 	/* ------------------------------------------------------------------------------------------------ */
-	function date_addon($var, $icon){
+	function date_addon($var){
 		if($this->act != 'view'){
 		?>
 			<a href="" id="<?php echo $var; ?>_addon_main_link" class="input-group-addon addon_main_link" onclick="return false"><i class="glyphicon glyphicon-calendar"></i></a>
@@ -645,28 +654,37 @@ class field extends html{
 
 	function date_picker($var, $min, $max, $format, $month, $year){
 		?>
-			<script>	
-				$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').datepicker({
-					<?php if(!$year){ ?>
-						changeYear: true,
-					<?php } ?>
-					
-					<?php if(!$month){ ?>
-						changeMonth: true,
-					<?php } ?>
-					
-					<?php if($format){ ?>
-						dateFormat: '<?php echo $format; ?>',
-					<?php } ?>
-					
-					<?php if($max){ ?>
-						maxDate: new Date('<?php echo $max; ?>'),
-					<?php } ?>
-					
-					<?php if($min){ ?>
-						minDate: new Date('<?php echo $min; ?>')
-					<?php } ?>
-				});
+			<script>
+				if(typeof datepicker_plugged == 'undefined'){
+					datepicker_plugged = true;
+					inject('<?php $this->plug('datepicker/bootstrap-datepicker.min.js'); ?>');
+					inject('<?php $this->plug('datepicker/bootstrap-datepicker.min.css'); ?>');
+				}
+			</script>
+			<script>
+				setTimeout(function(){
+					$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').datepicker({
+						<?php if(!$year){ ?>
+							changeYear: true,
+						<?php } ?>
+						
+						<?php if(!$month){ ?>
+							changeMonth: true,
+						<?php } ?>
+						
+						<?php if($format){ ?>
+							dateFormat: '<?php echo $format; ?>',
+						<?php } ?>
+						
+						<?php if($max){ ?>
+							maxDate: new Date('<?php echo $max; ?>'),
+						<?php } ?>
+						
+						<?php if($min){ ?>
+							minDate: new Date('<?php echo $min; ?>')
+						<?php } ?>
+					});
+				}, js_timeout);
 				
 				$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_addon_main_link').click(function(){
 					$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').focus();
@@ -684,7 +702,7 @@ class field extends html{
 	1 - You can not select month, it will be fixed whatever the month at the moment.
 	1 - You can not select year, it will be fixed whatever the year at the moment.
 	*/
-	function date($label, $val, $min, $max, $format, $month, $year){
+	function date($label, $val, $min, $max, $format, $month = '', $year = ''){
 		$this->field_frame_open($label);
 			$var = $this->variable($label);
 			$this->group_frame_open();
@@ -704,7 +722,7 @@ class field extends html{
 	1 - You can not select month, it will be fixed whatever the month at the moment.
 	1 - You can not select year, it will be fixed whatever the year at the moment.
 	*/
-	function date_required($label, $val, $min, $max, $format, $month, $year){
+	function date_required($label, $val, $min, $max, $format, $month = '', $year = ''){
 		$this->field_frame_open($label, 1);
 			$var = $this->variable($label);
 			$this->group_frame_open();
@@ -714,6 +732,7 @@ class field extends html{
 			$this->date_picker($var, $min, $max, $format, $month, $year);
 			// Validation
 			$this->alpha_event_val('keyup', $var);
+			$this->alpha_event_val('change', $var);
 			$this->alpha_submit_val($var);
 		$this->field_frame_close($var);
 	}

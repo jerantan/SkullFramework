@@ -16,19 +16,13 @@
 			$('.navbar-fixed-top').autoHidingNavbar();
 		});
 	</script>
-	<!-- Custom -->
+	<!-- Skull Custom -->
 	<?php include skull_root.'plug/custom/theme.php'; ?>
 	<script src="<?php echo skull_domain; ?>plug/custom/theme.js"></script>
 	<link href="<?php echo skull_domain; ?>plug/custom/theme.css" rel="stylesheet">
-
+	<!-- Header Custom -->
 	<?php include 'plug/custom/theme.php'; ?>
 	<link href="<?php echo domain.build.'/'; ?>_spec/widg/header/plug/custom/theme.css" rel="stylesheet">
-	<!-- DatePicker -->
-	<script src="<?php echo skull_domain; ?>plug/datepicker/bootstrap-datepicker.min.js"></script>
-	<link href="<?php echo skull_domain; ?>plug/datepicker/bootstrap-datepicker.min.css" rel="stylesheet">
-	<!-- Chosen -->
-	<script src="<?php echo skull_domain; ?>plug/chosen/chosen.jquery.min.js"></script>
-	<link href="<?php echo skull_domain; ?>plug/chosen/bootstrap-chosen.css" rel="stylesheet">
 </head>
 <body>
 <div class="navbar navbar-default navbar-fixed-top" role="navigation">
