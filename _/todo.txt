@@ -70,12 +70,7 @@ function field_switch($field_name){
 		- Not working properly.
 		- Required field validation is not working.
 	Just have to add it manually if needed because this is a burden and a huge blocker on the Skull development. - Done.
----
 
-
-
-Todo:
----
 *** Make this framework load only class methods, css and js for a specific widget or element if it is being used. Example if I dont use file upload element then the codes for file upload element should not be load. This is to optimize the page load.
 
 The above leads to page load performance issue because of having too many injecting process that is why I realized to just inject only the major libraries (js and css) not every js and css of a specific element. - Done.
@@ -90,11 +85,26 @@ The above leads to page load performance issue because of having too many inject
 
 *** Place signout script accordingly to solve "Uncaught ReferenceError: signout is not defined" issue. - Done.
 
-*** Add url to anchor tags to identify the link before clicking.
+*** Update timeout to x3 for FormValBefore because it causes error in online deployment. - Done.
 
-*** Enable modal form using url or even page refresh.
+*** Do not scroll up if single upload. - Done.
 
-*** Create a function for the repeated js like .submit and .keyup scripts so it won't be displayed in the page source one by one each element and place it on skull/theme.js.
+*** Add url to anchor tags to identify the link before clicking. - Done.
+
+*** Updated upload js to use only [] instead of new Array to make it simple. - Done.
+
+*** Enable modal form using url or even page refresh. - Done.
+---
+
+
+
+Todo:
+---
+*** Create a function for the repeated js like .submit and .keyup scripts so it won't be displayed in the page source one by one each element and place it on skull/theme.js. Use unique function in skull/theme.js for username and email checking if existing instead of using ajax_unique_val function in skull/field.php
+
+*** Separate config for dev, staging, preprod and production.
+
+*** Dev instance creation easy process and staging, preprod and production deployment easy process.
 
 *** Create Documentation Page and link to Docs under Temp tab.
 ---

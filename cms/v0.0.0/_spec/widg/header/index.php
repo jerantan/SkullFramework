@@ -39,14 +39,14 @@
 		<div class="navbar-collapse collapse">
 			<ul class="nav navbar-nav">
 				<li class="dropdown">
-					<a href="" class="dropdown-toggle" data-toggle="dropdown">Temp <b class="caret"></b></a>	
+					<a href="<?php $this->link('temp/'); ?>" class="dropdown-toggle" data-toggle="dropdown">Temp <b class="caret"></b></a>	
 					<ul class="dropdown-menu" role="menu">
 						<li><?php $this->a('temp/test/', 'Test'); ?></li>
 						<li><?php $this->a('temp/docs/', 'Docs'); ?></li>
 					</ul>
 				</li>				
 				<li class="dropdown">
-					<a href="" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i> <b class="caret"></b></a>
+					<a href="<?php $this->link('user/'); ?>" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i> <b class="caret"></b></a>
 					<ul class="dropdown-menu" role="menu">
 						<?php if($this->userdata['active']){ ?>
 							<li><?php $this->a('user/profile/', $this->userdata['name'].' : '.$this->userdata['level']); ?></li>
@@ -54,7 +54,7 @@
 						<?php } ?>
 						<li><?php $this->a('user/manager/', 'User Manager'); ?></li>
 						<?php if($this->userdata['active']){ ?>
-							<li><a href="" onclick="signout(); return false">Sign out</a></li>
+							<li><a href="<?php $this->link('user/signout/'); ?>" onclick="signout(); return false">Sign out</a></li>
 						<?php } ?>
 					</ul>
 				</li>

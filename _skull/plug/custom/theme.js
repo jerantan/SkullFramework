@@ -1,6 +1,15 @@
 // Email RegEx
 var email = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
+// URL Hash
+hash = location.hash;
+if(hash){
+	hash = hash.replace('#', '');
+	hash = hash.split('#');
+} else {
+	hash = [];
+}
+
 // Modal Form
 /* ------------------------------------------------------------------------------------------------ */
 function form_open(table, request, act, id = ''){
@@ -358,7 +367,7 @@ function file_upload(form, request, variable, id, by){
 		file_form.append('id', response_id);
 		file_form.append('file_upload', _upload_obj.file_arr[id]);
 
-		_upload_obj.file_arr[id] = new Array(_upload_obj.file_arr[id], 1); // This is to set the object as upload-in-progress
+		_upload_obj.file_arr[id] = [_upload_obj.file_arr[id], 1]; // This is to set the object as upload-in-progress
 		
 		$.ajax({
 			url: js_domain+request,
@@ -653,9 +662,9 @@ function success(){
 				chosen_load(table, request, '', response_id, post_form, post_variable, post_type);
 				form3_close();
 			}
+			scroll(form+'_form');
+			delete submit; delete upload;
 		}
-		scroll(form+'_form');
-		delete submit; delete upload;
 	}
 }
 
@@ -697,4 +706,42 @@ function encrypt(str){
 		}
 	}
 	return btoa('<!--192'+rand_half+'168-->'+hash+'<!--0'+rand+'1-->');
+}
+
+function unique(table, request, field, val, id = ''){
+	$.ajax({
+		url: request,
+		async: false,
+		type: 'post',
+		data: {
+			proc: 'unique',
+			table: table,
+			field: field,
+			val: encrypt(val),
+			id: id
+		},
+		success: function(response){
+			unires = response;
+		}
+	});
+}
+
+function trigger(request){
+	switch(hash[1]){
+		case 'setup':
+			form1_open(hash[0], request);
+		break;
+		case 'add':
+			form_open(hash[0], request, 'insert');
+		break;
+		case 'view':
+		case 'update':
+			unique(hash[0], request, 'id', hash[2]);
+			if(unires > 0){
+				form_open(hash[0], request, hash[1], hash[2]);
+				delete unires;
+			}
+		break;
+	}
+	hash = [];
 }

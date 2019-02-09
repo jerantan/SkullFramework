@@ -460,7 +460,7 @@ class field extends html{
 	function chosen_addon($var, $type = ''){
 		if($this->act != 'view'){
 		?>
-			<a href="" id="<?php echo $var; ?>_addon_main_link" class="input-group-addon addon_main_link" onclick="form_select('<?php echo $this->trim($var); ?>', '<?php echo $this->request; ?>', 'insert', '<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $type; ?>'); return false">
+			<a id="<?php echo $var; ?>_addon_main_link" class="input-group-addon addon_main_link pointer" onclick="form_select('<?php echo $this->trim($var); ?>', '<?php echo $this->request; ?>', 'insert', '<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $type; ?>'); return false">
 				<i class="glyphicon glyphicon-plus-sign"></i>
 			</a>
 		<?php
@@ -647,7 +647,7 @@ class field extends html{
 	function date_addon($var){
 		if($this->act != 'view'){
 		?>
-			<a href="" id="<?php echo $var; ?>_addon_main_link" class="input-group-addon addon_main_link" onclick="return false"><i class="glyphicon glyphicon-calendar"></i></a>
+			<a id="<?php echo $var; ?>_addon_main_link" class="input-group-addon addon_main_link pointer" onclick="return false"><i class="glyphicon glyphicon-calendar"></i></a>
 		<?php
 		}
 	}
@@ -981,7 +981,7 @@ class field extends html{
 					upload_obj['<?php echo $this->form; ?>'] = {};
 				}
 				upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'] = {};
-				upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].file_arr = new Array;
+				upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].file_arr = [];
 				upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].file_count = 0;
 				upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].upload_type_arr = '<?php echo $this->upload_type; ?>'.split(', ');
 				upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].upload_list = '';

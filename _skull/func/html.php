@@ -394,7 +394,7 @@ class html extends proc{
 	/* ------------------------------------------------------------------------------------------------ */
 	function a($url, $caption, $class = '', $icon = ''){
 		?>
-			<a href="<?php if($url){ $this->link($url); } ?>" class="<?php echo $class; ?>">
+			<a href="<?php if($url){ $this->link($url); } ?>" <?php if($class){ ?> class="<?php echo $class; ?>" <?php } ?>>
 				<?php if($icon){ ?>
 					<i class="glyphicon glyphicon-<?php echo $icon; ?>"></i>
 				<?php } ?>
@@ -405,7 +405,7 @@ class html extends proc{
 	
 	function add_record($table, $request, $type, $caption){
 		?>
-			<a href="" id="<?php echo $table; ?>_add_record_link" class="add_record_link" onclick="form_open('<?php echo $table; ?>', '<?php echo $request; ?>', 'insert'); return false" <?php if(!$caption){ ?> data-toggle="tooltip" data-placement="top" title="Add Record" <?php } ?>>
+			<a href="<?php $this->link("$request#$table#add"); ?>" id="<?php echo $table; ?>_add_record_link" class="add_record_link" onclick="form_open('<?php echo $table; ?>', '<?php echo $request; ?>', 'insert'); return false" <?php if(!$caption){ ?> data-toggle="tooltip" data-placement="top" title="Add Record" <?php } ?>>
 				<?php if($type){ ?>
 					<i class="glyphicon glyphicon-plus-sign info"></i>
 				<?php } ?>
@@ -420,7 +420,7 @@ class html extends proc{
 	
 	function view_record($table, $request, $id, $type, $caption = ''){
 		?>
-			<a href="" onclick="form_open('<?php echo $table; ?>', '<?php echo $request; ?>', 'view', '<?php echo $id; ?>'); return false" <?php if(!$caption){ ?> data-toggle="tooltip" data-placement="top" title="View Record" <?php } ?>>
+			<a href="<?php $this->link("$request#$table#view#$id"); ?>" onclick="form_open('<?php echo $table; ?>', '<?php echo $request; ?>', 'view', '<?php echo $id; ?>'); return false" <?php if(!$caption){ ?> data-toggle="tooltip" data-placement="top" title="View Record" <?php } ?>>
 				<?php if($type){ ?>
 					<i class="glyphicon glyphicon-folder-open" style="color: orange"></i>
 				<?php } ?>
@@ -431,7 +431,7 @@ class html extends proc{
 	
 	function update_record($table, $request, $id, $type, $caption = ''){
 		?>
-			<a href="" onclick="form_open('<?php echo $table; ?>', '<?php echo $request; ?>', 'update', '<?php echo $id; ?>'); return false" <?php if(!$caption){ ?> data-toggle="tooltip" data-placement="top" title="Update Record" <?php } ?>>
+			<a href="<?php $this->link("$request#$table#update#$id"); ?>" onclick="form_open('<?php echo $table; ?>', '<?php echo $request; ?>', 'update', '<?php echo $id; ?>'); return false" <?php if(!$caption){ ?> data-toggle="tooltip" data-placement="top" title="Update Record" <?php } ?>>
 				<?php if($type){ ?>
 					<i class="glyphicon glyphicon-pencil fine"></i>
 				<?php } ?>
@@ -442,7 +442,7 @@ class html extends proc{
 	
 	function delete_record($table, $request, $val, $id, $type, $caption = ''){
 		?>
-			<a href="" onclick="del_box('<?php echo $table; ?>', '<?php echo $request; ?>', '<?php echo $val; ?>', '<?php echo $id; ?>'); return false" <?php if(!$caption){ ?> data-toggle="tooltip" data-placement="top" title="Delete Record" <?php } ?>>
+			<a class="pointer" onclick="del_box('<?php echo $table; ?>', '<?php echo $request; ?>', '<?php echo $val; ?>', '<?php echo $id; ?>'); return false" <?php if(!$caption){ ?> data-toggle="tooltip" data-placement="top" title="Delete Record" <?php } ?>>
 				<?php if($type){ ?>
 					<i class="glyphicon glyphicon-trash err"></i>
 				<?php } ?>
@@ -453,7 +453,7 @@ class html extends proc{
 	
 	function setup($table, $request, $type, $caption){
 		?>
-			<a href="" onclick="form1_open('<?php echo $table; ?>', '<?php echo $request; ?>'); return false" <?php if(!$caption){ ?> data-toggle="tooltip" data-placement="top" title="Delete Record" <?php } ?>>
+			<a href="<?php $this->link("$request#$table#setup"); ?>" onclick="form1_open('<?php echo $table; ?>', '<?php echo $request; ?>'); return false" <?php if(!$caption){ ?> data-toggle="tooltip" data-placement="top" title="Delete Record" <?php } ?>>
 				<?php if($type){ ?>
 					<i class="glyphicon glyphicon-cog"></i>
 				<?php } ?>
@@ -504,7 +504,7 @@ class html extends proc{
 					$('#<?php echo $this->form; ?>_form .input_field').each(function(){
 						FormValBefore += $(this).val();
 					});
-				}, <?php echo timeout; ?>);
+				}, <?php echo timeout * 3; ?>);
 
 				$('#<?php echo $this->form; ?>_form').submit(function(){
 					if(submit == true){
@@ -519,6 +519,7 @@ class html extends proc{
 							setTimeout(function(){
 								$('#<?php echo $this->form; ?>_notice_main_div').html('<?php $this->notice_err('No changes to save.'); ?>').delay(<?php echo delay; ?>).fadeOut(<?php echo fadeout; ?>);
 							}, <?php echo timeout; ?>);
+							delete submit; delete upload;
 						} else {
 							var FormData = {};
 							$('#<?php echo $this->form; ?>_form input[type="hidden"]').each(function(){
@@ -679,7 +680,7 @@ class html extends proc{
 				<div class="col-md-4 col-sm-6 float_center">
 					<div class="input-group">
 						<input type="text" value="<?php echo $val; ?>" id="<?php echo $this->table; ?>_search_field" class="form-control input-sm search_field" onkeyup="if(typeof timer != 'undefined'){ clearTimeout(timer); } timer = setTimeout(function(){ search('<?php echo $this->table; ?>', '<?php echo $this->request; ?>'); }, js_timeout)" placeholder="Search . . .">
-						<div class="input-group-addon pointer"><i class="glyphicon glyphicon-search"></i></div>
+						<div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
 					</div>
 				</div>
 			</div>
@@ -702,7 +703,7 @@ class html extends proc{
 	function active($val, $id){
 		?>
 			<td>
-				<a href="" onclick="active('<?php echo $this->table; ?>', '<?php echo $this->request; ?>', '<?php echo $val; ?>', '<?php echo $id; ?>'); return false">
+				<a class="pointer" onclick="active('<?php echo $this->table; ?>', '<?php echo $this->request; ?>', '<?php echo $val; ?>', '<?php echo $id; ?>'); return false">
 					<?php if($val){ ?>
 						<i class="glyphicon glyphicon-ok ok"></i>
 					<?php } else { ?>
@@ -756,8 +757,8 @@ class html extends proc{
 				<div class="col-xs-12 align_center">
 					<div class="btn-group">
 						<?php if($next > 1){ ?>
-							<a href="" class="btn btn-sm btn_prop" onclick="back_next('<?php echo $this->table; ?>', '<?php echo $this->request; ?>', '0'); return false">First</a>
-							<a href="" class="btn btn-sm btn_prop" onclick="back_next('<?php echo $this->table; ?>', '<?php echo $this->request; ?>', '<?php echo $back; ?>'); return false">Back</a>
+							<a class="btn btn-sm btn_prop" onclick="back_next('<?php echo $this->table; ?>', '<?php echo $this->request; ?>', '0'); return false">First</a>
+							<a class="btn btn-sm btn_prop" onclick="back_next('<?php echo $this->table; ?>', '<?php echo $this->request; ?>', '<?php echo $back; ?>'); return false">Back</a>
 						<?php } else { ?>
 							<a class="btn btn-sm btn_prop disable arrow">First</a>
 							<a class="btn btn-sm btn_prop disable arrow">Back</a>
@@ -770,16 +771,21 @@ class html extends proc{
 						</a>
 						
 						<?php if($next < $pages){ ?>
-							<a href="" class="btn btn-sm btn_prop" onclick="back_next('<?php echo $this->table; ?>', '<?php echo $this->request; ?>', '<?php echo $next; ?>'); return false">Next</a>
-							<a href="" class="btn btn-sm btn_prop" onclick="back_next('<?php echo $this->table; ?>', '<?php echo $this->request; ?>', '<?php echo $pages - 1; ?>'); return false">Last</a>
+							<a class="btn btn-sm btn_prop" onclick="back_next('<?php echo $this->table; ?>', '<?php echo $this->request; ?>', '<?php echo $next; ?>'); return false">Next</a>
+							<a class="btn btn-sm btn_prop" onclick="back_next('<?php echo $this->table; ?>', '<?php echo $this->request; ?>', '<?php echo $pages - 1; ?>'); return false">Last</a>
 						<?php } else { ?>
 							<a class="btn btn-sm btn_prop disable arrow">Next</a>
 							<a class="btn btn-sm btn_prop disable arrow">Last</a>
 						<?php } ?>
 						
-						<input type="submit" value="Go" class="btn btn-sm btn_prop" onclick="go_to('<?php echo $this->table; ?>', '<?php echo $this->request; ?>', '<?php echo $pages; ?>')">
+						<a class="btn btn-sm btn_prop" onclick="go_to('<?php echo $this->table; ?>', '<?php echo $this->request; ?>', '<?php echo $pages; ?>'); return false">Go</a>
 					</div>
 				</div>
+				<script>
+					if(hash[0] == '<?php echo $this->table; ?>'){
+						trigger('<?php echo $this->request; ?>');
+					}
+				</script>
 			<?php
 		}
 		$this->clear();
