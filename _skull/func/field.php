@@ -58,21 +58,10 @@ class field extends html{
 	}
 	
 	function alpha_submit_val($var){
+		$chosen_class = (isset($this->chosen))? '_chosen input' : '';
 		?>
 			<script>
-				$('#<?php echo $this->form; ?>_form').submit(function(){
-					if(!$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val()){
-						<?php $this->focus($var); ?>
-						$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('Please fill out this field.');
-					} else {
-						<?php if(strpos($var, 'email') !== false){ ?>
-							if(!email.test($('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val())){
-								$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('Please fill out this field with an email.');
-								<?php $this->focus($var); ?>
-							}
-						<?php } ?>
-					}
-				});	
+				alpha_submit_val('<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $chosen_class; ?>');
 			</script>
 		<?php
 	}
@@ -80,25 +69,7 @@ class field extends html{
 	function alpha_unique_event_val($event, $var, $trim){
 		?>
 			<script>
-				$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').<?php echo $event; ?>(function(){
-					if(!$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val()){
-						$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('Please fill out this field.');
-					} else {
-						<?php if($trim == 'username'){ ?>
-							if($('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val() && $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val().length <= 5){
-								$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('Please fill out this field with 6 chars or above.');
-							} else {
-								<?php $this->ajax_unique_val($var, $trim); ?>
-							}
-						<?php } elseif($trim == 'email'){ ?>
-							if(!email.test($('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val())){
-								$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('Please fill out this field with an email.');
-							} else {
-								<?php $this->ajax_unique_val($var, $trim); ?>
-							}
-						<?php } else { $this->ajax_unique_val($var, $trim); } ?>
-					}
-				});
+				alpha_unique_event_val('<?php echo $this->form; ?>', '<?php echo $this->request; ?>', '<?php echo $this->id; ?>', '<?php echo $var; ?>', '<?php echo $event; ?>', '<?php echo $trim; ?>');
 			</script>	
 		<?php
 	}
@@ -106,28 +77,7 @@ class field extends html{
 	function alpha_unique_submit_val($var, $trim){
 		?>
 			<script>
-				$('#<?php echo $this->form; ?>_form').submit(function(){
-					if(!$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val()){
-						<?php $this->focus($var); ?>
-						$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('Please fill out this field.');
-					} else {
-						<?php if($trim == 'username'){ ?>
-							if($('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val() && $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val().length <= 5){
-								<?php $this->focus($var); ?>
-								$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('Please fill out this field with 6 chars or above.');
-							} else {
-								<?php $this->ajax_unique_val($var, $trim, 1); ?>
-							}
-						<?php } elseif($trim == 'email'){ ?>
-							if(!email.test($('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val())){
-								$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('Please fill out this field with an email.');
-								<?php $this->focus($var); ?>
-							} else {
-								<?php $this->ajax_unique_val($var, $trim, 1); ?>
-							}
-						<?php } else { $this->ajax_unique_val($var, $trim); } ?>
-					}
-				});
+				alpha_unique_submit_val('<?php echo $this->form; ?>', '<?php echo $this->request; ?>', '<?php echo $this->id; ?>', '<?php echo $var; ?>', '<?php echo $trim; ?>');
 			</script>
 		<?php
 	}
@@ -223,52 +173,6 @@ class field extends html{
 					}
 				});	
 			</script>
-		<?php
-	}
-
-	function ajax_unique_val($var, $trim, $type = ''){
-		?>
-			if(typeof timer != 'undefined'){ clearTimeout(timer); } timer = setTimeout(function(){
-				$.ajax({
-					url: '<?php echo domain.$this->request; ?>',
-					<?php if($type){ ?>async: false,<?php } ?>
-					type: 'post',
-					data: {
-						proc: 'unique',
-						table: '<?php echo $this->form; ?>',
-						field: '<?php echo $trim; ?>',
-						val: encrypt($('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val()),
-						id: '<?php echo $this->id; ?>'
-					},
-					success: function(response){
-						if(response.substr(-1) > 0){
-							<?php if($type){ $this->focus($var); } ?>
-							$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('Please fill out this field again this <?php echo $this->trim($trim); ?> is already taken.');
-						} else {
-							$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('');
-						}
-					}
-				});
-			}, js_timeout);
-		<?php
-	}
-
-	function focus($var){
-		$add = (isset($this->chosen))? '_chosen input' : '';
-		?>
-			if(submit != false){
-				var form_name = form_current();
-				if(!form_name){
-					$('html').animate({
-						scrollTop: $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field<?php echo $add; ?>').offset().top - js_offset
-					}, js_scroll, function(){ $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field<?php echo $add; ?>').focus(); });
-				} else {
-					$('.'+form_name+'_main_div').animate({
-						scrollTop: $('.'+form_name+'_main_div').scrollTop() - $('.'+form_name+'_main_div').offset().top + $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field<?php echo $add; ?>').offset().top - js_offset
-					}, js_scroll, function(){ $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field<?php echo $add; ?>').focus(); });
-				}
-			}
-			submit = false;
 		<?php
 	}
 

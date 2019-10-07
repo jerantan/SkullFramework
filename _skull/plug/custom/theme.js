@@ -763,3 +763,112 @@ function alpha_event_val(form, variable, event){
 		}
 	});
 }
+
+function alpha_submit_val(form, variable, chosen_class){
+	$('#'+form+'_form').submit(function(){
+		if(!$('#'+form+'_form #'+variable+'_input_field').val()){
+			focus(form, variable, chosen_class);
+			$('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field.');
+		} else {
+			if(variable.indexOf('email') >= 0){
+				if(!email.test($('#'+form+'_form #'+variable+'_input_field').val())){
+					$('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field with an email.');
+					focus(form, variable, chosen_class);
+				}
+			}
+		}
+	});
+}
+
+function alpha_unique_event_val(form, request, id, variable, event, trim){
+	$('#'+form+'_form #'+variable+'_input_field')[event](function(){
+		if(!$('#'+form+'_form #'+variable+'_input_field').val()){
+			$('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field.');
+		} else {
+			if(trim == 'username'){
+				if($('#'+form+'_form #'+variable+'_input_field').val() && $('#'+form+'_form #'+variable+'_input_field').val().length <= 5){
+					$('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field with 6 chars or above.');
+				} else {
+					ajax_unique_val(form, request, id, variable, trim);
+				}
+			} elseif(trim == 'email'){
+				if(!email.test($('#'+form+'_form #'+variable+'_input_field').val())){
+					$('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field with an email.');
+				} else {
+					ajax_unique_val(form, request, id, variable, trim);
+				}
+			} else {
+				ajax_unique_val(form, request, id, variable, trim);
+			}
+		}
+	});
+}
+
+function alpha_unique_submit_val(form, request, id, variable, trim){
+	$('#'+form+'_form').submit(function(){
+		if(!$('#'+form+'_form #'+variable+'_input_field').val()){
+			<?php $this->focus($var); ?>
+			$('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field.');
+		} else {
+			if(trim == 'username'){
+				if($('#'+form+'_form #'+variable+'_input_field').val() && $('#'+form+'_form #'+variable+'_input_field').val().length <= 5){
+					focus(form, variable);
+					$('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field with 6 chars or above.');
+				} else {
+					ajax_unique_val(form, request, id, variable, trim, 1);
+				}
+			} elseif(trim == 'email'){
+				if(!email.test($('#'+form+'_form #'+variable+'_input_field').val())){
+					$('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field with an email.');
+					focus(form, variable);
+				} else {
+					ajax_unique_val(form, request, id, variable, trim, 1);
+				}
+			} else {
+				ajax_unique_val(form, request, id, variable, trim);
+			}
+		}
+	});
+}
+
+function ajax_unique_val(form, request, id, variable, trim, type = ''){
+	if(typeof timer != 'undefined'){ clearTimeout(timer); } timer = setTimeout(function(){
+		var async = (!type)? true : false;
+		$.ajax({
+			url: js_domain+request,
+			async: async,
+			type: 'post',
+			data: {
+				proc: 'unique',
+				table: form,
+				field: trim,
+				val: encrypt($('#'+form+'_form #'+variable+'_input_field').val()),
+				id: id
+			},
+			success: function(response){
+				if(response.substr(-1) > 0){
+					if(type) focus(form, variable);
+					$('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field again, this '+trim+' is already taken.');
+				} else {
+					$('#'+form+'_form #'+variable+'_err_main_div').html('');
+				}
+			}
+		});
+	}, js_timeout);
+}
+
+function focus(form, variable, chosen_class = ''){
+	if(submit != false){
+		var form_name = form_current();
+		if(!form_name){
+			$('html').animate({
+				scrollTop: $('#'+form+'_form #'+variable+'_input_field'+chosen_class).offset().top - js_offset
+			}, js_scroll, function(){ $('#'+form+'_form #'+variable+'_input_field'+chosen_class).focus(); });
+		} else {
+			$('.'+form_name+'_main_div').animate({
+				scrollTop: $('.'+form_name+'_main_div').scrollTop() - $('.'+form_name+'_main_div').offset().top + $('#'+form+'_form #'+variable+'_input_field'+chosen_class).offset().top - js_offset
+			}, js_scroll, function(){ $('#'+form+'_form #'+variable+'_input_field'+chosen_class).focus(); });
+		}
+	}
+	submit = false;
+}
