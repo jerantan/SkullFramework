@@ -745,3 +745,21 @@ function trigger(request){
 	}
 	hash = [];
 }
+
+function alpha_event_val(form, variable, event){
+	$('#'+form+'_form #'+variable+'_input_field')[event](function(){
+		if(!$('#'+form+'_form #'+variable+'_input_field').val()){
+			$('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field.');
+		} else {
+			if(variable.indexOf('email') >= 0){
+				if(!email.test($('#'+form+'_form #'+variable+'_input_field').val())){
+					$('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field with an email.');
+				} else {
+					$('#'+form+'_form #'+variable+'_err_main_div').html('');
+				}
+			} else {
+				$('#'+form+'_form #'+variable+'_err_main_div').html('');
+			}
+		}
+	});
+}

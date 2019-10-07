@@ -52,21 +52,7 @@ class field extends html{
 	function alpha_event_val($event, $var){
 		?>
 			<script>
-				$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').<?php echo $event; ?>(function(){
-					if(!$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val()){
-						$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('Please fill out this field.');
-					} else {
-						<?php if(strpos($var, 'email') !== false){ ?>
-							if(!email.test($('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val())){
-								$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('Please fill out this field with an email.');
-							} else {
-								$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('');
-							}
-						<?php } else { ?>
-							$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('');
-						<?php } ?>
-					}
-				});
+				alpha_event_val('<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $event; ?>');
 			</script>
 		<?php
 	}
