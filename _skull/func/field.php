@@ -85,37 +85,7 @@ class field extends html{
 	function numeric_val($type, $var){
 		?>
 			<script>
-				<?php if($type == 'measure'){ ?>
-					$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').attr('style', 'text-align: right; padding-right: 25px');
-				<?php } else { ?>
-					$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').attr('style', 'text-align: right');
-				<?php } ?>
-
-				$('#<?php echo $this->form; ?>_form .input-group .view_field').attr('style', 'text-align: right');
-					
-				$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').blur(function(){
-					var val = $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val();
-					val = val.replace('<?php echo symbol; ?>', '');
-					val = val.replace('%', '');
-					$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val(format('<?php echo $type; ?>', val));
-				});
-				
-				$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').keypress(function(e){
-					var e = (e) ? e : window.event;
-					var key = (e.which) ? e.which : e.keycode;
-					
-					if
-						<?php if($type == 'number'){ ?>
-							(key > 31 && (key < 48 || key > 57))
-						<?php } ?>
-						
-						<?php if($type == 'measure' || $type == 'amount' || $type == 'percent'){ ?>
-							(key > 31 && (key < 46 || key == 47 || key > 57))
-						<?php } ?>
-					{
-						return false;
-					}
-				});
+				numeric_val('<?php echo $type; ?>', '<?php echo $this->form; ?>', '<?php echo $var; ?>');
 			</script>
 		<?php
 	}
@@ -123,13 +93,7 @@ class field extends html{
 	function numeric_event_val($event, $var){
 		?>
 			<script>
-				$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').<?php echo $event; ?>(function(){
-					if(!$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val() || $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val() <= 0){
-						$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('Please fill out this field.');
-					} else {
-						$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('');
-					}
-				});
+				numeric_event_val('<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $event; ?>');
 			</script>
 		<?php
 	}
@@ -137,12 +101,7 @@ class field extends html{
 	function numeric_submit_val($var){
 		?>
 			<script>
-				$('#<?php echo $this->form; ?>_form').submit(function(){
-					if(!$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val() || $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val() <= 0){
-						<?php $this->focus($var); ?>
-						$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('Please fill out this field.');
-					}
-				});	
+				numeric_submit_val('<?php echo $this->form; ?>', '<?php echo $var; ?>');	
 			</script>
 		<?php
 	}
@@ -150,13 +109,7 @@ class field extends html{
 	function numeric_unique_event_val($event, $var, $trim){
 		?>
 			<script>
-				$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').<?php echo $event; ?>(function(){
-					if(!$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val() || $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val() <= 0){
-						$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('Please fill out this field.');
-					} else {
-						<?php $this->ajax_unique_val($var, $trim); ?>
-					}
-				});
+				numeric_unique_event_val('<?php echo $this->form; ?>', '<?php echo $this->request; ?>', '<?php echo $this->id; ?>', '<?php echo $var; ?>', '<?php echo $event; ?>', '<?php echo $trim; ?>');
 			</script>
 		<?php
 	}
@@ -164,14 +117,7 @@ class field extends html{
 	function numeric_unique_submit_val($var, $trim){
 		?>
 			<script>
-				$('#<?php echo $this->form; ?>_form').submit(function(){
-					if(!$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val() || $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val() <= 0){
-						<?php $this->focus($var); ?>
-						$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('Please fill out this field.');
-					} else {
-						<?php $this->ajax_unique_val($var, $trim, 1); ?>
-					}
-				});	
+				numeric_unique_submit_val('<?php echo $this->form; ?>', '<?php echo $this->request; ?>', '<?php echo $this->id; ?>', '<?php echo $var; ?>', '<?php echo $trim; ?>');	
 			</script>
 		<?php
 	}
@@ -550,35 +496,7 @@ class field extends html{
 					inject('<?php $this->plug('datepicker/bootstrap-datepicker.min.js'); ?>');
 					inject('<?php $this->plug('datepicker/bootstrap-datepicker.min.css'); ?>');
 				}
-			</script>
-			<script>
-				setTimeout(function(){
-					$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').datepicker({
-						<?php if(!$year){ ?>
-							changeYear: true,
-						<?php } ?>
-						
-						<?php if(!$month){ ?>
-							changeMonth: true,
-						<?php } ?>
-						
-						<?php if($format){ ?>
-							dateFormat: '<?php echo $format; ?>',
-						<?php } ?>
-						
-						<?php if($max){ ?>
-							maxDate: new Date('<?php echo $max; ?>'),
-						<?php } ?>
-						
-						<?php if($min){ ?>
-							minDate: new Date('<?php echo $min; ?>')
-						<?php } ?>
-					});
-				}, js_timeout);
-				
-				$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_addon_main_link').click(function(){
-					$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').focus();
-				});
+				date_picker('<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $min; ?>', '<?php echo $max; ?>', '<?php echo $format; ?>', '<?php echo $month; ?>', '<?php echo $year; ?>');
 			</script>
 		<?php
 	}
@@ -642,27 +560,7 @@ class field extends html{
 	function pass_event_val($var, $type = ''){
 		?>
 			<script>
-				$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').keyup(function(){
-					if(!$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val()){
-						<?php if($type){ ?>
-							$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('Please fill out this field.');
-						<?php } ?>
-					} else {
-						if($('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val().length <= 5){
-							$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('Please fill out this field with 6 chars or above.');
-						} else {
-							$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('');
-						}
-
-						if(($('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val() || $('#<?php echo $this->form; ?>_form #confirm_input_field').val()) && $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val() != $('#<?php echo $this->form; ?>_form #confirm_input_field').val()){
-							$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').css('border-color', 'red');
-							$('#<?php echo $this->form; ?>_form #confirm_input_field').css('border-color', 'red');
-						} else {
-							$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').css('border-color', '');
-							$('#<?php echo $this->form; ?>_form #confirm_input_field').css('border-color', '');
-						}
-					}
-				});
+				pass_event_val('<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $type; ?>');
 			</script>
 		<?php
 	}
@@ -670,21 +568,7 @@ class field extends html{
 	function pass_submit_val($var, $type = ''){
 		?>
 			<script>
-				$('#<?php echo $this->form; ?>_form').submit(function(){
-					if(!$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val()){
-						<?php if($type){ ?>
-							<?php $this->focus($var); ?>
-							$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('Please fill out this field.');
-						<?php } ?>
-					} else {
-						if($('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val().length <= 5){
-							<?php $this->focus($var); ?>
-							$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('Please fill out this field with 6 chars or above.');
-						} else {
-							$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('');
-						}
-					}
-				});
+				pass_submit_val('<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $type; ?>');
 			</script>
 		<?php
 	}
