@@ -101,7 +101,7 @@ class field extends html{
 	function numeric_submit_val($var){
 		?>
 			<script>
-				numeric_submit_val('<?php echo $this->form; ?>', '<?php echo $var; ?>');	
+				numeric_submit_val('<?php echo $this->form; ?>', '<?php echo $var; ?>');
 			</script>
 		<?php
 	}
@@ -117,7 +117,7 @@ class field extends html{
 	function numeric_unique_submit_val($var, $trim){
 		?>
 			<script>
-				numeric_unique_submit_val('<?php echo $this->form; ?>', '<?php echo $this->request; ?>', '<?php echo $this->id; ?>', '<?php echo $var; ?>', '<?php echo $trim; ?>');	
+				numeric_unique_submit_val('<?php echo $this->form; ?>', '<?php echo $this->request; ?>', '<?php echo $this->id; ?>', '<?php echo $var; ?>', '<?php echo $trim; ?>');
 			</script>
 		<?php
 	}

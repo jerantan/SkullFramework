@@ -839,17 +839,17 @@ function numeric_val(type, form, variable){
 	}
 
 	$('#'+form+'_form .input-group .view_field').attr('style', 'text-align: right');
-		
+
 	$('#'+form+'_form #'+variable+'_input_field').blur(function(){
 		var val = $('#'+form+'_form #'+variable+'_input_field').val();
 		val = val.replace(js_symbol, '');
 		val = val.replace('%', '');
 		$('#'+form+'_form #'+variable+'_input_field').val(format(type, val));
 	});
-	
+
 	$('#'+form+'_form #'+variable+'_input_field').keypress(function(e){
 		var e = (e) ? e : window.event;
-		var key = (e.which) ? e.which : e.keycode;		
+		var key = (e.which) ? e.which : e.keycode;
 		if(type == 'measure' || type == 'amount' || type == 'percent'){
 			if(key > 31 && (key < 46 || key == 47 || key > 57)) return false;
 		} else if(type == 'number'){
@@ -908,7 +908,7 @@ function date_picker(form, var, min, max, format, month, year){
 			minDate: ((min)? new Date(min) : '')
 		});
 	}, js_timeout);
-	
+
 	$('#'+form+'_form #'+variable+'_addon_main_link').click(function(){
 		$('#'+form+'_form #'+variable+'_input_field').focus();
 	});
