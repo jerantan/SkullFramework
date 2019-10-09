@@ -44,6 +44,14 @@ Add lines:
        </Directory>
 </VirtualHost>
 
+Important:
+Never forget "AllowOverride All" otherwise some declarations in .htaccess will cause the containing folder to be hidden in localhost and accessing the hidden folder will result to "Internal Server Error".
+
+Error Declarations in .htaccess:
+DirectoryIndex jtan.php
+php_value post_max_size 300M
+php_value upload_max_filesize 300M
+
 2. Right click notepad and select Run as administrator then Ctrl + O to open C:\Windows\System32\drivers\etc\hosts
 
 Add lines:

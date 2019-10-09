@@ -898,7 +898,7 @@ function numeric_unique_submit_val(form, request, id, variable, trim){
 	});
 }
 
-function date_picker(form, var, min, max, format, month, year){
+function date_picker(form, variable, min, max, format, month, year){
 	setTimeout(function(){
 		$('#'+form+'_form #'+variable+'_input_field').datepicker({
 			changeYear: ((!year)? true : false),
@@ -952,6 +952,169 @@ function pass_submit_val(form, variable, type){
 			} else {
 				$('#'+form+'_form #'+variable+'_err_main_div').html('');
 			}
+		}
+	});
+}
+
+function con_event_val(form, variable, type){
+	$('#'+form+'_form #'+variable+'_input_field').keyup(function(){
+		if(type){
+			if(!$('#'+form+'_form #'+variable+'_input_field').val()){
+				$('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field.');
+			} else {
+				$('#'+form+'_form #'+variable+'_err_main_div').html('');
+			}
+		} else {
+			if(($('#'+form+'_form #'+variable+'_input_field').val() || $('#'+form+'_form #password_input_field').val()) && $('#'+form+'_form #'+variable+'_input_field').val() != $('#'+form+'_form #password_input_field').val()){
+				$('#'+form+'_form #'+variable+'_input_field').css('border-color', 'red');
+				$('#'+form+'_form #password_input_field').css('border-color', 'red');
+			} else {
+				$('#'+form+'_form #'+variable+'_input_field').css('border-color', '');
+				$('#'+form+'_form #password_input_field').css('border-color', '');
+			}
+		}
+	});
+}
+
+function con_submit_val(form, variable, type){
+	$('#'+form+'_form').submit(function(){
+		if(type){
+			if(!$('#'+form+'_form #'+variable+'_input_field').val()){
+				focus(form, variable);
+				$('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field.');
+			} else {
+				$('#'+form+'_form #'+variable+'_err_main_div').html('');
+			}
+		} else {
+			if(($('#'+form+'form #'+variable+'_input_field').val() || $('#'+form+'_form #password_input_field').val()) && $('#'+form+'_form #'+variable+'_input_field').val() != $('#'+form+'_form #password_input_field').val()){
+				focus(form, variable);
+				$('#'+form+'_form #'+variable+'_input_field').css('border-color', 'red');
+				$('#'+form+'_form #password_input_field').css('border-color', 'red');
+			} else {
+				$('#'+form+'_form #'+variable+'_input_field').css('border-color', '');
+				$('#'+form+'_form #password_input_field').css('border-color', '');
+			}
+		}
+	});
+}
+
+function upload_event_val(form, variable, event, upload_type, upload_by, multi, type){
+  if(typeof upload_obj[form] == 'undefined'){
+    upload_obj[form] = {};
+  }
+  upload_obj[form][variable] = {};
+  upload_obj[form][variable].file_arr = [];
+  upload_obj[form][variable].file_count = 0;
+  upload_obj[form][variable].upload_type_arr = upload_type.split(', ');
+  upload_obj[form][variable].upload_list = '';
+  upload_obj[form][variable].upload_by = upload_by;
+  upload_obj[form][variable].uip_count = 0; // This is upload-in-progress initial count
+
+  $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field')[event](function(event){
+    var file = event.target.files;
+    for(var count = upload_obj[form][variable].file_count; count < file.length + upload_obj[form][variable].file_count; count++){
+      var filename = file[count - upload_obj[form][variable].file_count].name;
+      var extension = filename.substr(filename.lastIndexOf('.') + 1);
+
+      upload_obj[form][variable].file_arr[count] = file[count - upload_obj[form][variable].file_count];
+      var tmppath = URL.createObjectURL(file[count - upload_obj[form][variable].file_count]);
+
+      if(!multi){
+        file_remove(form, variable, count - 1, type);
+      }
+
+      var html; var list; var list_arr; var preview;
+
+      html  = '<div id="'+variable+'_prev_'+count+'" class="col-md-2">';
+      html += '<br>';
+      html += '<div class="col-md-12 shadow" style="padding-top: 15px; padding-bottom: 15px">';
+
+      if($.inArray('image', upload_obj[form][variable].upload_type_arr) >= 0){
+        list = '<?php echo image; ?>';
+        list_arr = list.split(', ');
+        upload_obj[form][variable].upload_list += list+', ';
+
+        if($.inArray(extension, list_arr) >= 0){
+          preview = '<div style="width: 100%; height: 150px; background: url('+tmppath+') no-repeat center; background-size: 100%"></div>';
+        }
+      }
+
+      if($.inArray('audio', upload_obj[form][variable].upload_type_arr) >= 0){
+        list = '<?php echo audio; ?>';
+        list_arr = list.split(', ');
+        upload_obj[form][variable].upload_list += list+', ';
+
+        if($.inArray(extension, list_arr) >= 0){
+          preview = '<div style="height: 150px; overflow: hidden; word-wrap: break-word">';
+          preview += '<audio controls>';
+          preview += '<source src="'+tmppath+'">';
+          preview += '</audio>';
+          preview += filename;
+          preview += '</div>';
+        }
+      }
+
+      if($.inArray('video', upload_obj[form][variable].upload_type_arr) >= 0){
+        list = '<?php echo video; ?>';
+        list_arr = list.split(', ');
+        upload_obj[form][variable].upload_list += list;
+
+        if($.inArray(extension, list_arr) >= 0){
+          preview = '<div style="height: 150px">';
+          preview += '<video controls>';
+          preview += '<source src="'+tmppath+'">';
+          preview += '</video>';
+          preview += '</div>';
+        }
+      }
+
+      var upload_list_arr = upload_obj[form][variable].upload_list.split(', ');
+      if($.inArray(extension, upload_list_arr) < 0){
+        html += '<div class="err" style="width: 100%; height: 150px">WhOops! ".'+extension+'" is not allowed. This will be auto removed.</div>';
+        html += '<br>';
+      } else {
+        var html_single_upload; var html_file_remove;
+
+        html += preview;
+        <?php if($this->act == 'update'){ ?>
+          act = '<?php echo $this->act; ?>';
+          html_single_upload = "single_upload('<?php echo $this->table; ?>', '<?php echo $this->request; ?>', form, variable, '<?php echo $this->id; ?>', "+count+", upload_by)";
+          html += '<span class="upload" onclick="'+html_single_upload+'">Upload</span>';
+        <?php } ?>
+        html_file_remove = "file_remove(form, variable, "+count+", type)";
+        html += '<span class="remove" onclick="'+html_file_remove+'">Remove</span>';
+        html += '<div class="col-xs-12 upload_item_main_div">';
+        html += '<div class="progress" style="display: none"><div class="progress-bar progress-bar-striped active"></div></div>';
+        html += '<button class="btn btn-danger btn-sm btn-block cancel" onclick="return false" style="display: none">Cancel</button>';
+        html += '</div>';
+      }
+
+      html += '</div>';
+      html += '</div>';
+      $('#'+form+'_form #'+variable+'_prev').prepend(html);
+
+      if($.inArray(extension, upload_list_arr) < 0){
+        file_remove(form, variable, count, type, 1);
+      }
+    }
+
+    $(this).val('');
+    upload_obj[form][variable].file_count = count;
+    form_height_load();
+    $('#'+form+'_form #'+variable+'_err_main_div').html('');
+  });
+}
+
+function upload_submit_val(form, variable, type){
+	$('#'+form+'_form').submit(function(){
+		if(!upload_obj[form][variable].file_arr.filter(string).length){
+			if(type){
+				<?php $this->focus($var); ?>
+				$('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field.');
+				$('#'+form+'_form #'+variable+'_err_main_div').css('top', '22px');
+			}
+		} else {
+			upload = true;
 		}
 	});
 }

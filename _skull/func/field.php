@@ -576,32 +576,7 @@ class field extends html{
 	function con_event_val($var, $type = ''){
 		?>
 			<script>
-				$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').keyup(function(){
-					// Executed if the statement is true
-					/* ================================================================================================ */
-					<?php if($type){ ?>
-						if(!$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val()){
-							$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('Please fill out this field.');
-						} else {
-							$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('');
-					<?php } ?>
-					/* ================================================================================================ */
-					
-							if(($('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val() || $('#<?php echo $this->form; ?>_form #password_input_field').val()) && $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val() != $('#<?php echo $this->form; ?>_form #password_input_field').val()){
-								$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').css('border-color', 'red');
-								$('#<?php echo $this->form; ?>_form #password_input_field').css('border-color', 'red');
-							} else {
-								$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').css('border-color', '');
-								$('#<?php echo $this->form; ?>_form #password_input_field').css('border-color', '');
-							}
-					
-					// Executed if the statement is true
-					/* ================================================================================================ */
-					<?php if($type){ ?>
-						}
-					<?php } ?>
-					/* ================================================================================================ */
-				});
+				con_event_val('<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $type; ?>');
 			</script>
 		<?php
 	}
@@ -609,35 +584,7 @@ class field extends html{
 	function con_submit_val($var, $type = ''){
 		?>
 			<script>
-				$('#<?php echo $this->form; ?>_form').submit(function(){
-					// Executed if the statement is true
-					/* ================================================================================================ */
-					<?php if($type){ ?>
-						if(!$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val()){
-							<?php $this->focus($var); ?>
-							$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('Please fill out this field.');
-						} else {
-							$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('');
-					<?php } ?>
-					/* ================================================================================================ */
-
-							if(($('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val() || $('#<?php echo $this->form; ?>_form #password_input_field').val()) && $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').val() != $('#<?php echo $this->form; ?>_form #password_input_field').val()){
-								<?php $this->focus($var); ?>
-
-								$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').css('border-color', 'red');
-								$('#<?php echo $this->form; ?>_form #password_input_field').css('border-color', 'red');
-							} else {
-								$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').css('border-color', '');
-								$('#<?php echo $this->form; ?>_form #password_input_field').css('border-color', '');
-							}
-					
-					// Executed if the statement is true
-					/* ================================================================================================ */	
-					<?php if($type){ ?>		
-						}
-					<?php } ?>
-					/* ================================================================================================ */
-				});
+				con_submit_val('<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $type; ?>');
 			</script>
 		<?php
 	}
@@ -751,110 +698,7 @@ class field extends html{
 	function upload_event_val($event, $var, $multi, $type = ''){
 		?>
 			<script>
-				if(typeof upload_obj['<?php echo $this->form; ?>'] == 'undefined'){
-					upload_obj['<?php echo $this->form; ?>'] = {};
-				}
-				upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'] = {};
-				upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].file_arr = [];
-				upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].file_count = 0;
-				upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].upload_type_arr = '<?php echo $this->upload_type; ?>'.split(', ');
-				upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].upload_list = '';
-				upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].upload_by = '<?php echo $this->upload_by; ?>';
-				upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].uip_count = 0; // This is upload-in-progress initial count
-				
-				$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').<?php echo $event; ?>(function(event){
-					var file = event.target.files;
-					for(var count = upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].file_count; count < file.length + upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].file_count; count++){
-						var filename = file[count - upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].file_count].name;
-						var extension = filename.substr(filename.lastIndexOf('.') + 1);
-						
-						upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].file_arr[count] = file[count - upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].file_count];
-						var tmppath = URL.createObjectURL(file[count - upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].file_count]);
-						
-						<?php if(!$multi){ ?>
-							file_remove('<?php echo $this->form; ?>', '<?php echo $var; ?>', count - 1, '<?php echo $type; ?>');
-						<?php } ?>
-
-						var html; var list; var list_arr; var preview;
-
-						html  = '<div id="<?php echo $var; ?>_prev_'+count+'" class="col-md-2">';
-						html += '<br>';
-						html += '<div class="col-md-12 shadow" style="padding-top: 15px; padding-bottom: 15px">';
-						
-						if($.inArray('image', upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].upload_type_arr) >= 0){
-							list = '<?php echo image; ?>';
-							list_arr = list.split(', ');
-							upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].upload_list += list+', ';
-							
-							if($.inArray(extension, list_arr) >= 0){
-								preview = '<div style="width: 100%; height: 150px; background: url('+tmppath+') no-repeat center; background-size: 100%"></div>';
-							}
-						}
-						
-						if($.inArray('audio', upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].upload_type_arr) >= 0){
-							list = '<?php echo audio; ?>';
-							list_arr = list.split(', ');
-							upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].upload_list += list+', ';
-							
-							if($.inArray(extension, list_arr) >= 0){
-								preview = '<div style="height: 150px; overflow: hidden; word-wrap: break-word">';
-								preview += '<audio controls>';
-								preview += '<source src="'+tmppath+'">';
-								preview += '</audio>';
-								preview += filename;
-								preview += '</div>';
-							}
-						}
-						
-						if($.inArray('video', upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].upload_type_arr) >= 0){
-							list = '<?php echo video; ?>';
-							list_arr = list.split(', ');
-							upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].upload_list += list;
-							
-							if($.inArray(extension, list_arr) >= 0){
-								preview = '<div style="height: 150px">';
-								preview += '<video controls>';
-								preview += '<source src="'+tmppath+'">';
-								preview += '</video>';
-								preview += '</div>';
-							}
-						}
-
-						var upload_list_arr = upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].upload_list.split(', ');
-						if($.inArray(extension, upload_list_arr) < 0){
-							html += '<div class="err" style="width: 100%; height: 150px">WhOops! ".'+extension+'" is not allowed. This will be auto removed.</div>';
-							html += '<br>';
-						} else {
-							var html_single_upload; var html_file_remove;
-
-							html += preview;
-							<?php if($this->act == 'update'){ ?>
-								act = '<?php echo $this->act; ?>';
-								html_single_upload = "single_upload('<?php echo $this->table; ?>', '<?php echo $this->request; ?>', '<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $this->id; ?>', "+count+", '<?php echo $this->upload_by; ?>')";
-								html += '<span class="upload" onclick="'+html_single_upload+'">Upload</span>';
-							<?php } ?>
-							html_file_remove = "file_remove('<?php echo $this->form; ?>', '<?php echo $var; ?>', "+count+", '<?php echo $type; ?>')";
-							html += '<span class="remove" onclick="'+html_file_remove+'">Remove</span>';
-							html += '<div class="col-xs-12 upload_item_main_div">';
-							html += '<div class="progress" style="display: none"><div class="progress-bar progress-bar-striped active"></div></div>';
-							html += '<button class="btn btn-danger btn-sm btn-block cancel" onclick="return false" style="display: none">Cancel</button>';
-							html += '</div>';
-						}
-						
-						html += '</div>';
-						html += '</div>';
-						$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_prev').prepend(html);
-
-						if($.inArray(extension, upload_list_arr) < 0){
-							file_remove('<?php echo $this->form; ?>', '<?php echo $var; ?>', count, '<?php echo $type; ?>', 1);
-						}
-					}
-					
-					$(this).val('');
-					upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].file_count = count;
-					form_height_load();
-					$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('');
-				});
+				upload_event_val('<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $event; ?>', '<?php echo $this->upload_type; ?>', '<?php echo $this->upload_by; ?>', '<?php echo $multi; ?>', '<?php echo $type; ?>');
 			</script>
 		<?php
 	}
@@ -862,17 +706,7 @@ class field extends html{
 	function upload_submit_val($var, $type = ''){
 		?>
 			<script>
-				$('#<?php echo $this->form; ?>_form').submit(function(){
-					if(!upload_obj['<?php echo $this->form; ?>']['<?php echo $var; ?>'].file_arr.filter(string).length){
-						<?php if($type){ ?>
-							<?php $this->focus($var); ?>
-							$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').html('Please fill out this field.');
-							$('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_err_main_div').css('top', '22px');
-						<?php } ?>
-					} else {
-						upload = true;
-					}
-				});	
+				upload_submit_val('<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $type; ?>');
 			</script>
 		<?php
 	}

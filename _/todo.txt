@@ -102,6 +102,8 @@ Todo:
 ---
 *** Create a function for the repeated js like .submit and .keyup scripts so it won't be displayed in the page source one by one each element and place it on skull/theme.js. Use unique function in skull/theme.js for username and email checking if existing instead of using ajax_unique_val function in skull/field.php
 
+*** Convert Peso sign to HTML Entity and change the encoding of config.php to normal encoding.
+
 *** Separate config for dev, staging, preprod and production.
 
 *** Dev instance creation easy process and staging, preprod and production deployment easy process.
