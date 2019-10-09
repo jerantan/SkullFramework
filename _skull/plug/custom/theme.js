@@ -998,7 +998,7 @@ function con_submit_val(form, variable, type){
 	});
 }
 
-function upload_event_val(form, variable, event, upload_type, upload_by, multi, type){
+function upload_event_val(table, request, _act, form, variable, event, upload_type, upload_by, multi, type, id){
   if(typeof upload_obj[form] == 'undefined'){
     upload_obj[form] = {};
   }
@@ -1010,7 +1010,7 @@ function upload_event_val(form, variable, event, upload_type, upload_by, multi, 
   upload_obj[form][variable].upload_by = upload_by;
   upload_obj[form][variable].uip_count = 0; // This is upload-in-progress initial count
 
-  $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field')[event](function(event){
+  $('#'+form+'_form #'+variable+'_input_field')[event](function(event){
     var file = event.target.files;
     for(var count = upload_obj[form][variable].file_count; count < file.length + upload_obj[form][variable].file_count; count++){
       var filename = file[count - upload_obj[form][variable].file_count].name;
@@ -1030,7 +1030,7 @@ function upload_event_val(form, variable, event, upload_type, upload_by, multi, 
       html += '<div class="col-md-12 shadow" style="padding-top: 15px; padding-bottom: 15px">';
 
       if($.inArray('image', upload_obj[form][variable].upload_type_arr) >= 0){
-        list = '<?php echo image; ?>';
+        list = js_image;
         list_arr = list.split(', ');
         upload_obj[form][variable].upload_list += list+', ';
 
@@ -1040,7 +1040,7 @@ function upload_event_val(form, variable, event, upload_type, upload_by, multi, 
       }
 
       if($.inArray('audio', upload_obj[form][variable].upload_type_arr) >= 0){
-        list = '<?php echo audio; ?>';
+        list = js_audio;
         list_arr = list.split(', ');
         upload_obj[form][variable].upload_list += list+', ';
 
@@ -1055,7 +1055,7 @@ function upload_event_val(form, variable, event, upload_type, upload_by, multi, 
       }
 
       if($.inArray('video', upload_obj[form][variable].upload_type_arr) >= 0){
-        list = '<?php echo video; ?>';
+        list = js_video;
         list_arr = list.split(', ');
         upload_obj[form][variable].upload_list += list;
 
@@ -1076,11 +1076,11 @@ function upload_event_val(form, variable, event, upload_type, upload_by, multi, 
         var html_single_upload; var html_file_remove;
 
         html += preview;
-        <?php if($this->act == 'update'){ ?>
-          act = '<?php echo $this->act; ?>';
-          html_single_upload = "single_upload('<?php echo $this->table; ?>', '<?php echo $this->request; ?>', form, variable, '<?php echo $this->id; ?>', "+count+", upload_by)";
+        if(_act == 'update'){
+          act = _act;
+          html_single_upload = "single_upload(table, request, form, variable, id, "+count+", upload_by)";
           html += '<span class="upload" onclick="'+html_single_upload+'">Upload</span>';
-        <?php } ?>
+        }
         html_file_remove = "file_remove(form, variable, "+count+", type)";
         html += '<span class="remove" onclick="'+html_file_remove+'">Remove</span>';
         html += '<div class="col-xs-12 upload_item_main_div">';
@@ -1109,7 +1109,7 @@ function upload_submit_val(form, variable, type){
 	$('#'+form+'_form').submit(function(){
 		if(!upload_obj[form][variable].file_arr.filter(string).length){
 			if(type){
-				<?php $this->focus($var); ?>
+				focus(form, variable);
 				$('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field.');
 				$('#'+form+'_form #'+variable+'_err_main_div').css('top', '22px');
 			}

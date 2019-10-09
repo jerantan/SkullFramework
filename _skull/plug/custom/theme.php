@@ -9,6 +9,9 @@
 	var js_timeout = '<?php echo timeout; ?>';
 	var js_offset = '<?php echo offset; ?>';
 	var js_scroll = '<?php echo scroll; ?>';
+	var js_image = '<?php echo image; ?>';
+	var js_audio = '<?php echo audio; ?>';
+	var js_video = '<?php echo video; ?>';
 
 	// Upload Obj
 	upload_obj = {};

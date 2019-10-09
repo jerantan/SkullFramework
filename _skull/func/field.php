@@ -698,7 +698,7 @@ class field extends html{
 	function upload_event_val($event, $var, $multi, $type = ''){
 		?>
 			<script>
-				upload_event_val('<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $event; ?>', '<?php echo $this->upload_type; ?>', '<?php echo $this->upload_by; ?>', '<?php echo $multi; ?>', '<?php echo $type; ?>');
+				upload_event_val('<?php echo $this->trim($var); ?>', '<?php echo $this->request; ?>', '<?php echo $this->act; ?>', '<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $event; ?>', '<?php echo $this->upload_type; ?>', '<?php echo $this->upload_by; ?>', '<?php echo $multi; ?>', '<?php echo $type; ?>', '<?php echo $this->id; ?>');
 			</script>
 		<?php
 	}
