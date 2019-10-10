@@ -499,71 +499,7 @@ class html extends proc{
 			<?php $this->div_close(); ?>
 			
 			<script>
-				var FormValBefore = '';
-				setTimeout(function(){
-					$('#<?php echo $this->form; ?>_form .input_field').each(function(){
-						FormValBefore += $(this).val();
-					});
-				}, <?php echo timeout * 3; ?>);
-
-				$('#<?php echo $this->form; ?>_form').submit(function(){
-					if(submit == true){
-						$('#<?php echo $this->form; ?>_notice_main_div').html('<?php $this->notice_fine(fine); ?>').delay().fadeIn();
-
-						var FormValAfter = '';
-						$('#<?php echo $this->form; ?>_form .input_field').each(function(){
-							FormValAfter += $(this).val();
-						});
-
-						if(FormValBefore == FormValAfter && upload == false){
-							setTimeout(function(){
-								$('#<?php echo $this->form; ?>_notice_main_div').html('<?php $this->notice_err('No changes to save.'); ?>').delay(<?php echo delay; ?>).fadeOut(<?php echo fadeout; ?>);
-							}, <?php echo timeout; ?>);
-							delete submit; delete upload;
-						} else {
-							var FormData = {};
-							$('#<?php echo $this->form; ?>_form input[type="hidden"]').each(function(){
-								FormData[$(this).attr('name')] = $(this).val();
-							});
-							$('#<?php echo $this->form; ?>_form .input_field').each(function(){
-								FormData[$(this).attr('name')] = encrypt($(this).val());
-							});
-							setTimeout(function(){
-								$.ajax({
-									url: '<?php echo domain.$this->request; ?>',
-									type: 'post',
-									data: FormData,	
-									success: function(response){
-										// Redirection Page
-										url = '<?php echo $url; ?>';
-										// Module Vars
-										table = '<?php echo $this->table; ?>';
-										request = '<?php echo $this->request; ?>';
-										// Form Vars
-										act = '<?php echo $this->act; ?>';
-										form = '<?php echo $this->form; ?>';
-										<?php if($this->act == 'insert'){ ?>
-											response_id = response.trim();
-										<?php } else { ?>
-											response_id = '<?php echo $this->id; ?>';
-										<?php } ?>
-										// Post Form Vars
-										post_form = '<?php echo (isset($_POST['form']))? $_POST['form'] : ''; ?>';
-										post_variable = '<?php echo (isset($_POST['variable']))? $_POST['variable'] : ''; ?>';
-										post_type = '<?php echo (isset($_POST['type']))? $_POST['type'] : ''; ?>';
-										// Result
-										if(upload == true){
-											multi_upload();
-										} else {
-											success();
-										}
-									}
-								});
-							}, <?php echo timeout; ?>);
-						}
-					}
-					return false;
-				});
+				submit('<?php echo $this->table; ?>', '<?php echo $this->request; ?>', '<?php echo $this->act; ?>', '<?php echo $this->form; ?>', '<?php echo $this->id; ?>', '<?php echo $url; ?>', '<?php echo (isset($_POST['form']))? $_POST['form'] : ''; ?>', '<?php echo (isset($_POST['variable']))? $_POST['variable'] : ''; ?>', '<?php echo (isset($_POST['type']))? $_POST['type'] : ''; ?>');
 			</script>
 		<?php
 	}

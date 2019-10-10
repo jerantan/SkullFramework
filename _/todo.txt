@@ -102,6 +102,18 @@ Todo:
 ---
 *** Create a function for the repeated js like .submit and .keyup scripts so it won't be displayed in the page source one by one each element and place it on skull/theme.js. Use unique function in skull/theme.js for username and email checking if existing instead of using ajax_unique_val function in skull/field.php
 
+*** Move submit validation to theme.js
+
+*** Move the upload image display to a separate function to reuse it.
+
+*** Check active and inactive if it is waiting for ajax response. This should not wait just update from x to check and vise versa to avoid loading the whole data again every click.
+
+*** Use localStorage for active or inactive fields that customizes table display so every user can custom their table set or display.
+
+*** In settings page should have the option to select backed up databases. I think it can be a dropdwon then set the selected to localStorage if also accessible in php if not use cookie or phpsession. Delete the localStorage or cookie or phpsession if selected back to the latest database so the default in config will be used. This means a condition should be added if database localStorage or cookie or phpsession exist or not blank then use the database name that is set in that localStorage or cookie or phpsession.
+
+*** Try to analyse making the page as widget.
+
 *** Convert Peso sign to HTML Entity and change the encoding of config.php to normal encoding.
 
 *** Separate config for dev, staging, preprod and production.

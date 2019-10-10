@@ -2,8 +2,9 @@
 	var js_alphanumeric = '<?php echo alphanumeric; ?>';
 	var js_domain = '<?php echo domain; ?>';
 	var js_symbol = '<?php echo symbol; ?>';
-	var js_notice_fine = '<?php $this->notice_fine(fine); ?>';
+	var js_notice_fine = '<?php $this->notice_fine("Please wait."); ?>';
 	var js_notice_ok = '<?php $this->notice_ok("Success."); ?>';
+	var js_notice_no = '<?php $this->notice_err("No changes to save."); ?>';
 	var js_delay = '<?php echo delay; ?>';
 	var js_fadeout = '<?php echo fadeout; ?>';
 	var js_timeout = '<?php echo timeout; ?>';

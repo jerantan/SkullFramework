@@ -44,9 +44,6 @@ define('scroll', 500);
 // Offset
 define('offset', 130);
 
-// Fine
-define('fine', 'Please wait.');
-
 // Override In Config And Spec
 /* ================================================================================================ */
 // Time Zone

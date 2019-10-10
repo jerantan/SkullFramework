@@ -1119,6 +1119,74 @@ function upload_submit_val(form, variable, type){
 	});
 }
 
+function submit(_table, _request, _act, _form, id, _url, _post_form, _post_variable, _post_type){
+	var FormValBefore = '';
+  setTimeout(function(){
+    $('#'+_form+'_form .input_field').each(function(){
+      FormValBefore += $(this).val();
+    });
+  }, js_timeout * 3);
+
+  $('#'+_form+'_form').submit(function(){
+    if(submit == true){
+      $('#'+_form+'_notice_main_div').html(js_notice_fine).delay().fadeIn();
+
+      var FormValAfter = '';
+      $('#'+_form+'_form .input_field').each(function(){
+        FormValAfter += $(this).val();
+      });
+
+      if(FormValBefore == FormValAfter && upload == false){
+        setTimeout(function(){
+          $('#'+_form+'_notice_main_div').html(js_notice_no).delay(js_delay).fadeOut(js_fadeout);
+        }, js_timeout);
+        delete submit; delete upload;
+      } else {
+        var FormData = {};
+        $('#'+_form+'_form input[type="hidden"]').each(function(){
+          FormData[$(this).attr('name')] = $(this).val();
+        });
+        $('#'+_form+'_form .input_field').each(function(){
+          FormData[$(this).attr('name')] = encrypt($(this).val());
+        });
+        setTimeout(function(){
+          $.ajax({
+            url: js_domain+_request,
+            type: 'post',
+            data: FormData,
+            success: function(response){
+              // Redirection Page
+              url = _url;
+              // Module Vars
+              table = _table;
+              request = _request;
+              // Form Vars
+              act = _act;
+              form = _form;
+              if(act == 'insert'){
+                response_id = response.trim();
+              } else {
+                response_id = id;
+              }
+              // Post Form Vars
+              post_form = _post_form;
+              post_variable = _post_variable;
+              post_type = _post_type;
+              // Result
+              if(upload == true){
+                multi_upload();
+              } else {
+                success();
+              }
+            }
+          });
+        }, js_timeout);
+      }
+    }
+    return false;
+  });
+}
+
 function ajax_unique_val(form, request, id, variable, trim, type = ''){
 	if(typeof timer != 'undefined'){ clearTimeout(timer); } timer = setTimeout(function(){
 		var async = (!type)? true : false;
