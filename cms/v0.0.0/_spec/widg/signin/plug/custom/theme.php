@@ -1,10 +1,10 @@
 <script>
 	$('#<?php echo $this->form; ?>_form').submit(function(){
 		if(submit == true){
-			$('#<?php echo $this->form; ?>_notice_main_div').html('<?php $this->notice_fine(fine); ?>').delay().fadeIn();
+			$('#<?php echo $this->form; ?>_notice_main_div').html(js_notice_fine).delay().fadeIn();
 			setTimeout(function(){
 				$.ajax({
-					url: '<?php echo domain.$table; ?>',
+					url: js_domain+'<?php echo $table; ?>',
 					type: 'post',
 					data: {
 						proc: 'signin',
@@ -16,21 +16,21 @@
 					success: function(response){
 						switch(response.trim()){
 							case '-':
-								$('#<?php echo $this->form; ?>_notice_main_div').html('<?php $this->notice_err("Either $var or password is incorrect."); ?>').delay(<?php echo delay; ?>).fadeOut(<?php echo fadeout; ?>);
+								$('#<?php echo $this->form; ?>_notice_main_div').html('<?php $this->notice_err("Either $var or password is incorrect."); ?>').delay(js_delay).fadeOut(js_fadeout);
 							break;
 							case '0':
-								$('#<?php echo $this->form; ?>_notice_main_div').html('<?php $this->notice_err('Account is inactive.'); ?>').delay(<?php echo delay; ?>).fadeOut(<?php echo fadeout; ?>);
+								$('#<?php echo $this->form; ?>_notice_main_div').html('<?php $this->notice_err('Account is inactive.'); ?>').delay(js_delay).fadeOut(js_fadeout);
 							break;
 							case '1':
-								$('#<?php echo $this->form; ?>_notice_main_div').html('<?php $this->notice_ok('Success.'); ?>').delay(<?php echo delay; ?>).fadeOut(<?php echo fadeout; ?>);
+								$('#<?php echo $this->form; ?>_notice_main_div').html(js_notice_ok).delay(js_delay).fadeOut(js_fadeout);
 								setTimeout(function(){
 									location.reload();
-								}, <?php echo timeout; ?>);
+								}, js_timeout);
 							break;
 						}
 					}
 				});
-			}, <?php echo timeout; ?>);
+			}, js_timeout);
 		}
 		return false;
 	});

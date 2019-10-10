@@ -998,6 +998,33 @@ function con_submit_val(form, variable, type){
 	});
 }
 
+function upload_preview(extension, list_arr, tmppath, filename, id){
+	var preview = '';
+	if($.inArray(extension, list_arr) >= 0){
+		preview += '<div style="width: 100%; height: 150px; background: url('+tmppath+') no-repeat center; background-size: 100%"></div>';
+	} else if($.inArray(extension, list_arr) >= 0){
+		preview += '<div style="height: 150px; overflow: hidden; word-wrap: break-word">';
+		preview += '<audio controls>';
+		preview += '<source src="'+tmppath+'">';
+		preview += '</audio>';
+		preview += filename;
+		preview += '</div>';
+	}else if($.inArray(extension, list_arr) >= 0){
+		preview += '<div style="height: 150px">';
+		preview += '<video controls>';
+		preview += '<source src="'+tmppath+'">';
+		preview += '</video>';
+		preview += '</div>';
+	}
+
+	var html = '';
+	html += '<div id="'+id+'" class="col-md-2">';
+	html += '<br>';
+	html += '<div class="col-md-12 shadow" style="padding-top: 15px; padding-bottom: 15px">';
+	html += '</div>';
+	html += '</div>';
+}
+
 function upload_event_val(table, request, _act, form, variable, event, upload_type, upload_by, multi, type, id){
   if(typeof upload_obj[form] == 'undefined'){
     upload_obj[form] = {};
@@ -1023,49 +1050,27 @@ function upload_event_val(table, request, _act, form, variable, event, upload_ty
         file_remove(form, variable, count - 1, type);
       }
 
-      var html; var list; var list_arr; var preview;
-
-      html  = '<div id="'+variable+'_prev_'+count+'" class="col-md-2">';
-      html += '<br>';
-      html += '<div class="col-md-12 shadow" style="padding-top: 15px; padding-bottom: 15px">';
+      var html = ''; var list = ''; var list_arr = []; var prev_id = variable+'_prev_'+count;
 
       if($.inArray('image', upload_obj[form][variable].upload_type_arr) >= 0){
         list = js_image;
         list_arr = list.split(', ');
         upload_obj[form][variable].upload_list += list+', ';
-
-        if($.inArray(extension, list_arr) >= 0){
-          preview = '<div style="width: 100%; height: 150px; background: url('+tmppath+') no-repeat center; background-size: 100%"></div>';
-        }
+        html += upload_preview(extension, list_arr, tmppath, filename, prev_id);
       }
 
       if($.inArray('audio', upload_obj[form][variable].upload_type_arr) >= 0){
         list = js_audio;
         list_arr = list.split(', ');
         upload_obj[form][variable].upload_list += list+', ';
-
-        if($.inArray(extension, list_arr) >= 0){
-          preview = '<div style="height: 150px; overflow: hidden; word-wrap: break-word">';
-          preview += '<audio controls>';
-          preview += '<source src="'+tmppath+'">';
-          preview += '</audio>';
-          preview += filename;
-          preview += '</div>';
-        }
+        html += upload_preview(extension, list_arr, tmppath, filename, prev_id);
       }
 
       if($.inArray('video', upload_obj[form][variable].upload_type_arr) >= 0){
         list = js_video;
         list_arr = list.split(', ');
-        upload_obj[form][variable].upload_list += list;
-
-        if($.inArray(extension, list_arr) >= 0){
-          preview = '<div style="height: 150px">';
-          preview += '<video controls>';
-          preview += '<source src="'+tmppath+'">';
-          preview += '</video>';
-          preview += '</div>';
-        }
+        upload_obj[form][variable].upload_list += list+', ';
+        html += upload_preview(extension, list_arr, tmppath, filename, prev_id);
       }
 
       var upload_list_arr = upload_obj[form][variable].upload_list.split(', ');
@@ -1074,8 +1079,6 @@ function upload_event_val(table, request, _act, form, variable, event, upload_ty
         html += '<br>';
       } else {
         var html_single_upload; var html_file_remove;
-
-        html += preview;
         if(_act == 'update'){
           act = _act;
           html_single_upload = "single_upload(table, request, form, variable, id, "+count+", upload_by)";
@@ -1089,8 +1092,6 @@ function upload_event_val(table, request, _act, form, variable, event, upload_ty
         html += '</div>';
       }
 
-      html += '</div>';
-      html += '</div>';
       $('#'+form+'_form #'+variable+'_prev').prepend(html);
 
       if($.inArray(extension, upload_list_arr) < 0){
