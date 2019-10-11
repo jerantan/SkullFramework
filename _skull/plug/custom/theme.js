@@ -998,31 +998,65 @@ function con_submit_val(form, variable, type){
 	});
 }
 
-function upload_preview(extension, list_arr, tmppath, filename, id){
-	var preview = '';
-	if($.inArray(extension, list_arr) >= 0){
-		preview += '<div style="width: 100%; height: 150px; background: url('+tmppath+') no-repeat center; background-size: 100%"></div>';
-	} else if($.inArray(extension, list_arr) >= 0){
-		preview += '<div style="height: 150px; overflow: hidden; word-wrap: break-word">';
-		preview += '<audio controls>';
-		preview += '<source src="'+tmppath+'">';
-		preview += '</audio>';
-		preview += filename;
-		preview += '</div>';
-	}else if($.inArray(extension, list_arr) >= 0){
-		preview += '<div style="height: 150px">';
-		preview += '<video controls>';
-		preview += '<source src="'+tmppath+'">';
-		preview += '</video>';
-		preview += '</div>';
+function preview_image(extension, url){
+	if(js_image.indexOf(extension) >= 0){
+		return '<div style="width: 100%; height: 150px; background: url('+url+') no-repeat center; background-size: 100%"></div>';
 	}
+}
 
+function preview_audio(extension, url, filename){
+	if(js_audio.indexOf(extension) >= 0){
+		var html = '';
+		html += '<div style="height: 150px; overflow: hidden; word-wrap: break-word">';
+		html += '<audio controls>';
+		html += '<source src="'+url+'">';
+		html += '</audio>';
+		html += filename;
+		html += '</div>';
+		return html;
+	}
+}
+
+function preview_video(extension, url){
+	if(js_video.indexOf(extension) >= 0){
+		var html = '';
+		html += '<div style="height: 150px">';
+		html += '<video controls>';
+		html += '<source src="'+url+'">';
+		html += '</video>';
+		html += '</div>';
+		return html;
+	}
+}
+
+function upload_preview(prev, extension, id, remove, upload = ''){
 	var html = '';
 	html += '<div id="'+id+'" class="col-md-2">';
 	html += '<br>';
 	html += '<div class="col-md-12 shadow" style="padding-top: 15px; padding-bottom: 15px">';
+
+	if(!prev){
+	  html += '<div class="err" style="width: 100%; height: 150px">WhOops! ".'+extension+'" is not allowed. This will be auto removed.</div><br>';
+	} else {
+		html += prev;
+	  if(act == 'update'){
+	    html += '<span class="upload" onclick="'+upload+'">Upload</span>';
+	  }
+
+	  if(act != 'view'){
+			html += '<span class="remove" onclick="'+remove+'">Delete</span>';
+	  } else {
+			html += '<span class="remove" onclick="'+remove+'">Remove</span>';
+	  }
+	  html += '<div class="col-xs-12 upload_item_main_div">';
+	  html += '<div class="progress" style="display: none"><div class="progress-bar progress-bar-striped active"></div></div>';
+	  html += '<button class="btn btn-danger btn-sm btn-block cancel" onclick="return false" style="display: none">Cancel</button>';
+	  html += '</div>';
+	}
+
 	html += '</div>';
 	html += '</div>';
+	return html;
 }
 
 function upload_event_val(table, request, _act, form, variable, event, upload_type, upload_by, multi, type, id){
@@ -1032,8 +1066,7 @@ function upload_event_val(table, request, _act, form, variable, event, upload_ty
   upload_obj[form][variable] = {};
   upload_obj[form][variable].file_arr = [];
   upload_obj[form][variable].file_count = 0;
-  upload_obj[form][variable].upload_type_arr = upload_type.split(', ');
-  upload_obj[form][variable].upload_list = '';
+  upload_obj[form][variable].upload_type = upload_type;
   upload_obj[form][variable].upload_by = upload_by;
   upload_obj[form][variable].uip_count = 0; // This is upload-in-progress initial count
 
@@ -1050,51 +1083,28 @@ function upload_event_val(table, request, _act, form, variable, event, upload_ty
         file_remove(form, variable, count - 1, type);
       }
 
-      var html = ''; var list = ''; var list_arr = []; var prev_id = variable+'_prev_'+count;
+      act = _act;
+      var prev_id = variable+'_prev_'+count;
+      var upload = "single_upload(table, request, form, variable, id, count, upload_by)";
+      var remove = "file_remove(form, variable, count, type)";
 
-      if($.inArray('image', upload_obj[form][variable].upload_type_arr) >= 0){
-        list = js_image;
-        list_arr = list.split(', ');
-        upload_obj[form][variable].upload_list += list+', ';
-        html += upload_preview(extension, list_arr, tmppath, filename, prev_id);
+      var prev = '';
+      if(upload_obj[form][variable].upload_type.indexOf('image') >= 0 && !prev){
+        prev = preview_image(extension, tmppath);
       }
 
-      if($.inArray('audio', upload_obj[form][variable].upload_type_arr) >= 0){
-        list = js_audio;
-        list_arr = list.split(', ');
-        upload_obj[form][variable].upload_list += list+', ';
-        html += upload_preview(extension, list_arr, tmppath, filename, prev_id);
+      if(upload_obj[form][variable].upload_type.indexOf('audio') >= 0 && !prev){
+        prev = preview_audio(extension, tmppath, filename);
       }
 
-      if($.inArray('video', upload_obj[form][variable].upload_type_arr) >= 0){
-        list = js_video;
-        list_arr = list.split(', ');
-        upload_obj[form][variable].upload_list += list+', ';
-        html += upload_preview(extension, list_arr, tmppath, filename, prev_id);
+      if(upload_obj[form][variable].upload_type.indexOf('video') >= 0 && !prev){
+        prev = preview_video(extension, tmppath);
       }
 
-      var upload_list_arr = upload_obj[form][variable].upload_list.split(', ');
-      if($.inArray(extension, upload_list_arr) < 0){
-        html += '<div class="err" style="width: 100%; height: 150px">WhOops! ".'+extension+'" is not allowed. This will be auto removed.</div>';
-        html += '<br>';
-      } else {
-        var html_single_upload; var html_file_remove;
-        if(_act == 'update'){
-          act = _act;
-          html_single_upload = "single_upload(table, request, form, variable, id, "+count+", upload_by)";
-          html += '<span class="upload" onclick="'+html_single_upload+'">Upload</span>';
-        }
-        html_file_remove = "file_remove(form, variable, "+count+", type)";
-        html += '<span class="remove" onclick="'+html_file_remove+'">Remove</span>';
-        html += '<div class="col-xs-12 upload_item_main_div">';
-        html += '<div class="progress" style="display: none"><div class="progress-bar progress-bar-striped active"></div></div>';
-        html += '<button class="btn btn-danger btn-sm btn-block cancel" onclick="return false" style="display: none">Cancel</button>';
-        html += '</div>';
-      }
-
+      var html = upload_preview(prev, extension, prev_id, remove, upload);
       $('#'+form+'_form #'+variable+'_prev').prepend(html);
 
-      if($.inArray(extension, upload_list_arr) < 0){
+      if(!prev){
         file_remove(form, variable, count, type, 1);
       }
     }

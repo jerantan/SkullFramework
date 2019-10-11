@@ -643,54 +643,30 @@ class field extends html{
 		}
 		?>
 			<div id="<?php echo $var; ?>_prev" class="row"></div>
-			<?php
-				if($this->act != 'insert'){
-					foreach(array_reverse(glob($this->path($this->upload_by, $this->table, $this->id).'*.*')) as $target){
-						$filename = end(explode('/', $target));
-						$extension = end(explode('.', $filename));
-						$del_box = "del_box('$this->table', '$this->request', '$filename', '$this->id', 1)";
-						$del_span = '';
+				<?php if($this->act != 'insert'){ ?>
+				<script>
+					var target = <?php echo json_encode(array_reverse(glob($this->path($this->upload_by, $this->table, $this->id).'*.*'))); ?>;
+					for(var key in target){
+						var _target = target[key];
+						var name = _target.substr(_target.lastIndexOf('/') + 1);
+						var ext = name.substr(name.lastIndexOf('.') + 1);
 
-						$list_arr = explode(', ', image);
-						if(in_array($extension, $list_arr)){
-							$preview = '<div style="width: 100%; height: 150px; background: url('.$this->url($target).') no-repeat center; background-size: 100%"></div>';
-						}
+						var prev = '';
+						if(!prev) prev = preview_image(ext, '<?php echo $this->url($target); ?>');
+						if(!prev) prev = preview_audio(ext, '<?php echo $this->url($target); ?>', name);
+						if(!prev) prev = preview_video(ext, '<?php echo $this->url($target); ?>');
 
-						$list_arr = explode(', ', audio);
-						if(in_array($extension, $list_arr)){
-							$preview = '<div style="height: 150px; overflow: hidden; word-wrap: break-word">';
-							$preview .= '<audio controls>';
-							$preview .= '<source src="'.$this->url($target).'">';
-							$preview .= '</audio>';
-							$preview .= $filename;
-							$preview .= '</div>';
-						}
+						/*$del_span = '';
+            if($this->act != 'view'){
+              $del_box = "del_box('$this->table', '$this->request', '$filename', '$this->id', 1)";
+              $del_span = '<span class="remove" onclick="'.$del_box.'">Delete</span>';
+            }*/
 
-						$list_arr = explode(', ', video);
-						if(in_array($extension, $list_arr)){
-							$preview = '<div style="height: 150px">';
-							$preview .= '<video controls>';
-							$preview .= '<source src="'.$this->url($target).'">';
-							$preview .= '</video>';
-							$preview .= '</div>';
-						}
-
-						if($this->act != 'view'){
-							$del_span = '<span class="remove" onclick="'.$del_box.'">Delete</span>';
-						}
-
-						echo '
-							<div id="'.$this->variable($filename).'" class="col-md-2">
-								<br>
-								<div class="col-md-12 shadow" style="padding-top: 15px; padding-bottom: 15px">
-									'.$preview.'
-									'.$del_span.'
-								</div>
-							</div>
-							';
+						var html = upload_preview(prev, ext, '<?php echo $this->variable($filename); ?>', remove);
+						$('#'+form+'_form #'+variable+'_prev').prepend(html);
 					}
-				}
-			?>
+				</script>
+				<?php } ?>
 		<?php
 	}
 

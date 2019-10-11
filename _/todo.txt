@@ -106,6 +106,8 @@ Todo:
 
 *** Move the upload image display to a separate function to reuse it.
 
+*** Fix datepicker, sometimes it does not working.
+
 *** Check active and inactive if it is waiting for ajax response. This should not wait just update from x to check and vise versa to avoid loading the whole data again every click.
 
 *** Use localStorage for active or inactive fields that customizes table display so every user can custom their table set or display.
@@ -115,6 +117,8 @@ Todo:
 *** Try to analyse making the page as widget.
 
 *** Convert Peso sign to HTML Entity and change the encoding of config.php to normal encoding.
+
+*** Add sort feature in tables.
 
 *** Separate config for dev, staging, preprod and production.
 
