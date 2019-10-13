@@ -10,15 +10,15 @@ Other:
 Done:
 ---
 *** theme.js.php redundant responses like this function
-	function form_height_load(){
-		if(form_current()){
-			form_height('form');
-			form_height('form1');
-			form_height('form2');
-			form_height('form3');
-			$('.form_load_div .option').tooltip('show');
-		}
-	}
+  function form_height_load(){
+    if(form_current()){
+      form_height('form');
+      form_height('form1');
+      form_height('form2');
+      form_height('form3');
+      $('.form_load_div .option').tooltip('show');
+    }
+  }
 it change the height of all forms, this should be change to specific, identify what is the active/current form then only change the height of the active/current form not all forms to avoid redundant response and optimize the page ajax reponse/load. In this way site/system will become faster. - Done.
 
 *** In search box trigger only ajax after stopped typing for 1, 2 or 3 secs. - Done.
@@ -43,11 +43,11 @@ it change the height of all forms, this should be change to specific, identify w
 
 *** Check all functions like below, because it has switch but only using default case.
 function field_switch($field_name){
-	switch($field_name){
-		default:
-			$this->field_arr[] = $field_name;
-		break;
-	}
+  switch($field_name){
+    default:
+      $this->field_arr[] = $field_name;
+    break;
+  }
 } - Done.
 
 *** Not scrolling up when form has image to upload, review why I make it like this. For now I guess its nice if this is scrolling up. - Done.
@@ -55,10 +55,10 @@ function field_switch($field_name){
 *** Fix issue in function url and upload variable value when using same domain. - Done.
 
 *** Chosen validation for required field is not working if action is update then chosen is empty.
-	Explanation: The field is empty bacause the value of the selected option is blank, but actually it has a selected option if you inspect the element, that is why required field is not working. But I fixed it anyway by updating the line below.
-	From 	: <?php if($sel == $val){ echo 'selected'; } ?>
-	To 		: <?php if($sel == $val && $arr_opt[$index]){ echo 'selected'; } ?>
-	by adding  && $arr_opt[$index]. - Done.
+  Explanation: The field is empty bacause the value of the selected option is blank, but actually it has a selected option if you inspect the element, that is why required field is not working. But I fixed it anyway by updating the line below.
+  From   : <?php if($sel == $val){ echo 'selected'; } ?>
+  To     : <?php if($sel == $val && $arr_opt[$index]){ echo 'selected'; } ?>
+  by adding  && $arr_opt[$index]. - Done.
 
 *** Fix js missing arguments, no error sbut this should be fix to be standard. - Done.
 
@@ -67,9 +67,9 @@ function field_switch($field_name){
 *** Auto log out if user dont have activity on site. - Done.
 
 *** Remove Ckeditor because of the following issues:
-		- Not working properly.
-		- Required field validation is not working.
-	Just have to add it manually if needed because this is a burden and a huge blocker on the Skull development. - Done.
+    - Not working properly.
+    - Required field validation is not working.
+  Just have to add it manually if needed because this is a burden and a huge blocker on the Skull development. - Done.
 
 *** Make this framework load only class methods, css and js for a specific widget or element if it is being used. Example if I dont use file upload element then the codes for file upload element should not be load. This is to optimize the page load.
 
@@ -83,7 +83,7 @@ The above leads to page load performance issue because of having too many inject
 
 *** Submit only if form has changes if none, just a div saying that no changes to save. - Done.
 
-*** Place signout script accordingly to solve "Uncaught ReferenceError: signout is not defined" issue. - Done.
+*** Place signout script accordingly to solve 'Uncaught ReferenceError: signout is not defined' issue. - Done.
 
 *** Update timeout to x3 for FormValBefore because it causes error in online deployment. - Done.
 
@@ -100,13 +100,38 @@ The above leads to page load performance issue because of having too many inject
 
 Todo:
 ---
-*** Create a function for the repeated js like .submit and .keyup scripts so it won't be displayed in the page source one by one each element and place it on skull/theme.js. Use unique function in skull/theme.js for username and email checking if existing instead of using ajax_unique_val function in skull/field.php
+*** Create a function for the repeated js like .submit and .keyup scripts so it won't be displayed in the page source one by one each element and place it on skull/theme.js. Use unique function in skull/theme.js for username and email checking if existing instead of using ajax_unique_val function in skull/field.php - Done.
 
-*** Move submit validation to theme.js
+*** Move submit validation to theme.js - Done.
 
-*** Move the upload image display to a separate function to reuse it.
+*** Move the upload image display to a separate function to reuse it. - Done.
 
-*** Fix datepicker, sometimes it does not working.
+*** Fix datepicker, sometimes it does not working. - Done.
+
+*** Fix chosen, sometimes it does not working. - Done.
+
+*** Remove autocomplete in datepicket textbox, but autocomplete="off" all textbox. - Done.
+
+*** Checked all files, all are using ANSI encoding except for config.php it uses UTF-8, I intentionally set it because of Peso symbol. Change Peso sign with HTML Entity and change the encoding of config.php to ANSI. Change symbol to currency. - Done.
+
+*** Fix measure to adjust to '0' if decimal is not '00' then tridown click. Currently it stop on '1'. - Done.
+
+*** Fix amount has issue in validation, submiting even its value is 0.00 and also has issue in encryption because of the Peso symbol. - Done.
+
+*** Setup sublime, see photo of sublime settings in phone. - Done.
+
+*** Use two spaces for coding indentation. Opened all files to replace tabs with spaces and also search white spaces that does not needed. Below are the string searched every file.
+
+'}
+ ', '} ', '; ', '> ', '{ ', '*/ ', ', ', '. ', '( '
+
+ Last, git diff and look for red means white spaces and remove one by one except for spec classes that are empty. - Done.
+
+*** Create functions for '#'+form+'_form #'+variable+'_input_field', 'Please fill out this field.' and 'Please fill out this field with an email.'. This is to sanitize theme.js.
+
+*** Use localStorage for display limit.
+
+*** Use only one script tag for a specific component.
 
 *** Check active and inactive if it is waiting for ajax response. This should not wait just update from x to check and vise versa to avoid loading the whole data again every click.
 
@@ -116,9 +141,13 @@ Todo:
 
 *** Try to analyse making the page as widget.
 
-*** Convert Peso sign to HTML Entity and change the encoding of config.php to normal encoding.
+*** Update plug/custom to plug/theme
+
+*** Update skullframework/cms to skullframework/app
 
 *** Add sort feature in tables.
+
+*** Update datepicket to datetimepicker.
 
 *** Separate config for dev, staging, preprod and production.
 

@@ -49,11 +49,11 @@ define('offset', 130);
 // Time Zone
 date_default_timezone_set($config['timezone']);
 
+// Currency
+define('currency', $config['currency']);
+
 // Term
 define('term', $config['term']);
-
-// Currency
-define('symbol', $config['symbol']);
 
 // Environment
 define('env', $config['env']);

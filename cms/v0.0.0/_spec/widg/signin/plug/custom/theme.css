@@ -1,9 +1,9 @@
 .signin_main_div .close{
-	display: none;
+  display: none;
 }
 
 .signin_submit_div{
-	position: absolute;
-	right: 15px;
-	bottom: 20px;
+  position: absolute;
+  right: 15px;
+  bottom: 20px;
 }
