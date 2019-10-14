@@ -12,71 +12,75 @@ if(hash){
 
 // Modal Form
 /* ------------------------------------------------------------------------------------------------ */
-function form_open(table, request, act, id = ''){
-  $('.form_main_div').show();
-  $('.form_main_div').attr('id', table+'_form_main_div');
-  $('.form_main_div').scrollTop(0);
-  $('.form_content_div .form_hidden_field').val('form');
-  $('.form_content_div .close').attr('onclick', "form_close('"+table+"', '"+request+"')");
-  $('.form_content_div .form_close_button').attr('onclick', "form_close('"+table+"', '"+request+"')");
+function __form(obj){
+  $('.form'+obj.type+'_main_div').show();
+  $('.form'+obj.type+'_main_div').attr('id', obj.table+'_form'+obj.type+'_main_div');
+  $('.form'+obj.type+'_main_div').scrollTop(0);
+  $('.form'+obj.type+'_content_div .form'+obj.type+'_hidden_field').val('form'+obj.type);
+  $('.form'+obj.type+'_content_div .close').attr('onclick', 'form'+obj.type+'_close('+obj.cont_close+')');
+  $('.form'+obj.type+'_content_div .form'+obj.type+'_close_button').attr('onclick', 'form'+obj.type+'_close('+obj.form_close+')');
   $('html').attr('style', 'overflow: hidden');
   $.ajax({
-    url: js_domain+request,
+    url: js_domain+obj.request,
     type: 'post',
+    data: obj.data,
+    success: function(response){
+      $('.form'+obj.type+'_title').html(obj.title);
+      $('.form'+obj.type+'_load_div').html(response);
+      form_height_load();
+    }
+  });
+}
+
+function __close(type){
+  $('.form'+type+'_main_div').hide();
+  $('.form'+type+'_content_div .form'+type+'_hidden_field').val('');
+  $('.form'+type+'_title').html('');
+  $('.form'+type+'_load_div').html('');
+}
+
+function form0_open(table, request, act, id = ''){
+  var obj = {
+    type: 0,
+    table: table,
+    cont_close: "'"+table+"', '"+request+"'",
+    form_close: "'"+table+"', '"+request+"'",
+    request: request,
     data: {
       proc: 'fillin',
       table: table,
       act: act,
       id: id
     },
-    success: function(response){
-      $('.form_title').html(ucfirst(table)+' Form');
-      $('.form_load_div').html(response);
-      form_height_load();
-    }
-  });
+    title: ucfirst(table)+' Form'
+  };
+  __form(obj);
 }
 
-function form_close(table, request){
-  $('.form_main_div').hide();
-  $('.form_content_div .form_hidden_field').val('');
-  $('.form_title').html('');
-  $('.form_load_div').html('');
-  load(table, request);
+function form0_close(table, request){
+  __close(0); load(table, request);
   $('html').removeAttr('style');
 }
 
 function form1_open(table, request){
-  $('.form1_main_div').show();
-  $('.form1_main_div').attr('id', table+'_form1_main_div');
-  $('.form1_main_div').scrollTop(0);
-  $('.form1_content_div .form1_hidden_field').val('form1');
-  $('.form1_content_div .close').attr('onclick', "form1_close('"+table+"', '"+request+"')");
-  $('.form1_content_div .form1_close_button').attr('onclick', "form1_close('"+table+"', '"+request+"')");
-  $('html').attr('style', 'overflow: hidden');
-  $.ajax({
-    url: js_domain+request,
-    type: 'post',
+  var obj = {
+    type: 1,
+    table: table,
+    cont_close: "'"+table+"', '"+request+"'",
+    form_close: "'"+table+"', '"+request+"'",
+    request: request,
     data: {
       proc: 'setting',
       table: table
     },
-    success: function(response){
-      $('.form1_title').html('Setup');
-      $('.form1_load_div').html(response);
-      form_height_load();
-    }
-  });
+    title: 'Setup'
+  };
+  __form(obj);
 }
 
 function form1_close(table, request){
-  $('.form1_main_div').hide();
-  $('.form1_content_div .form1_hidden_field').val('');
-  $('.form1_title').html('');
-  $('.form1_load_div').html('');
-  load(table, request);
-
-  if(!form_active('form')){
+  __close(1); load(table, request);
+  if(!form_active('form0')){
     $('html').removeAttr('style');
   }
 }
@@ -114,7 +118,7 @@ function form2_close(){
   $('.form2_content_div .form2_hidden_field').val('');
   $('.form2_title').html('');
   $('.form2_load_div').html('');
-  if(!form_active('form')){
+  if(!form_active('form0')){
     $('html').removeAttr('style');
   }
 }
@@ -152,7 +156,7 @@ function form3_close(){
   $('.form3_content_div .form3_hidden_field').val('');
   $('.form3_title').html('');
   $('.form3_load_div').html('');
-  if(!form_active('form')){
+  if(!form_active('form0')){
     $('html').removeAttr('style');
   }
 }
@@ -168,7 +172,7 @@ function form_active(form){
 
 function form_current(){
   var form = '';
-  if(form_active('form'))  form = 'form';
+  if(form_active('form0')) form = 'form0';
   if(form_active('form1')) form = 'form1';
   if(form_active('form2')) form = 'form2';
   if(form_active('form3')) form = 'form3';
@@ -177,7 +181,7 @@ function form_current(){
 
 function form_select(table, request, act, form, variable, type, id = ''){
   var form_name = form_current();
-  if(form_name == 'form'){
+  if(form_name == 'form0'){
     form2_open(table, request, act, form, variable, type, id);
   } else if(form_name == 'form2'){
     form3_open(table, request, act, form, variable, type, id);
@@ -203,7 +207,7 @@ function form_height_load(){
   var form_name = form_current();
   if(form_name){
     form_height(form_name);
-    $('.form_load_div .option').tooltip('show');
+    $('.form0_load_div .option').tooltip('show');
   }
 }
 
@@ -570,7 +574,7 @@ function del(table, request, id, val = ''){
         $('#html_notice_main_div').html(js_notice_ok).delay(js_delay).fadeOut(js_fadeout);
         if(!val){
           setTimeout(function(){
-            if(form_current() == 'form'){
+            if(form_current() == 'form0'){
               form_close(table, request);
             } else {
               load(table, request);
@@ -632,12 +636,12 @@ function success(){
   } else {
     if(typeof submit != 'undefined'){
       var form_name = form_current();
-      if(form_name == 'form'){
+      if(form_name == 'form0'){
         setTimeout(function(){
           if(act == 'insert'){
-            form_open(table, request, act);
+            form0_open(table, request, act);
           } else {
-            form_open(table, request, act, response_id);
+            form0_open(table, request, act, response_id);
           }
         }, js_timeout);
       } else if(form_name == 'form2'){
@@ -717,13 +721,13 @@ function trigger(request){
       form1_open(hash[0], request);
     break;
     case 'add':
-      form_open(hash[0], request, 'insert');
+      form0_open(hash[0], request, 'insert');
     break;
     case 'view':
     case 'update':
       unique(hash[0], request, 'id', hash[2]);
       if(unires > 0){
-        form_open(hash[0], request, hash[1], hash[2]);
+        form0_open(hash[0], request, hash[1], hash[2]);
         delete unires;
       }
     break;

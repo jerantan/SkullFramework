@@ -16,14 +16,11 @@ class html extends proc{
       <div class="col-md-<?php echo $md; ?> col-sm-<?php echo $sm; ?> content_main_div float_center radius shadow">
         <div class="row no_margin">
           <?php $this->clear(); ?>
-
           <form action="<?php $this->link('main/'); ?>">
             <button type="submit" class="close">&times;</button>
           </form>
-
           <?php $this->h(3, $title); ?>
           <?php $this->hr(); ?>
-
           <div class="row no_margin">
     <?php
   }
@@ -31,13 +28,10 @@ class html extends proc{
   function content_close(){
     ?>
           </div>
-
           <?php $this->hr(); ?>
-
           <form action="<?php $this->link('main/'); ?>">
             <?php $this->button('submit', 'Close', 'btn-default float_right'); ?>
           </form>
-
           <?php $this->clear(); ?>
         </div>
       </div>
@@ -49,7 +43,6 @@ class html extends proc{
     ?>
       <span class="dropdown navbar-right option" data-toggle="tooltip" data-placement="top" title="Option">
         <?php $this->button_dropdown('', 'close'); ?>
-
         <ul class="dropdown-menu" role="menu">
           <li><?php $this->setup($this->table, $this->request, 1, 'Setup'); ?></li>
         </ul>
@@ -64,7 +57,6 @@ class html extends proc{
         <div class="row no_margin">
           <?php $this->h(4, $title); ?>
           <?php $this->hr(); ?>
-
           <div class="row no_margin">
     <?php
   }
@@ -72,7 +64,6 @@ class html extends proc{
   function content1_close($type = ''){
     ?>
           </div>
-
           <?php if($type){ ?>
             <?php $this->hr(); ?>
             <?php $this->clear(); ?>
@@ -85,26 +76,26 @@ class html extends proc{
 
   // Modal Form
   /* ------------------------------------------------------------------------------------------------ */
-  function form(){
+  function form($type){
     ?>
-      <div class="form_prop form_main_div">
-        <div class="form_prop form_main_back_div"></div>
-        <div class="form_prop form_back_div"></div>
+      <div class="form<?php echo $type; ?>_prop form<?php echo $type; ?>_main_div">
+        <div class="form<?php echo $type; ?>_prop form<?php echo $type; ?>_main_back_div"></div>
+        <div class="form<?php echo $type; ?>_prop form<?php echo $type; ?>_back_div"></div>
         <br><br><br><br><br>
-        <div class="form_content_div radius shadow">
+        <div class="form<?php echo $type; ?>_content_div radius shadow">
           <div class="row no_margin">
             <?php $this->clear(); ?>
-            <input type="hidden" name="form_hidden_field[]" class="form_hidden_field">
+            <input type="hidden" name="form_hidden_field[]" class="form<?php echo $type; ?>_hidden_field">
             <button type="button" class="close">&times;</button>
-            <h3 class="form_title"></h3>
+            <h3 class="form<?php echo $type; ?>_title"></h3>
             <?php $this->hr(); ?>
 
             <div class="row no_margin">
-              <div class="form_load_div"></div>
+              <div class="form<?php echo $type; ?>_load_div"></div>
             </div>
 
             <?php $this->hr(); ?>
-            <?php $this->button('button', 'Close', 'btn-default form_close_button float_right'); ?>
+            <?php $this->button('button', 'Close', "btn-default form{$type}_close_button float_right"); ?>
             <?php $this->clear(); ?>
           </div>
         </div>
@@ -134,87 +125,6 @@ class html extends proc{
     <?php
   }
 
-  function form1(){
-    ?>
-      <div class="form1_prop form1_main_div">
-        <div class="form1_prop form1_main_back_div"></div>
-        <div class="form1_prop form1_back_div"></div>
-        <br><br><br><br><br>
-        <div class="form1_content_div radius shadow">
-          <div class="row no_margin">
-            <?php $this->clear(); ?>
-            <input type="hidden" name="form_hidden_field[]" class="form1_hidden_field">
-            <button type="button" class="close">&times;</button>
-            <h3 class="form1_title"></h3>
-            <?php $this->hr(); ?>
-
-            <div class="row no_margin">
-              <div class="form1_load_div"></div>
-            </div>
-
-            <?php $this->hr(); ?>
-            <?php $this->button('button', 'Close', 'btn-default form1_close_button float_right'); ?>
-            <?php $this->clear(); ?>
-          </div>
-        </div>
-      </div>
-    <?php
-  }
-
-  function form2(){
-    ?>
-      <div class="form2_prop form2_main_div">
-        <div class="form2_prop form2_main_back_div"></div>
-        <div class="form2_prop form2_back_div"></div>
-        <br><br><br><br><br>
-        <div class="form2_content_div radius shadow">
-          <div class="row no_margin">
-            <?php $this->clear(); ?>
-            <input type="hidden" name="form_hidden_field[]" class="form2_hidden_field">
-            <button type="button" class="close">&times;</button>
-            <h3 class="form2_title"></h3>
-            <?php $this->hr(); ?>
-
-            <div class="row no_margin">
-              <div class="form2_load_div"></div>
-            </div>
-
-            <?php $this->hr(); ?>
-            <?php $this->button('button', 'Close', 'btn-default form2_close_button float_right'); ?>
-            <?php $this->clear(); ?>
-          </div>
-        </div>
-      </div>
-    <?php
-  }
-
-  function form3(){
-    ?>
-      <div class="form3_prop form3_main_div">
-        <div class="form3_prop form3_main_back_div"></div>
-        <div class="form3_prop form3_back_div"></div>
-        <br><br><br><br><br>
-        <div class="form3_content_div radius shadow">
-          <div class="row no_margin">
-            <?php $this->clear(); ?>
-            <input type="hidden" name="form_hidden_field[]" class="form3_hidden_field">
-            <button type="button" class="close">&times;</button>
-            <h3 class="form3_title"></h3>
-            <?php $this->hr(); ?>
-
-            <div class="row no_margin">
-              <div class="form3_load_div"></div>
-            </div>
-
-            <?php $this->hr(); ?>
-            <?php $this->button('button', 'Close', 'btn-default form3_close_button float_right'); ?>
-            <?php $this->clear(); ?>
-          </div>
-        </div>
-      </div>
-    <?php
-  }
-
   // Table
   /* ------------------------------------------------------------------------------------------------ */
   function table_header(){
@@ -236,7 +146,6 @@ class html extends proc{
         <div class="col-xs-6">
           <?php $this->limit(); ?>
         </div>
-
         <div class="col-xs-6 align_right">
           <?php $this->add_record($this->table, $this->request, 0, 'Add Record'); ?>
         </div>
@@ -405,13 +314,12 @@ class html extends proc{
 
   function add_record($table, $request, $type, $caption){
     ?>
-      <a href="<?php $this->link("$request#$table#add"); ?>" id="<?php echo $table; ?>_add_record_link" class="add_record_link" onclick="form_open('<?php echo $table; ?>', '<?php echo $request; ?>', 'insert'); return false" <?php if(!$caption){ ?> data-toggle="tooltip" data-placement="top" title="Add Record" <?php } ?>>
+      <a href="<?php $this->link("$request#$table#add"); ?>" id="<?php echo $table; ?>_add_record_link" class="add_record_link" onclick="form0_open('<?php echo $table; ?>', '<?php echo $request; ?>', 'insert'); return false" <?php if(!$caption){ ?> data-toggle="tooltip" data-placement="top" title="Add Record" <?php } ?>>
         <?php if($type){ ?>
           <i class="glyphicon glyphicon-plus-sign info"></i>
         <?php } ?>
         <?php echo $caption; ?>
       </a>
-
       <script>
         $('[data-toggle="tooltip"]').tooltip();
       </script>
@@ -420,7 +328,7 @@ class html extends proc{
 
   function view_record($table, $request, $id, $type, $caption = ''){
     ?>
-      <a href="<?php $this->link("$request#$table#view#$id"); ?>" onclick="form_open('<?php echo $table; ?>', '<?php echo $request; ?>', 'view', '<?php echo $id; ?>'); return false" <?php if(!$caption){ ?> data-toggle="tooltip" data-placement="top" title="View Record" <?php } ?>>
+      <a href="<?php $this->link("$request#$table#view#$id"); ?>" onclick="form0_open('<?php echo $table; ?>', '<?php echo $request; ?>', 'view', '<?php echo $id; ?>'); return false" <?php if(!$caption){ ?> data-toggle="tooltip" data-placement="top" title="View Record" <?php } ?>>
         <?php if($type){ ?>
           <i class="glyphicon glyphicon-folder-open" style="color: orange"></i>
         <?php } ?>
@@ -431,7 +339,7 @@ class html extends proc{
 
   function update_record($table, $request, $id, $type, $caption = ''){
     ?>
-      <a href="<?php $this->link("$request#$table#update#$id"); ?>" onclick="form_open('<?php echo $table; ?>', '<?php echo $request; ?>', 'update', '<?php echo $id; ?>'); return false" <?php if(!$caption){ ?> data-toggle="tooltip" data-placement="top" title="Update Record" <?php } ?>>
+      <a href="<?php $this->link("$request#$table#update#$id"); ?>" onclick="form0_open('<?php echo $table; ?>', '<?php echo $request; ?>', 'update', '<?php echo $id; ?>'); return false" <?php if(!$caption){ ?> data-toggle="tooltip" data-placement="top" title="Update Record" <?php } ?>>
         <?php if($type){ ?>
           <i class="glyphicon glyphicon-pencil fine"></i>
         <?php } ?>
@@ -669,11 +577,9 @@ class html extends proc{
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
               <h4 class="modal-title" id="myModalLabel">WhOops!</h4>
             </div>
-
             <div class="modal-body">
               Are you sure you want to delete : <span class="del_box_val"></span> ?
             </div>
-
             <div class="modal-footer">
               <button class="btn btn-sm btn-default" data-dismiss="modal">Cancel</button>
               <button class="btn btn-sm btn_prop del_box_confirm" data-dismiss="modal">Confirm</button>

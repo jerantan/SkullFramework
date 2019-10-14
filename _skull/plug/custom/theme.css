@@ -77,7 +77,7 @@ html, body{
 
 /* Modal Form
 /* ------------------------------------------------------------------------------------------------ */
-.form_prop{
+.form0_prop{
   top: 0;
   right: 0;
   bottom: 0;
@@ -85,22 +85,22 @@ html, body{
   z-index: 1030;
 }
 
-.form_main_div{
+.form0_main_div{
   position: fixed;
   overflow-x: hidden;
   overflow-y: auto;
   display: none;
 }
 
-.form_main_back_div{
+.form0_main_back_div{
   position: fixed;
 }
 
-.form_back_div{
+.form0_back_div{
   position: fixed;
 }
 
-.form_content_div{
+.form0_content_div{
   background: #FFF;
   position: relative;
   margin: 15px;
@@ -108,30 +108,30 @@ html, body{
   z-index: 1030;
 }
 
-.form_content_div .close{
+.form0_content_div .close{
   margin-top: -5px;
 }
 
-.form_load_div .caret{
+.form0_load_div .caret{
   margin-top: -5px;
   border-top: 9px solid;
   border-right: 7px solid transparent;
   border-left: 7px solid transparent;
 }
 
-.form_load_div .option{
+.form0_load_div .option{
   position: absolute;
   top: 20px;
   right: 50px;
 }
 
 @media(max-width: 767px){
-  .form_load_div .navbar-right{
+  .form0_load_div .navbar-right{
     float: right !important;
     margin-right: -15px;
   }
 
-  .form_load_div .navbar-right .dropdown-menu{
+  .form0_load_div .navbar-right .dropdown-menu{
     right: 0px;
     left: auto;
   }

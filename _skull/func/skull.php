@@ -573,10 +573,10 @@ class skull{
 
   function bottom(){
     $this->notice('html');
-    $this->form3();
-    $this->form2();
-    $this->form1();
-    $this->form();
+    $this->form(3);
+    $this->form(2);
+    $this->form(1);
+    $this->form(0);
     $this->del_box();
   }
 

@@ -58,12 +58,12 @@
   .content_main_div .dropdown-menu > li > a{ color: <?php echo main; ?>; }
   .content_main_div .dropdown-menu > li > a:hover,
   .content_main_div .dropdown-menu > li > a:focus{ color: <?php echo hove; ?>; background: <?php echo main; ?>; }
-  .form_main_back_div{ background: <?php echo (opac != 1)? 'black' : main; ?>; opacity: <?php echo opac; ?>; }
-  .form_back_div{ background: <?php echo (opac != 1)? 'transparent' : font; ?>; }
-  .form_load_div .dropdown-menu{ background-color: <?php echo font; ?>; }
-  .form_load_div .dropdown-menu > li > a{ color: <?php echo main; ?>; }
-  .form_load_div .dropdown-menu > li > a:hover,
-  .form_load_div .dropdown-menu > li > a:focus{ color: <?php echo hove; ?>; background: <?php echo main; ?>; }
+  .form0_main_back_div{ background: <?php echo (opac != 1)? 'black' : main; ?>; opacity: <?php echo opac; ?>; }
+  .form0_back_div{ background: <?php echo (opac != 1)? 'transparent' : font; ?>; }
+  .form0_load_div .dropdown-menu{ background-color: <?php echo font; ?>; }
+  .form0_load_div .dropdown-menu > li > a{ color: <?php echo main; ?>; }
+  .form0_load_div .dropdown-menu > li > a:hover,
+  .form0_load_div .dropdown-menu > li > a:focus{ color: <?php echo hove; ?>; background: <?php echo main; ?>; }
   .form1_main_back_div{ background: <?php echo (opac != 1)? 'black' : main; ?>; opacity: <?php echo opac; ?>; }
   .form1_back_div{ background: <?php echo (opac != 1)? 'transparent' : font; ?>; }
   .form2_main_back_div{ background: <?php echo (opac != 1)? 'black' : main; ?>; opacity: <?php echo opac; ?>; }
