@@ -54,7 +54,6 @@ function form1_open(table, request){
   $('.form1_content_div .close').attr('onclick', "form1_close('"+table+"', '"+request+"')");
   $('.form1_content_div .form1_close_button').attr('onclick', "form1_close('"+table+"', '"+request+"')");
   $('html').attr('style', 'overflow: hidden');
-
   $.ajax({
     url: js_domain+request,
     type: 'post',
@@ -90,7 +89,6 @@ function form2_open(table, request, act, form, variable, type, id = ''){
   $('.form2_content_div .close').attr('onclick', "form2_close('"+table+"')");
   $('.form2_content_div .form2_close_button').attr('onclick', "form2_close('"+table+"')");
   $('html').attr('style', 'overflow: hidden');
-
   $.ajax({
     url: js_domain+request,
     type: 'post',
@@ -116,7 +114,6 @@ function form2_close(){
   $('.form2_content_div .form2_hidden_field').val('');
   $('.form2_title').html('');
   $('.form2_load_div').html('');
-
   if(!form_active('form')){
     $('html').removeAttr('style');
   }
@@ -130,7 +127,6 @@ function form3_open(table, request, act, form, variable, type, id = ''){
   $('.form3_content_div .close').attr('onclick', "form3_close('"+table+"')");
   $('.form3_content_div .form3_close_button').attr('onclick', "form3_close('"+table+"')");
   $('html').attr('style', 'overflow: hidden');
-
   $.ajax({
     url: js_domain+request,
     type: 'post',
@@ -156,7 +152,6 @@ function form3_close(){
   $('.form3_content_div .form3_hidden_field').val('');
   $('.form3_title').html('');
   $('.form3_load_div').html('');
-
   if(!form_active('form')){
     $('html').removeAttr('style');
   }
@@ -173,18 +168,10 @@ function form_active(form){
 
 function form_current(){
   var form = '';
-  if(form_active('form')){
-    form = 'form';
-  }
-  if(form_active('form1')){
-    form = 'form1';
-  }
-  if(form_active('form2')){
-    form = 'form2';
-  }
-  if(form_active('form3')){
-    form = 'form3';
-  }
+  if(form_active('form'))  form = 'form';
+  if(form_active('form1')) form = 'form1';
+  if(form_active('form2')) form = 'form2';
+  if(form_active('form3')) form = 'form3';
   return form;
 }
 
@@ -203,7 +190,6 @@ function form_height(form){
   var margin_top = 50;
   var margin_bottom = 20;
   var window_height = $(window).height() - (div_point + margin_bottom);
-
   if(div_height < window_height){
     $('.'+form+'_content_div').removeAttr('style');
     $('.'+form+'_back_div').attr('style', 'top: '+margin_top+'px; bottom: '+margin_bottom+'px');
