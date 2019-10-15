@@ -86,16 +86,12 @@ function form1_close(table, request){
 }
 
 function form2_open(table, request, act, form, variable, type, id = ''){
-  $('.form2_main_div').show();
-  $('.form2_main_div').attr('id', table+'_form2_main_div');
-  $('.form2_main_div').scrollTop(0);
-  $('.form2_content_div .form2_hidden_field').val('form2');
-  $('.form2_content_div .close').attr('onclick', "form2_close('"+table+"')");
-  $('.form2_content_div .form2_close_button').attr('onclick', "form2_close('"+table+"')");
-  $('html').attr('style', 'overflow: hidden');
-  $.ajax({
-    url: js_domain+request,
-    type: 'post',
+  var obj = {
+    type: 2,
+    table: table,
+    cont_close: "'"+table+"'",
+    form_close: "'"+table+"'",
+    request: request,
     data: {
       proc: 'fillin',
       table: table,
@@ -105,35 +101,25 @@ function form2_open(table, request, act, form, variable, type, id = ''){
       type: type,
       id: id
     },
-    success: function(response){
-      $('.form2_title').html('Instant ('+ucfirst(table)+' Form)');
-      $('.form2_load_div').html(response);
-      form_height_load();
-    }
-  });
+    title: 'Instant ('+ucfirst(table)+' Form)'
+  };
+  __form(obj);
 }
 
 function form2_close(){
-  $('.form2_main_div').hide();
-  $('.form2_content_div .form2_hidden_field').val('');
-  $('.form2_title').html('');
-  $('.form2_load_div').html('');
+  __close(2);
   if(!form_active('form0')){
     $('html').removeAttr('style');
   }
 }
 
 function form3_open(table, request, act, form, variable, type, id = ''){
-  $('.form3_main_div').show();
-  $('.form3_main_div').attr('id', table+'_form3_main_div');
-  $('.form3_main_div').scrollTop(0);
-  $('.form3_content_div .form3_hidden_field').val('form3');
-  $('.form3_content_div .close').attr('onclick', "form3_close('"+table+"')");
-  $('.form3_content_div .form3_close_button').attr('onclick', "form3_close('"+table+"')");
-  $('html').attr('style', 'overflow: hidden');
-  $.ajax({
-    url: js_domain+request,
-    type: 'post',
+  var obj = {
+    type: 3,
+    table: table,
+    cont_close: "'"+table+"'",
+    form_close: "'"+table+"'",
+    request: request,
     data: {
       proc: 'fillin',
       table: table,
@@ -143,19 +129,13 @@ function form3_open(table, request, act, form, variable, type, id = ''){
       type: type,
       id: id
     },
-    success: function(response){
-      $('.form3_title').html('Instant ('+ucfirst(table)+' Form)');
-      $('.form3_load_div').html(response);
-      form_height_load();
-    }
-  });
+    title: 'Instant ('+ucfirst(table)+' Form)'
+  };
+  __form(obj);
 }
 
 function form3_close(){
-  $('.form3_main_div').hide();
-  $('.form3_content_div .form3_hidden_field').val('');
-  $('.form3_title').html('');
-  $('.form3_load_div').html('');
+  __close(3);
   if(!form_active('form0')){
     $('html').removeAttr('style');
   }
@@ -218,18 +198,18 @@ function string(val){
 }
 
 function triup(form, variable){
-  var val = $('#'+form+'_form #'+variable+'_input_field').val();
+  var val = $(field(form, variable)).val();
   val = val * 1 + 1;
-  $('#'+form+'_form #'+variable+'_input_field').val(format('measure', string(val)));
-  $('#'+form+'_form #'+variable+'_err_main_div').html('');
+  $(field(form, variable)).val(format('measure', string(val)));
+  $(error(form, variable)).html('');
 }
 
 function tridown(form, variable){
-  var val = $('#'+form+'_form #'+variable+'_input_field').val();
+  var val = $(field(form, variable)).val();
   if(val >= 1) val = val * 1 - 1;
   val = format('measure', string(val));
-  if(val >= 0) $('#'+form+'_form #'+variable+'_input_field').val(val);
-  if(val == 0) $('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field.');
+  if(val >= 0) $(field(form, variable)).val(val);
+  if(val == 0) $(error(form, variable)).html(msg()+'.');
 }
 
 function format(type, val){
@@ -299,8 +279,8 @@ function file_remove(form, variable, id, type, animate = ''){
       $('#'+form+'_form #'+variable+'_prev_'+id).remove();
       if(type){
         if(!_upload_obj.file_arr.filter(string).length && !_upload_obj.uip_count){
-          $('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field.');
-          $('#'+form+'_form #'+variable+'_err_main_div').css('top', '22px');
+          $(error(form, variable)).html(msg()+'.');
+          $(error(form, variable)).css('top', '22px');
         }
       }
       form_height_load();
@@ -309,8 +289,8 @@ function file_remove(form, variable, id, type, animate = ''){
     $('#'+form+'_form #'+variable+'_prev_'+id).remove();
     if(type){
       if(!_upload_obj.file_arr.filter(string).length && !_upload_obj.uip_count){
-        $('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field.');
-        $('#'+form+'_form #'+variable+'_err_main_div').css('top', '22px');
+        $(error(form, variable)).html(msg()+'.');
+        $(error(form, variable)).css('top', '22px');
       }
     }
     form_height_load();
@@ -590,7 +570,7 @@ function del(table, request, id, val = ''){
 }
 
 function chosen_load(table, request, act, sel, form, variable, type){
-  $('#'+form+'_form #'+variable+'_err_main_div').html('');
+  $(error(form, variable)).html('');
   $.ajax({
     url: js_domain+request,
     type: 'post',
@@ -736,18 +716,18 @@ function trigger(request){
 }
 
 function alpha_event_val(form, variable, event){
-  $('#'+form+'_form #'+variable+'_input_field')[event](function(){
-    if(!$('#'+form+'_form #'+variable+'_input_field').val()){
-      $('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field.');
+  $(field(form, variable))[event](function(){
+    if(!$(field(form, variable)).val()){
+      $(error(form, variable)).html(msg()+'.');
     } else {
       if(variable.indexOf('email') >= 0){
-        if(!email.test($('#'+form+'_form #'+variable+'_input_field').val())){
-          $('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field with an email.');
+        if(!email.test($(field(form, variable)).val())){
+          $(error(form, variable)).html(msg()+' with an email.');
         } else {
-          $('#'+form+'_form #'+variable+'_err_main_div').html('');
+          $(error(form, variable)).html('');
         }
       } else {
-        $('#'+form+'_form #'+variable+'_err_main_div').html('');
+        $(error(form, variable)).html('');
       }
     }
   });
@@ -755,13 +735,13 @@ function alpha_event_val(form, variable, event){
 
 function alpha_submit_val(form, variable, chosen_class){
   $('#'+form+'_form').submit(function(){
-    if(!$('#'+form+'_form #'+variable+'_input_field').val()){
+    if(!$(field(form, variable)).val()){
       to_focus(form, variable, chosen_class);
-      $('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field.');
+      $(error(form, variable)).html(msg()+'.');
     } else {
       if(variable.indexOf('email') >= 0){
-        if(!email.test($('#'+form+'_form #'+variable+'_input_field').val())){
-          $('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field with an email.');
+        if(!email.test($(field(form, variable)).val())){
+          $(error(form, variable)).html(msg()+' with an email.');
           to_focus(form, variable, chosen_class);
         }
       }
@@ -770,19 +750,19 @@ function alpha_submit_val(form, variable, chosen_class){
 }
 
 function alpha_unique_event_val(form, request, id, variable, event, trim){
-  $('#'+form+'_form #'+variable+'_input_field')[event](function(){
-    if(!$('#'+form+'_form #'+variable+'_input_field').val()){
-      $('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field.');
+  $(field(form, variable))[event](function(){
+    if(!$(field(form, variable)).val()){
+      $(error(form, variable)).html(msg()+'.');
     } else {
       if(trim == 'username'){
-        if($('#'+form+'_form #'+variable+'_input_field').val() && $('#'+form+'_form #'+variable+'_input_field').val().length <= 5){
-          $('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field with 6 chars or above.');
+        if($(field(form, variable)).val() && $(field(form, variable)).val().length <= 5){
+          $(error(form, variable)).html(msg()+' with 6 chars or above.');
         } else {
           ajax_unique_val(form, request, id, variable, trim);
         }
       } else if(trim == 'email'){
-        if(!email.test($('#'+form+'_form #'+variable+'_input_field').val())){
-          $('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field with an email.');
+        if(!email.test($(field(form, variable)).val())){
+          $(error(form, variable)).html(msg()+' with an email.');
         } else {
           ajax_unique_val(form, request, id, variable, trim);
         }
@@ -795,20 +775,20 @@ function alpha_unique_event_val(form, request, id, variable, event, trim){
 
 function alpha_unique_submit_val(form, request, id, variable, trim){
   $('#'+form+'_form').submit(function(){
-    if(!$('#'+form+'_form #'+variable+'_input_field').val()){
+    if(!$(field(form, variable)).val()){
       to_focus(form, variable);
-      $('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field.');
+      $(error(form, variable)).html(msg()+'.');
     } else {
       if(trim == 'username'){
-        if($('#'+form+'_form #'+variable+'_input_field').val() && $('#'+form+'_form #'+variable+'_input_field').val().length <= 5){
+        if($(field(form, variable)).val() && $(field(form, variable)).val().length <= 5){
           to_focus(form, variable);
-          $('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field with 6 chars or above.');
+          $(error(form, variable)).html(msg()+' with 6 chars or above.');
         } else {
           ajax_unique_val(form, request, id, variable, trim, 1);
         }
       } else if(trim == 'email'){
-        if(!email.test($('#'+form+'_form #'+variable+'_input_field').val())){
-          $('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field with an email.');
+        if(!email.test($(field(form, variable)).val())){
+          $(error(form, variable)).html(msg()+' with an email.');
           to_focus(form, variable);
         } else {
           ajax_unique_val(form, request, id, variable, trim, 1);
@@ -822,19 +802,19 @@ function alpha_unique_submit_val(form, request, id, variable, trim){
 
 function numeric_val(type, form, variable){
   if(type == 'measure'){
-    $('#'+form+'_form #'+variable+'_input_field').attr('style', 'text-align: right; padding-right: 25px');
+    $(field(form, variable)).attr('style', 'text-align: right; padding-right: 25px');
   } else {
-    $('#'+form+'_form #'+variable+'_input_field').attr('style', 'text-align: right');
+    $(field(form, variable)).attr('style', 'text-align: right');
   }
 
   $('#'+form+'_form .input-group .view_field').attr('style', 'text-align: right');
 
-  $('#'+form+'_form #'+variable+'_input_field').blur(function(){
-    var val = $('#'+form+'_form #'+variable+'_input_field').val();
-    $('#'+form+'_form #'+variable+'_input_field').val(format(type, sanitize(val)));
+  $(field(form, variable)).blur(function(){
+    var val = $(field(form, variable)).val();
+    $(field(form, variable)).val(format(type, sanitize(val)));
   });
 
-  $('#'+form+'_form #'+variable+'_input_field').keypress(function(e){
+  $(field(form, variable)).keypress(function(e){
     var e = (e) ? e : window.event;
     var key = (e.which) ? e.which : e.keycode;
     if(type == 'measure' || type == 'amount' || type == 'percent'){
@@ -846,30 +826,30 @@ function numeric_val(type, form, variable){
 }
 
 function numeric_event_val(form, variable, event){
-  $('#'+form+'_form #'+variable+'_input_field')[event](function(){
+  $(field(form, variable))[event](function(){
     var val = sanitize($(this).val());
     if(!val || val <= 0){
-      $('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field.');
+      $(error(form, variable)).html(msg()+'.');
     } else {
-      $('#'+form+'_form #'+variable+'_err_main_div').html('');
+      $(error(form, variable)).html('');
     }
   });
 }
 
 function numeric_submit_val(form, variable){
   $('#'+form+'_form').submit(function(){
-    var val = sanitize($('#'+form+'_form #'+variable+'_input_field').val());
+    var val = sanitize($(field(form, variable)).val());
     if(!val || val <= 0){
       to_focus(form, variable);
-      $('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field.');
+      $(error(form, variable)).html(msg()+'.');
     }
   });
 }
 
 function numeric_unique_event_val(form, request, id, variable, event, trim){
-  $('#'+form+'_form #'+variable+'_input_field')[event](function(){
-    if(!$('#'+form+'_form #'+variable+'_input_field').val() || $('#'+form+'_form #'+variable+'_input_field').val() <= 0){
-      $('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field.');
+  $(field(form, variable))[event](function(){
+    if(!$(field(form, variable)).val() || $(field(form, variable)).val() <= 0){
+      $(error(form, variable)).html(msg()+'.');
     } else {
       ajax_unique_val(form, request, id, variable, trim);
     }
@@ -878,9 +858,9 @@ function numeric_unique_event_val(form, request, id, variable, event, trim){
 
 function numeric_unique_submit_val(form, request, id, variable, trim){
   $('#'+form+'_form').submit(function(){
-    if(!$('#'+form+'_form #'+variable+'_input_field').val() || $('#'+form+'_form #'+variable+'_input_field').val() <= 0){
+    if(!$(field(form, variable)).val() || $(field(form, variable)).val() <= 0){
       to_focus(form, variable);
-      $('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field.');
+      $(error(form, variable)).html(msg()+'.');
     } else {
       ajax_unique_val(form, request, id, variable, trim, 1);
     }
@@ -889,7 +869,7 @@ function numeric_unique_submit_val(form, request, id, variable, trim){
 
 function date_picker(form, variable, min, max, format, month, year){
   setTimeout(function(){
-    $('#'+form+'_form #'+variable+'_input_field').datepicker({
+    $(field(form, variable)).datepicker({
       changeYear: ((!year)? true : false),
       changeMonth: ((!month)? true : false),
       dateFormat: ((format)? format : ''),
@@ -899,28 +879,28 @@ function date_picker(form, variable, min, max, format, month, year){
   }, js_timeout * 2);
 
   $('#'+form+'_form #'+variable+'_addon_main_link').click(function(){
-    $('#'+form+'_form #'+variable+'_input_field').focus();
+    $(field(form, variable)).focus();
   });
 }
 
 function pass_event_val(form, variable, type){
-  $('#'+form+'_form #'+variable+'_input_field').keyup(function(){
-    if(!$('#'+form+'_form #'+variable+'_input_field').val()){
+  $(field(form, variable)).keyup(function(){
+    if(!$(field(form, variable)).val()){
       if(type){
-        $('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field.');
+        $(error(form, variable)).html(msg()+'.');
       }
     } else {
-      if($('#'+form+'_form #'+variable+'_input_field').val().length <= 5){
-        $('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field with 6 chars or above.');
+      if($(field(form, variable)).val().length <= 5){
+        $(error(form, variable)).html(msg()+' with 6 chars or above.');
       } else {
-        $('#'+form+'_form #'+variable+'_err_main_div').html('');
+        $(error(form, variable)).html('');
       }
 
-      if(($('#'+form+'_form #'+variable+'_input_field').val() || $('#'+form+'_form #confirm_input_field').val()) && $('#'+form+'_form #'+variable+'_input_field').val() != $('#'+form+'_form #confirm_input_field').val()){
-        $('#'+form+'_form #'+variable+'_input_field').css('border-color', 'red');
+      if(($(field(form, variable)).val() || $('#'+form+'_form #confirm_input_field').val()) && $(field(form, variable)).val() != $('#'+form+'_form #confirm_input_field').val()){
+        $(field(form, variable)).css('border-color', 'red');
         $('#'+form+'_form #confirm_input_field').css('border-color', 'red');
       } else {
-        $('#'+form+'_form #'+variable+'_input_field').css('border-color', '');
+        $(field(form, variable)).css('border-color', '');
         $('#'+form+'_form #confirm_input_field').css('border-color', '');
       }
     }
@@ -929,38 +909,38 @@ function pass_event_val(form, variable, type){
 
 function pass_submit_val(form, variable, type){
   $('#'+form+'_form').submit(function(){
-    if(!$('#'+form+'_form #'+variable+'_input_field').val()){
+    if(!$(field(form, variable)).val()){
       if(type){
         to_focus(form, variable);
-        $('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field.');
+        $(error(form, variable)).html(msg()+'.');
       }
     } else {
-      if($('#'+form+'_form #'+variable+'_input_field').val().length <= 5){
+      if($(field(form, variable)).val().length <= 5){
         to_focus(form, variable);
-        $('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field with 6 chars or above.');
+        $(error(form, variable)).html(msg()+' with 6 chars or above.');
       } else {
-        $('#'+form+'_form #'+variable+'_err_main_div').html('');
+        $(error(form, variable)).html('');
       }
     }
   });
 }
 
 function con_event_val(form, variable, type){
-  $('#'+form+'_form #'+variable+'_input_field').keyup(function(){
+  $(field(form, variable)).keyup(function(){
     if(type){
-      if(!$('#'+form+'_form #'+variable+'_input_field').val()){
-        $('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field.');
+      if(!$(field(form, variable)).val()){
+        $(error(form, variable)).html(msg()+'.');
         return;
       } else {
-        $('#'+form+'_form #'+variable+'_err_main_div').html('');
+        $(error(form, variable)).html('');
       }
     }
 
-    if(($('#'+form+'_form #'+variable+'_input_field').val() || $('#'+form+'_form #password_input_field').val()) && $('#'+form+'_form #'+variable+'_input_field').val() != $('#'+form+'_form #password_input_field').val()){
-      $('#'+form+'_form #'+variable+'_input_field').css('border-color', 'red');
+    if(($(field(form, variable)).val() || $('#'+form+'_form #password_input_field').val()) && $(field(form, variable)).val() != $('#'+form+'_form #password_input_field').val()){
+      $(field(form, variable)).css('border-color', 'red');
       $('#'+form+'_form #password_input_field').css('border-color', 'red');
     } else {
-      $('#'+form+'_form #'+variable+'_input_field').css('border-color', '');
+      $(field(form, variable)).css('border-color', '');
       $('#'+form+'_form #password_input_field').css('border-color', '');
     }
   });
@@ -969,21 +949,21 @@ function con_event_val(form, variable, type){
 function con_submit_val(form, variable, type){
   $('#'+form+'_form').submit(function(){
     if(type){
-      if(!$('#'+form+'_form #'+variable+'_input_field').val()){
+      if(!$(field(form, variable)).val()){
         to_focus(form, variable);
-        $('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field.');
+        $(error(form, variable)).html(msg()+'.');
         return;
       } else {
-        $('#'+form+'_form #'+variable+'_err_main_div').html('');
+        $(error(form, variable)).html('');
       }
     }
 
-    if(($('#'+form+'form #'+variable+'_input_field').val() || $('#'+form+'_form #password_input_field').val()) && $('#'+form+'_form #'+variable+'_input_field').val() != $('#'+form+'_form #password_input_field').val()){
+    if(($('#'+form+'form #'+variable+'_input_field').val() || $('#'+form+'_form #password_input_field').val()) && $(field(form, variable)).val() != $('#'+form+'_form #password_input_field').val()){
       to_focus(form, variable);
-      $('#'+form+'_form #'+variable+'_input_field').css('border-color', 'red');
+      $(field(form, variable)).css('border-color', 'red');
       $('#'+form+'_form #password_input_field').css('border-color', 'red');
     } else {
-      $('#'+form+'_form #'+variable+'_input_field').css('border-color', '');
+      $(field(form, variable)).css('border-color', '');
       $('#'+form+'_form #password_input_field').css('border-color', '');
     }
   });
@@ -1058,7 +1038,7 @@ function upload_event_val(table, request, _act, form, variable, event, upload_ty
   upload_obj[form][variable].upload_by = upload_by;
   upload_obj[form][variable].uip_count = 0; // This is upload-in-progress initial count
 
-  $('#'+form+'_form #'+variable+'_input_field')[event](function(event){
+  $(field(form, variable))[event](function(event){
     var file = event.target.files;
     for(var count = upload_obj[form][variable].file_count; count < file.length + upload_obj[form][variable].file_count; count++){
       var filename = file[count - upload_obj[form][variable].file_count].name;
@@ -1100,7 +1080,7 @@ function upload_event_val(table, request, _act, form, variable, event, upload_ty
     $(this).val('');
     upload_obj[form][variable].file_count = count;
     form_height_load();
-    $('#'+form+'_form #'+variable+'_err_main_div').html('');
+    $(error(form, variable)).html('');
   });
 }
 
@@ -1109,8 +1089,8 @@ function upload_submit_val(form, variable, type){
     if(!upload_obj[form][variable].file_arr.filter(string).length){
       if(type){
         to_focus(form, variable);
-        $('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field.');
-        $('#'+form+'_form #'+variable+'_err_main_div').css('top', '22px');
+        $(error(form, variable)).html(msg()+'.');
+        $(error(form, variable)).css('top', '22px');
       }
     } else {
       upload = true;
@@ -1197,15 +1177,15 @@ function ajax_unique_val(form, request, id, variable, trim, type = ''){
         proc: 'unique',
         table: form,
         field: trim,
-        val: encrypt($('#'+form+'_form #'+variable+'_input_field').val()),
+        val: encrypt($(field(form, variable)).val()),
         id: id
       },
       success: function(response){
         if(response.substr(-1) > 0){
           if(type) to_focus(form, variable);
-          $('#'+form+'_form #'+variable+'_err_main_div').html('Please fill out this field again, this '+trim+' is already taken.');
+          $(error(form, variable)).html(msg()+' again, this '+trim+' is already taken.');
         } else {
-          $('#'+form+'_form #'+variable+'_err_main_div').html('');
+          $(error(form, variable)).html('');
         }
       }
     });
@@ -1217,12 +1197,12 @@ function to_focus(form, variable, chosen_class = ''){
     var form_name = form_current();
     if(!form_name){
       $('html').animate({
-        scrollTop: $('#'+form+'_form #'+variable+'_input_field'+chosen_class).offset().top - js_offset
-      }, js_scroll, function(){ $('#'+form+'_form #'+variable+'_input_field'+chosen_class).focus(); });
+        scrollTop: $(field(form, variable)+chosen_class).offset().top - js_offset
+      }, js_scroll, function(){ $(field(form, variable)+chosen_class).focus(); });
     } else {
       $('.'+form_name+'_main_div').animate({
-        scrollTop: $('.'+form_name+'_main_div').scrollTop() - $('.'+form_name+'_main_div').offset().top + $('#'+form+'_form #'+variable+'_input_field'+chosen_class).offset().top - js_offset
-      }, js_scroll, function(){ $('#'+form+'_form #'+variable+'_input_field'+chosen_class).focus(); });
+        scrollTop: $('.'+form_name+'_main_div').scrollTop() - $('.'+form_name+'_main_div').offset().top + $(field(form, variable)+chosen_class).offset().top - js_offset
+      }, js_scroll, function(){ $(field(form, variable)+chosen_class).focus(); });
     }
   }
   submit = false;
@@ -1236,4 +1216,16 @@ function sanitize(str){
   str = str.replace(js_currency, '');
   str = str.replace('%', '');
   return str;
+}
+
+function field(form, variable){
+  return '#'+form+'_form #'+variable+'_input_field';
+}
+
+function error(form, variable){
+  return '#'+form+'_form #'+variable+'_err_main_div';
+}
+
+function msg(){
+  return 'Please fill out this field';
 }

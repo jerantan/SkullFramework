@@ -127,9 +127,11 @@ Todo:
 
  Last, git diff and look for red means white spaces and remove one by one except for spec classes that are empty. - Done.
 
-*** Sanitized form functions both PHP and JS.
+*** Sanitized form functions both PHP and JS. - Done.
 
-*** Create functions for '#'+form+'_form #'+variable+'_input_field', 'Please fill out this field.' and 'Please fill out this field with an email.'. This is to sanitize theme.js.
+*** Create functions for '#'+form+'_form #'+variable+'_input_field', 'Please fill out this field.' and 'Please fill out this field with an email.'. This is to sanitize theme.js. - Done.
+
+*** Try loading the assets like chosen.js or chosen.css without using inject function, just load it directly as html script.
 
 *** Use only one script tag for a specific component.
 
