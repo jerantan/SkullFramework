@@ -131,9 +131,13 @@ Todo:
 
 *** Create functions for '#'+form+'_form #'+variable+'_input_field', 'Please fill out this field.' and 'Please fill out this field with an email.'. This is to sanitize theme.js. - Done.
 
-*** Try loading the assets like chosen.js or chosen.css without using inject function, just load it directly as html script.
+*** Created function for '#'+form+'_form #password_input_field', '#'+form+'_form #'+variable+'_prev_'+id and created generic function for actions like load, search, limit and etc. - Done.
 
 *** Use only one script tag for a specific component.
+
+*** Cancel should also clear preview images in upload input and clear ckeditor texts. Find function cancel(form) in theme then add the needed scripts.
+
+*** Try loading the assets like chosen.js or chosen.css without using inject function, just load it directly as html script.
 
 *** Check active and inactive if it is waiting for ajax response. This should not wait just update from x to check and vise versa to avoid loading the whole data again every click.
 

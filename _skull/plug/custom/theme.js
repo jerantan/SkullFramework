@@ -209,7 +209,7 @@ function tridown(form, variable){
   if(val >= 1) val = val * 1 - 1;
   val = format('measure', string(val));
   if(val >= 0) $(field(form, variable)).val(val);
-  if(val == 0) $(error(form, variable)).html(msg()+'.');
+  if(val == 0) $(error(form, variable)).html(wNone());
 }
 
 function format(type, val){
@@ -274,22 +274,22 @@ function file_remove(form, variable, id, type, animate = ''){
   var _upload_obj = upload_obj[form][variable];
   _upload_obj.file_arr[id] = '';
   if(animate){
-    $('#'+form+'_form #'+variable+'_prev_'+id).delay(js_delay).fadeOut(js_fadeout);
+    $(prev(form, variable, id)).delay(js_delay).fadeOut(js_fadeout);
     setTimeout(function(){
-      $('#'+form+'_form #'+variable+'_prev_'+id).remove();
+      $(prev(form, variable, id)).remove();
       if(type){
         if(!_upload_obj.file_arr.filter(string).length && !_upload_obj.uip_count){
-          $(error(form, variable)).html(msg()+'.');
+          $(error(form, variable)).html(wNone());
           $(error(form, variable)).css('top', '22px');
         }
       }
       form_height_load();
     }, 2000);
   } else {
-    $('#'+form+'_form #'+variable+'_prev_'+id).remove();
+    $(prev(form, variable, id)).remove();
     if(type){
       if(!_upload_obj.file_arr.filter(string).length && !_upload_obj.uip_count){
-        $(error(form, variable)).html(msg()+'.');
+        $(error(form, variable)).html(wNone());
         $(error(form, variable)).css('top', '22px');
       }
     }
@@ -323,11 +323,11 @@ function file_upload(form, request, variable, id, by){
   if(!$.isArray(_upload_obj.file_arr[id])){ // This means if the object is not upload-in-progress
     _upload_obj.uip_count++; // This is upload-in-progress add count
 
-    $('#'+form+'_form #'+variable+'_prev_'+id+' .progress-bar').html('0%');
-    $('#'+form+'_form #'+variable+'_prev_'+id+' .progress-bar').css('width', '0%');
+    $(prev(form, variable, id)+' .progress-bar').html('0%');
+    $(prev(form, variable, id)+' .progress-bar').css('width', '0%');
 
-    $('#'+form+'_form #'+variable+'_prev_'+id+' .progress').show();
-    $('#'+form+'_form #'+variable+'_prev_'+id+' .cancel').show();
+    $(prev(form, variable, id)+' .progress').show();
+    $(prev(form, variable, id)+' .cancel').show();
 
     file_form = new FormData();
     file_form.append('proc', 'copy');
@@ -349,14 +349,14 @@ function file_upload(form, request, variable, id, by){
         if(myXhr.upload){
           myXhr.upload.addEventListener('progress', function(e){
             progress = Math.round((e.loaded * 100) / e.total);
-            $('#'+form+'_form #'+variable+'_prev_'+id+' .progress-bar').html(progress+'%');
-            $('#'+form+'_form #'+variable+'_prev_'+id+' .progress-bar').css('width', progress+'%');
+            $(prev(form, variable, id)+' .progress-bar').html(progress+'%');
+            $(prev(form, variable, id)+' .progress-bar').css('width', progress+'%');
           });
         }
         return myXhr;
       },
       beforeSend: function(upload){
-        $('#'+form+'_form #'+variable+'_prev_'+id+' .cancel').click(function(){
+        $(prev(form, variable, id)+' .cancel').click(function(){
           upload.abort();
 
           if($.isArray(_upload_obj.file_arr[id])){ // This is to prevent loading many times. Enchancement: remove the appended FormData() after upload.abort.
@@ -372,8 +372,8 @@ function file_upload(form, request, variable, id, by){
               $('#'+form+'_notice_main_div').delay().fadeOut();
             }
 
-            $('#'+form+'_form #'+variable+'_prev_'+id+' .progress').hide();
-            $('#'+form+'_form #'+variable+'_prev_'+id+' .cancel').hide();
+            $(prev(form, variable, id)+' .progress').hide();
+            $(prev(form, variable, id)+' .cancel').hide();
 
             _upload_obj.file_arr[id] = _upload_obj.file_arr[id][0]; // This is to set the object as not upload-in-progress
           }
@@ -391,14 +391,14 @@ function file_added(form, request, variable, id, val){
   _upload_obj.uip_count--; // This is upload-in-progress minus count
   _upload_obj.file_arr[id] = '';
 
-  $('#'+form+'_form #'+variable+'_prev_'+id+' .upload').hide();
-  $('#'+form+'_form #'+variable+'_prev_'+id+' .remove').html('Delete');
-  $('#'+form+'_form #'+variable+'_prev_'+id+' .remove').attr('onclick', "del_box('"+table+"', '"+request+"', '"+val+"', '"+response_id+"', 1)");
+  $(prev(form, variable, id)+' .upload').hide();
+  $(prev(form, variable, id)+' .remove').html('Delete');
+  $(prev(form, variable, id)+' .remove').attr('onclick', "del_box('"+table+"', '"+request+"', '"+val+"', '"+response_id+"', 1)");
 
-  $('#'+form+'_form #'+variable+'_prev_'+id+' .progress').hide();
-  $('#'+form+'_form #'+variable+'_prev_'+id+' .cancel').hide();
+  $(prev(form, variable, id)+' .progress').hide();
+  $(prev(form, variable, id)+' .cancel').hide();
 
-  $('#'+form+'_form #'+variable+'_prev_'+id).attr('id', val.replace('.', ''));
+  $(prev(form, variable, id)).attr('id', val.replace('.', ''));
 
   if(!_upload_obj.uip_count){
     success();
@@ -407,107 +407,82 @@ function file_added(form, request, variable, id, val){
 
 // Process
 /* ------------------------------------------------------------------------------------------------ */
-function load(table, request){
-  var search = $('#'+table+'_search_field').val() || '';
-  var go = $('#'+table+'_go_to_field').val() - 1;
-  var limit = $('#'+table+'_limit_field').val() || '';
+function __load(obj){
+  var search = $('#'+obj.table+'_search_field').val() || '';
+  var limit = $('#'+obj.table+'_limit_field').val() || '';
   $.ajax({
-    url: js_domain+request,
+    url: js_domain+obj.request,
     type: 'post',
     data: {
       proc: 'manager',
-      table: table,
+      table: obj.table,
       search: search,
-      start: go,
+      start: obj.start,
       limit: limit
     },
     success: function(response){
-      $('#'+table+'_load_main_div').html(response);
-      form_height_load();
+      if(obj.scroll) scroll(obj.table+'_table_main_div');
+      $('#'+obj.table+'_load_main_div').html(response);
+      if(obj.height) form_height_load();
     }
   });
+}
+
+function load(table, request){
+  var obj = {
+    table: table,
+    request: request,
+    start: goto(table),
+    scroll: false,
+    height: true
+  };
+  __load(obj);
 }
 
 function search(table, request){
-  var search = $('#'+table+'_search_field').val() || '';
-  var go = 0;
-  var limit = $('#'+table+'_limit_field').val() || '';
-  $.ajax({
-    url: js_domain+request,
-    type: 'post',
-    data: {
-      proc: 'manager',
-      table: table,
-      search: search,
-      start: go,
-      limit: limit
-    },
-    success: function(response){
-      $('#'+table+'_load_main_div').html(response);
-    }
-  });
+  var obj = {
+    table: table,
+    request: request,
+    start: 0,
+    scroll: false,
+    height: false
+  };
+  __load(obj);
 }
 
 function limit(table, request){
-  var search = $('#'+table+'_search_field').val() || '';
-  var go = 0;
-  var limit = $('#'+table+'_limit_field').val() || '';
-  $.ajax({
-    url: js_domain+request,
-    type: 'post',
-    data: {
-      proc: 'manager',
-      table: table,
-      search: search,
-      start: go,
-      limit: limit
-    },
-    success: function(response){
-      $('#'+table+'_load_main_div').html(response);
-    }
-  });
+  var obj = {
+    table: table,
+    request: request,
+    start: 0,
+    scroll: false,
+    height: false
+  };
+  __load(obj);
 }
 
 function back_next(table, request, start){
-  var search = $('#'+table+'_search_field').val() || '';
-  var limit = $('#'+table+'_limit_field').val() || '';
-  $.ajax({
-    url: js_domain+request,
-    type: 'post',
-    data: {
-      proc: 'manager',
-      table: table,
-      search: search,
-      start: start,
-      limit: limit
-    },
-    success: function(response){
-      scroll(table+'_table_main_div');
-      $('#'+table+'_load_main_div').html(response);
-    }
-  });
+  var obj = {
+    table: table,
+    request: request,
+    start: start,
+    scroll: true,
+    height: false
+  };
+  __load(obj);
 }
 
 function go_to(table, request, page){
-  var go = $('#'+table+'_go_to_field').val() - 1;
+  var go = goto(table);
   if(go < page && go > -1){
-    var search = $('#'+table+'_search_field').val() || '';
-    var limit = $('#'+table+'_limit_field').val() || '';
-    $.ajax({
-      url: js_domain+request,
-      type: 'post',
-      data: {
-        proc: 'manager',
-        table: table,
-        search: search,
-        start: go,
-        limit: limit
-      },
-      success: function(response){
-        scroll(table+'_table_main_div');
-        $('#'+table+'_load_main_div').html(response);
-      }
-    });
+    var obj = {
+      table: table,
+      request: request,
+      start: go,
+      scroll: true,
+      height: false
+    };
+    __load(obj);
   }
 }
 
@@ -718,11 +693,11 @@ function trigger(request){
 function alpha_event_val(form, variable, event){
   $(field(form, variable))[event](function(){
     if(!$(field(form, variable)).val()){
-      $(error(form, variable)).html(msg()+'.');
+      $(error(form, variable)).html(wNone());
     } else {
       if(variable.indexOf('email') >= 0){
         if(!email.test($(field(form, variable)).val())){
-          $(error(form, variable)).html(msg()+' with an email.');
+          $(error(form, variable)).html(msg()+wEmail());
         } else {
           $(error(form, variable)).html('');
         }
@@ -737,11 +712,11 @@ function alpha_submit_val(form, variable, chosen_class){
   $('#'+form+'_form').submit(function(){
     if(!$(field(form, variable)).val()){
       to_focus(form, variable, chosen_class);
-      $(error(form, variable)).html(msg()+'.');
+      $(error(form, variable)).html(wNone());
     } else {
       if(variable.indexOf('email') >= 0){
         if(!email.test($(field(form, variable)).val())){
-          $(error(form, variable)).html(msg()+' with an email.');
+          $(error(form, variable)).html(msg()+wEmail());
           to_focus(form, variable, chosen_class);
         }
       }
@@ -752,17 +727,17 @@ function alpha_submit_val(form, variable, chosen_class){
 function alpha_unique_event_val(form, request, id, variable, event, trim){
   $(field(form, variable))[event](function(){
     if(!$(field(form, variable)).val()){
-      $(error(form, variable)).html(msg()+'.');
+      $(error(form, variable)).html(wNone());
     } else {
       if(trim == 'username'){
         if($(field(form, variable)).val() && $(field(form, variable)).val().length <= 5){
-          $(error(form, variable)).html(msg()+' with 6 chars or above.');
+          $(error(form, variable)).html(msg()+w6Chars());
         } else {
           ajax_unique_val(form, request, id, variable, trim);
         }
       } else if(trim == 'email'){
         if(!email.test($(field(form, variable)).val())){
-          $(error(form, variable)).html(msg()+' with an email.');
+          $(error(form, variable)).html(msg()+wEmail());
         } else {
           ajax_unique_val(form, request, id, variable, trim);
         }
@@ -777,18 +752,18 @@ function alpha_unique_submit_val(form, request, id, variable, trim){
   $('#'+form+'_form').submit(function(){
     if(!$(field(form, variable)).val()){
       to_focus(form, variable);
-      $(error(form, variable)).html(msg()+'.');
+      $(error(form, variable)).html(wNone());
     } else {
       if(trim == 'username'){
         if($(field(form, variable)).val() && $(field(form, variable)).val().length <= 5){
           to_focus(form, variable);
-          $(error(form, variable)).html(msg()+' with 6 chars or above.');
+          $(error(form, variable)).html(msg()+w6Chars());
         } else {
           ajax_unique_val(form, request, id, variable, trim, 1);
         }
       } else if(trim == 'email'){
         if(!email.test($(field(form, variable)).val())){
-          $(error(form, variable)).html(msg()+' with an email.');
+          $(error(form, variable)).html(msg()+wEmail());
           to_focus(form, variable);
         } else {
           ajax_unique_val(form, request, id, variable, trim, 1);
@@ -829,7 +804,7 @@ function numeric_event_val(form, variable, event){
   $(field(form, variable))[event](function(){
     var val = sanitize($(this).val());
     if(!val || val <= 0){
-      $(error(form, variable)).html(msg()+'.');
+      $(error(form, variable)).html(wNone());
     } else {
       $(error(form, variable)).html('');
     }
@@ -841,7 +816,7 @@ function numeric_submit_val(form, variable){
     var val = sanitize($(field(form, variable)).val());
     if(!val || val <= 0){
       to_focus(form, variable);
-      $(error(form, variable)).html(msg()+'.');
+      $(error(form, variable)).html(wNone());
     }
   });
 }
@@ -849,7 +824,7 @@ function numeric_submit_val(form, variable){
 function numeric_unique_event_val(form, request, id, variable, event, trim){
   $(field(form, variable))[event](function(){
     if(!$(field(form, variable)).val() || $(field(form, variable)).val() <= 0){
-      $(error(form, variable)).html(msg()+'.');
+      $(error(form, variable)).html(wNone());
     } else {
       ajax_unique_val(form, request, id, variable, trim);
     }
@@ -860,7 +835,7 @@ function numeric_unique_submit_val(form, request, id, variable, trim){
   $('#'+form+'_form').submit(function(){
     if(!$(field(form, variable)).val() || $(field(form, variable)).val() <= 0){
       to_focus(form, variable);
-      $(error(form, variable)).html(msg()+'.');
+      $(error(form, variable)).html(wNone());
     } else {
       ajax_unique_val(form, request, id, variable, trim, 1);
     }
@@ -887,21 +862,22 @@ function pass_event_val(form, variable, type){
   $(field(form, variable)).keyup(function(){
     if(!$(field(form, variable)).val()){
       if(type){
-        $(error(form, variable)).html(msg()+'.');
+        $(error(form, variable)).html(wNone());
       }
     } else {
       if($(field(form, variable)).val().length <= 5){
-        $(error(form, variable)).html(msg()+' with 6 chars or above.');
+        $(error(form, variable)).html(msg()+w6Chars());
       } else {
         $(error(form, variable)).html('');
       }
 
-      if(($(field(form, variable)).val() || $('#'+form+'_form #confirm_input_field').val()) && $(field(form, variable)).val() != $('#'+form+'_form #confirm_input_field').val()){
+      var confirm = $('#'+form+'_form #confirm_input_field');
+      if(($(field(form, variable)).val() || confirm.val()) && $(field(form, variable)).val() != confirm.val()){
         $(field(form, variable)).css('border-color', 'red');
-        $('#'+form+'_form #confirm_input_field').css('border-color', 'red');
+        confirm.css('border-color', 'red');
       } else {
         $(field(form, variable)).css('border-color', '');
-        $('#'+form+'_form #confirm_input_field').css('border-color', '');
+        confirm.css('border-color', '');
       }
     }
   });
@@ -912,12 +888,12 @@ function pass_submit_val(form, variable, type){
     if(!$(field(form, variable)).val()){
       if(type){
         to_focus(form, variable);
-        $(error(form, variable)).html(msg()+'.');
+        $(error(form, variable)).html(wNone());
       }
     } else {
       if($(field(form, variable)).val().length <= 5){
         to_focus(form, variable);
-        $(error(form, variable)).html(msg()+' with 6 chars or above.');
+        $(error(form, variable)).html(msg()+w6Chars());
       } else {
         $(error(form, variable)).html('');
       }
@@ -929,19 +905,19 @@ function con_event_val(form, variable, type){
   $(field(form, variable)).keyup(function(){
     if(type){
       if(!$(field(form, variable)).val()){
-        $(error(form, variable)).html(msg()+'.');
+        $(error(form, variable)).html(wNone());
         return;
       } else {
         $(error(form, variable)).html('');
       }
     }
 
-    if(($(field(form, variable)).val() || $('#'+form+'_form #password_input_field').val()) && $(field(form, variable)).val() != $('#'+form+'_form #password_input_field').val()){
+    if(($(field(form, variable)).val() || $(pwd(form, variable)).val()) && $(field(form, variable)).val() != $(pwd(form, variable)).val()){
       $(field(form, variable)).css('border-color', 'red');
-      $('#'+form+'_form #password_input_field').css('border-color', 'red');
+      $(pwd(form, variable)).css('border-color', 'red');
     } else {
       $(field(form, variable)).css('border-color', '');
-      $('#'+form+'_form #password_input_field').css('border-color', '');
+      $(pwd(form, variable)).css('border-color', '');
     }
   });
 }
@@ -951,20 +927,20 @@ function con_submit_val(form, variable, type){
     if(type){
       if(!$(field(form, variable)).val()){
         to_focus(form, variable);
-        $(error(form, variable)).html(msg()+'.');
+        $(error(form, variable)).html(wNone());
         return;
       } else {
         $(error(form, variable)).html('');
       }
     }
 
-    if(($('#'+form+'form #'+variable+'_input_field').val() || $('#'+form+'_form #password_input_field').val()) && $(field(form, variable)).val() != $('#'+form+'_form #password_input_field').val()){
+    if(($('#'+form+'form #'+variable+'_input_field').val() || $(pwd(form, variable)).val()) && $(field(form, variable)).val() != $(pwd(form, variable)).val()){
       to_focus(form, variable);
       $(field(form, variable)).css('border-color', 'red');
-      $('#'+form+'_form #password_input_field').css('border-color', 'red');
+      $(pwd(form, variable)).css('border-color', 'red');
     } else {
       $(field(form, variable)).css('border-color', '');
-      $('#'+form+'_form #password_input_field').css('border-color', '');
+      $(pwd(form, variable)).css('border-color', '');
     }
   });
 }
@@ -1089,7 +1065,7 @@ function upload_submit_val(form, variable, type){
     if(!upload_obj[form][variable].file_arr.filter(string).length){
       if(type){
         to_focus(form, variable);
-        $(error(form, variable)).html(msg()+'.');
+        $(error(form, variable)).html(wNone());
         $(error(form, variable)).css('top', '22px');
       }
     } else {
@@ -1108,16 +1084,17 @@ function form_submit(_table, _request, _act, _form, id, _url, _post_form, _post_
 
   $('#'+_form+'_form').submit(function(){
     if(submit == true){
-      $('#'+_form+'_notice_main_div').html(js_notice_fine).delay().fadeIn();
+      var notice = $('#'+_form+'_notice_main_div');
+      notice.html(js_notice_fine).delay().fadeIn();
 
       var FormValAfter = '';
-      $('#'+_form+'_form .input_field').each(function(){
+      notice.each(function(){
         FormValAfter += $(this).val();
       });
 
       if(FormValBefore == FormValAfter && upload == false){
         setTimeout(function(){
-          $('#'+_form+'_notice_main_div').html(js_notice_no).delay(js_delay).fadeOut(js_fadeout);
+          notice.html(js_notice_no).delay(js_delay).fadeOut(js_fadeout);
         }, js_timeout);
         delete submit; delete upload;
       } else {
@@ -1222,10 +1199,34 @@ function field(form, variable){
   return '#'+form+'_form #'+variable+'_input_field';
 }
 
+function pwd(form, variable){
+  return '#'+form+'_form #password_input_field';
+}
+
+function prev(form, variable, id){
+  return '#'+form+'_form #'+variable+'_prev_'+id;
+}
+
+function goto(table){
+  return $('#'+table+'_go_to_field').val() - 1;
+}
+
 function error(form, variable){
   return '#'+form+'_form #'+variable+'_err_main_div';
 }
 
 function msg(){
   return 'Please fill out this field';
+}
+
+function wNone(){
+  return msg()+'.';
+}
+
+function wEmail(){
+  return ' with an email.';
+}
+
+function w6Chars(){
+  return ' with 6 chars or above.';
 }
