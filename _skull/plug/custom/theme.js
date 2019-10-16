@@ -530,7 +530,7 @@ function del(table, request, id, val = ''){
         if(!val){
           setTimeout(function(){
             if(form_current() == 'form0'){
-              form_close(table, request);
+              form0_close(table, request);
             } else {
               load(table, request);
             }
@@ -1003,6 +1003,25 @@ function upload_preview(prev, extension, id, remove, upload = ''){
   return html;
 }
 
+function uploaded_preview(table, request, _act, form, variable, id, target){
+  for(var key in target){
+    var _target = target[key];
+    var name = _target.substr(_target.lastIndexOf('/') + 1);
+    var ext = name.substr(name.lastIndexOf('.') + 1);
+
+    act = _act;
+    var remove = "del_box('"+table+"', '"+request+"', '"+name+"', '"+id+"', 1)";
+
+    var prev = '';
+    if(!prev) prev = preview_image(ext, to_url(_target));
+    if(!prev) prev = preview_audio(ext, to_url(_target), name);
+    if(!prev) prev = preview_video(ext, to_url(_target));
+
+    var html = upload_preview(prev, ext, name.replace('.', ''), remove);
+    $('#'+form+'_form #'+variable+'_prev').append(html);
+  }
+}
+
 function upload_event_val(table, request, _act, form, variable, event, upload_type, upload_by, multi, type, id){
   if(typeof upload_obj[form] == 'undefined'){
     upload_obj[form] = {};
@@ -1193,6 +1212,26 @@ function sanitize(str){
   str = str.replace(js_currency, '');
   str = str.replace('%', '');
   return str;
+}
+
+function first(focus){
+  var form_name = form_current();
+  form_name = (form_name)? form_name+'_load' : 'content_main';
+  if(focus == 0){
+    var input = $('.'+form_name+'_div .input_field:first');
+    input.focus();
+    var val = input.val();
+    input.val('');
+    input.val(val);
+  } else {
+    setTimeout(function(){
+      if(focus == 1){
+        $('.'+form_name+'_div .chosen-container input:first').focus();
+      } else {
+        $('.'+form_name+'_div .cke_skin_kama:first').focus();
+      }
+    }, js_timeout);
+  }
 }
 
 function field(form, variable){

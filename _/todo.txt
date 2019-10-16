@@ -133,7 +133,7 @@ Todo:
 
 *** Created function for '#'+form+'_form #password_input_field', '#'+form+'_form #'+variable+'_prev_'+id and created generic function for actions like load, search, limit and etc. - Done.
 
-*** Use only one script tag for a specific component.
+*** Use only one script tag for a specific component and moved html.php function form_close js to theme and named it as first() because the function about focus on the very first element in a form. - Done.
 
 *** Cancel should also clear preview images in upload input and clear ckeditor texts. Find function cancel(form) in theme then add the needed scripts.
 

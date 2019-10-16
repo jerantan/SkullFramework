@@ -51,74 +51,56 @@ class field extends html{
 
   function alpha_event_val($event, $var){
     ?>
-      <script>
-        alpha_event_val('<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $event; ?>');
-      </script>
+      alpha_event_val('<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $event; ?>');
     <?php
   }
 
   function alpha_submit_val($var){
     $chosen_class = (isset($this->chosen))? '_chosen input' : '';
     ?>
-      <script>
-        alpha_submit_val('<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $chosen_class; ?>');
-      </script>
+      alpha_submit_val('<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $chosen_class; ?>');
     <?php
   }
 
   function alpha_unique_event_val($event, $var, $trim){
     ?>
-      <script>
-        alpha_unique_event_val('<?php echo $this->form; ?>', '<?php echo $this->request; ?>', '<?php echo $this->id; ?>', '<?php echo $var; ?>', '<?php echo $event; ?>', '<?php echo $trim; ?>');
-      </script>
+      alpha_unique_event_val('<?php echo $this->form; ?>', '<?php echo $this->request; ?>', '<?php echo $this->id; ?>', '<?php echo $var; ?>', '<?php echo $event; ?>', '<?php echo $trim; ?>');
     <?php
   }
 
   function alpha_unique_submit_val($var, $trim){
     ?>
-      <script>
-        alpha_unique_submit_val('<?php echo $this->form; ?>', '<?php echo $this->request; ?>', '<?php echo $this->id; ?>', '<?php echo $var; ?>', '<?php echo $trim; ?>');
-      </script>
+      alpha_unique_submit_val('<?php echo $this->form; ?>', '<?php echo $this->request; ?>', '<?php echo $this->id; ?>', '<?php echo $var; ?>', '<?php echo $trim; ?>');
     <?php
   }
 
   function numeric_val($type, $var){
     ?>
-      <script>
-        numeric_val('<?php echo $type; ?>', '<?php echo $this->form; ?>', '<?php echo $var; ?>');
-      </script>
+      numeric_val('<?php echo $type; ?>', '<?php echo $this->form; ?>', '<?php echo $var; ?>');
     <?php
   }
 
   function numeric_event_val($event, $var){
     ?>
-      <script>
-        numeric_event_val('<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $event; ?>');
-      </script>
+      numeric_event_val('<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $event; ?>');
     <?php
   }
 
   function numeric_submit_val($var){
     ?>
-      <script>
-        numeric_submit_val('<?php echo $this->form; ?>', '<?php echo $var; ?>');
-      </script>
+      numeric_submit_val('<?php echo $this->form; ?>', '<?php echo $var; ?>');
     <?php
   }
 
   function numeric_unique_event_val($event, $var, $trim){
     ?>
-      <script>
-        numeric_unique_event_val('<?php echo $this->form; ?>', '<?php echo $this->request; ?>', '<?php echo $this->id; ?>', '<?php echo $var; ?>', '<?php echo $event; ?>', '<?php echo $trim; ?>');
-      </script>
+      numeric_unique_event_val('<?php echo $this->form; ?>', '<?php echo $this->request; ?>', '<?php echo $this->id; ?>', '<?php echo $var; ?>', '<?php echo $event; ?>', '<?php echo $trim; ?>');
     <?php
   }
 
   function numeric_unique_submit_val($var, $trim){
     ?>
-      <script>
-        numeric_unique_submit_val('<?php echo $this->form; ?>', '<?php echo $this->request; ?>', '<?php echo $this->id; ?>', '<?php echo $var; ?>', '<?php echo $trim; ?>');
-      </script>
+      numeric_unique_submit_val('<?php echo $this->form; ?>', '<?php echo $this->request; ?>', '<?php echo $this->id; ?>', '<?php echo $var; ?>', '<?php echo $trim; ?>');
     <?php
   }
 
@@ -148,8 +130,10 @@ class field extends html{
       $var = $this->variable($label);
       $this->text_field($var, $val);
       // Validation
-      $this->alpha_event_val('keyup', $var);
-      $this->alpha_submit_val($var);
+      $this->openJS();
+        $this->alpha_event_val('keyup', $var);
+        $this->alpha_submit_val($var);
+      $this->closeJS();
     $this->field_frame_close($var);
   }
 
@@ -160,9 +144,11 @@ class field extends html{
       $trim = $this->trim($var);
       $this->text_field($var, $val);
       // Validation
-      $this->alpha_unique_event_val('keyup', $var, $trim);
-      $this->alpha_unique_event_val('change', $var, $trim);
-      $this->alpha_unique_submit_val($var, $trim);
+      $this->openJS();
+        $this->alpha_unique_event_val('keyup', $var, $trim);
+        $this->alpha_unique_event_val('change', $var, $trim);
+        $this->alpha_unique_submit_val($var, $trim);
+      $this->closeJS();
     $this->field_frame_close($var);
   }
 
@@ -192,8 +178,10 @@ class field extends html{
       $var = $this->variable($label);
       $this->textarea_field($var, $val);
       // Validation
-      $this->alpha_event_val('keyup', $var);
-      $this->alpha_submit_val($var);
+      $this->openJS();
+        $this->alpha_event_val('keyup', $var);
+        $this->alpha_submit_val($var);
+      $this->closeJS();
     $this->field_frame_close($var);
   }
 
@@ -240,8 +228,10 @@ class field extends html{
       $var = $this->variable($label);
       $this->dropdown_field($var, $arr_val, $arr_opt, $sel);
       // Validation
-      $this->alpha_event_val('change', $var);
-      $this->alpha_submit_val($var);
+      $this->openJS();
+        $this->alpha_event_val('change', $var);
+        $this->alpha_submit_val($var);
+      $this->closeJS();
     $this->field_frame_close($var);
   }
 
@@ -274,13 +264,8 @@ class field extends html{
 
       <script>
         $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_input_field').chosen({ allow_single_deselect: true });
+        <?php if($_POST['type']) $this->alpha_event_val('change', $var); ?>
       </script>
-
-      <?php
-      if($_POST['type']){
-        $this->alpha_event_val('change', $var);
-      }
-      ?>
     <?php
     } else {
       $opt = '';
@@ -323,9 +308,11 @@ class field extends html{
         $this->chosen_addon($var, 1);
       $this->group_frame_close();
       // Validation
-      $this->chosen = 1;
-        $this->alpha_submit_val($var);
-      unset($this->chosen);
+      $this->openJS();
+        $this->chosen = 1;
+          $this->alpha_submit_val($var);
+        unset($this->chosen);
+      $this->closeJS();
     $this->field_frame_close($var);
   }
 
@@ -347,7 +334,9 @@ class field extends html{
       $var = $this->variable($label);
       $this->number_field($var, $val);
       // Validation
-      $this->numeric_val('number', $var);
+      $this->openJS();
+        $this->numeric_val('number', $var);
+      $this->closeJS();
     $this->field_frame_close($var);
   }
 
@@ -357,10 +346,12 @@ class field extends html{
       $var = $this->variable($label);
       $this->number_field($var, $val);
       // Validation
-      $this->numeric_val('number', $var);
-      $this->numeric_event_val('keyup', $var);
-      $this->numeric_event_val('change', $var);
-      $this->numeric_submit_val($var);
+      $this->openJS();
+        $this->numeric_val('number', $var);
+        $this->numeric_event_val('keyup', $var);
+        $this->numeric_event_val('change', $var);
+        $this->numeric_submit_val($var);
+      $this->closeJS();
     $this->field_frame_close($var);
   }
 
@@ -371,10 +362,12 @@ class field extends html{
       $trim = $this->trim($var);
       $this->number_field($var, $val);
       // Validation
-      $this->numeric_val('number', $var);
-      $this->numeric_unique_event_val('keyup', $var, $trim);
-      $this->numeric_unique_event_val('change', $var, $trim);
-      $this->numeric_unique_submit_val($var, $trim);
+      $this->openJS();
+        $this->numeric_val('number', $var);
+        $this->numeric_unique_event_val('keyup', $var, $trim);
+        $this->numeric_unique_event_val('change', $var, $trim);
+        $this->numeric_unique_submit_val($var, $trim);
+      $this->closeJS();
     $this->field_frame_close($var);
   }
 
@@ -404,7 +397,9 @@ class field extends html{
       $var = $this->variable($label);
       $this->measure_field($var, $val);
       // Validation
-      $this->numeric_val('measure', $var);
+      $this->openJS();
+        $this->numeric_val('measure', $var);
+      $this->closeJS();
     $this->field_frame_close($var);
   }
 
@@ -414,10 +409,12 @@ class field extends html{
       $var = $this->variable($label);
       $this->measure_field($var, $val);
       // Validation
-      $this->numeric_val('measure', $var);
-      $this->numeric_event_val('keyup', $var);
-      $this->numeric_event_val('change', $var);
-      $this->numeric_submit_val($var);
+      $this->openJS();
+        $this->numeric_val('measure', $var);
+        $this->numeric_event_val('keyup', $var);
+        $this->numeric_event_val('change', $var);
+        $this->numeric_submit_val($var);
+      $this->closeJS();
     $this->field_frame_close($var);
   }
 
@@ -429,7 +426,9 @@ class field extends html{
       $var = $this->variable($label);
       $this->text_field($var, $val);
       // Validation
-      $this->numeric_val('amount', $var);
+      $this->openJS();
+        $this->numeric_val('amount', $var);
+      $this->closeJS();
     $this->field_frame_close($var);
   }
 
@@ -439,10 +438,12 @@ class field extends html{
       $var = $this->variable($label);
       $this->text_field($var, $val);
       // Validation
-      $this->numeric_val('amount', $var);
-      $this->numeric_event_val('keyup', $var);
-      $this->numeric_event_val('change', $var);
-      $this->numeric_submit_val($var);
+      $this->openJS();
+        $this->numeric_val('amount', $var);
+        $this->numeric_event_val('keyup', $var);
+        $this->numeric_event_val('change', $var);
+        $this->numeric_submit_val($var);
+      $this->closeJS();
     $this->field_frame_close($var);
   }
 
@@ -454,7 +455,9 @@ class field extends html{
       $var = $this->variable($label);
       $this->text_field($var, $val);
       // Validation
-      $this->numeric_val('percent', $var);
+      $this->openJS();
+        $this->numeric_val('percent', $var);
+      $this->closeJS();
     $this->field_frame_close($var);
   }
 
@@ -464,10 +467,12 @@ class field extends html{
       $var = $this->variable($label);
       $this->text_field($var, $val);
       // Validation
-      $this->numeric_val('percent', $var);
-      $this->numeric_event_val('keyup', $var);
-      $this->numeric_event_val('change', $var);
-      $this->numeric_submit_val($var);
+      $this->openJS();
+        $this->numeric_val('percent', $var);
+        $this->numeric_event_val('keyup', $var);
+        $this->numeric_event_val('change', $var);
+        $this->numeric_submit_val($var);
+      $this->closeJS();
     $this->field_frame_close($var);
   }
 
@@ -532,9 +537,11 @@ class field extends html{
       $this->group_frame_close();
       $this->date_picker($var, $min, $max, $format, $month, $year);
       // Validation
-      $this->alpha_event_val('keyup', $var);
-      $this->alpha_event_val('change', $var);
-      $this->alpha_submit_val($var);
+      $this->openJS();
+        $this->alpha_event_val('keyup', $var);
+        $this->alpha_event_val('change', $var);
+        $this->alpha_submit_val($var);
+      $this->closeJS();
     $this->field_frame_close($var);
   }
 
@@ -552,33 +559,25 @@ class field extends html{
 
   function pass_event_val($var, $type = ''){
     ?>
-      <script>
-        pass_event_val('<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $type; ?>');
-      </script>
+      pass_event_val('<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $type; ?>');
     <?php
   }
 
   function pass_submit_val($var, $type = ''){
     ?>
-      <script>
-        pass_submit_val('<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $type; ?>');
-      </script>
+      pass_submit_val('<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $type; ?>');
     <?php
   }
 
   function con_event_val($var, $type = ''){
     ?>
-      <script>
-        con_event_val('<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $type; ?>');
-      </script>
+      con_event_val('<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $type; ?>');
     <?php
   }
 
   function con_submit_val($var, $type = ''){
     ?>
-      <script>
-        con_submit_val('<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $type; ?>');
-      </script>
+      con_submit_val('<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $type; ?>');
     <?php
   }
 
@@ -588,8 +587,10 @@ class field extends html{
       $var = $this->variable($label);
       $this->pass_field($var);
       // Validation
-      $this->pass_event_val($var);
-      $this->pass_submit_val($var);
+      $this->openJS();
+        $this->pass_event_val($var);
+        $this->pass_submit_val($var);
+      $this->closeJS();
     $this->field_frame_close($var);
 
     $label = 'Confirm';
@@ -597,8 +598,10 @@ class field extends html{
       $var = $this->variable($label);
       $this->pass_field($var);
       // Validation
-      $this->con_event_val($var);
-      $this->con_submit_val($var);
+      $this->openJS();
+        $this->con_event_val($var);
+        $this->con_submit_val($var);
+      $this->closeJS();
     $this->field_frame_close($var);
   }
 
@@ -608,8 +611,10 @@ class field extends html{
       $var = $this->variable($label);
       $this->pass_field($var);
       // Validation
-      $this->pass_event_val($var, 1);
-      $this->pass_submit_val($var, 1);
+      $this->openJS();
+        $this->pass_event_val($var, 1);
+        $this->pass_submit_val($var, 1);
+      $this->closeJS();
     $this->field_frame_close($var);
 
     $label = 'Confirm';
@@ -617,8 +622,10 @@ class field extends html{
       $var = $this->variable($label);
       $this->pass_field($var);
       // Validation
-      $this->con_event_val($var, 1);
-      $this->con_submit_val($var, 1);
+      $this->openJS();
+        $this->con_event_val($var, 1);
+        $this->con_submit_val($var, 1);
+      $this->closeJS();
     $this->field_frame_close($var);
   }
 
@@ -638,23 +645,7 @@ class field extends html{
       <div id="<?php echo $var; ?>_prev" class="row"></div>
         <?php if($this->act != 'insert'){ ?>
         <script>
-          var target = <?php echo json_encode(array_reverse(glob($this->path($this->upload_by, $this->table, $this->id).'*.*'))); ?>;
-          for(var key in target){
-            var _target = target[key];
-            var name = _target.substr(_target.lastIndexOf('/') + 1);
-            var ext = name.substr(name.lastIndexOf('.') + 1);
-
-            act = '<?php echo $this->act; ?>';
-            var remove = "del_box('<?php echo $this->table; ?>', '<?php echo $this->request; ?>', '"+name+"', '<?php echo $this->id; ?>', 1)";
-
-            var prev = '';
-            if(!prev) prev = preview_image(ext, to_url(_target));
-            if(!prev) prev = preview_audio(ext, to_url(_target), name);
-            if(!prev) prev = preview_video(ext, to_url(_target));
-
-            var html = upload_preview(prev, ext, name.replace('.', ''), remove);
-            $('#<?php echo $this->form; ?>_form #<?php echo $var; ?>_prev').append(html);
-          }
+          uploaded_preview('<?php echo $this->table; ?>', '<?php echo $this->request; ?>', '<?php echo $this->act; ?>', '<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $this->id; ?>', <?php echo json_encode(array_reverse(glob($this->path($this->upload_by, $this->table, $this->id).'*.*'))); ?>);
         </script>
         <?php } ?>
     <?php
@@ -662,17 +653,13 @@ class field extends html{
 
   function upload_event_val($event, $var, $multi, $type = ''){
     ?>
-      <script>
-        upload_event_val('<?php echo $this->table; ?>', '<?php echo $this->request; ?>', '<?php echo $this->act; ?>', '<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $event; ?>', '<?php echo $this->upload_type; ?>', '<?php echo $this->upload_by; ?>', '<?php echo $multi; ?>', '<?php echo $type; ?>', '<?php echo $this->id; ?>');
-      </script>
+      upload_event_val('<?php echo $this->table; ?>', '<?php echo $this->request; ?>', '<?php echo $this->act; ?>', '<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $event; ?>', '<?php echo $this->upload_type; ?>', '<?php echo $this->upload_by; ?>', '<?php echo $multi; ?>', '<?php echo $type; ?>', '<?php echo $this->id; ?>');
     <?php
   }
 
   function upload_submit_val($var, $type = ''){
     ?>
-      <script>
-        upload_submit_val('<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $type; ?>');
-      </script>
+      upload_submit_val('<?php echo $this->form; ?>', '<?php echo $var; ?>', '<?php echo $type; ?>');
     <?php
   }
 
@@ -687,8 +674,10 @@ class field extends html{
       $var = $this->variable($label);
       $this->upload_field($var, $multi);
       // Validation
-      $this->upload_event_val('change', $var, $multi);
-      $this->upload_submit_val($var);
+      $this->openJS();
+        $this->upload_event_val('change', $var, $multi);
+        $this->upload_submit_val($var);
+      $this->closeJS();
     $this->field_frame_close($var);
   }
 
@@ -703,9 +692,19 @@ class field extends html{
       $var = $this->variable($label);
       $this->upload_field($var, $multi);
       // Validation
-      $this->upload_event_val('change', $var, $multi, 1);
-      $this->upload_submit_val($var, 1);
+      $this->openJS();
+        $this->upload_event_val('change', $var, $multi, 1);
+        $this->upload_submit_val($var, 1);
+      $this->closeJS();
     $this->field_frame_close($var);
+  }
+
+  function openJS(){
+    echo '<script>';
+  }
+
+  function closeJS(){
+    echo '</script>';
   }
 }
 ?>
