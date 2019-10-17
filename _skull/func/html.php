@@ -169,7 +169,19 @@ class html extends proc{
             } else {
               $title = ucfirst($field_name);
             }
-            $title = '<a href="" style="color: #FFF">'.$title.'</a><b class="triup"></b><b class="tridown"></b>';
+            $title = '
+              <a href="">
+                '.$title.'
+                <span class="tri_span">
+                  <span class="triup_span">
+                    <b class="triup"></b>
+                  </span>
+                  <span class="tridown_span">
+                    <b class="tridown"></b>
+                  </span>
+                </span>
+              </a>
+            ';
 
             switch($align){
               case 'left':

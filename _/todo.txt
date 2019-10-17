@@ -135,7 +135,7 @@ Todo:
 
 *** Use only one script tag for a specific component and moved html.php function form_close js to theme and named it as first() because the function about focus on the very first element in a form. - Done.
 
-*** Use localStorage for display limit.
+*** Use localStorage for display limit. - Done.
 
 *** Add sort feature in tables.
 

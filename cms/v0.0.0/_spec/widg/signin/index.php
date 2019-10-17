@@ -29,11 +29,13 @@ $var = $this->variable($label);
 <?php } ?>
 
 <?php
-// $label Validation
-$this->alpha_event_val('keyup', $var);
-$this->alpha_submit_val($var);
-// Passwrod Validation
-$this->alpha_event_val('keyup', 'password');
-$this->alpha_submit_val('password');
+$this->openJS();
+  // $label Validation
+  $this->alpha_event_val('keyup', $var);
+  $this->alpha_submit_val($var);
+  // Passwrod Validation
+  $this->alpha_event_val('keyup', 'password');
+  $this->alpha_submit_val('password');
+$this->closeJS();
 ?>
 <?php include 'plug/custom/theme.php'; ?>

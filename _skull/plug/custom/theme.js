@@ -409,7 +409,7 @@ function file_added(form, request, variable, id, val){
 /* ------------------------------------------------------------------------------------------------ */
 function __load(obj){
   var search = $('#'+obj.table+'_search_field').val() || '';
-  var limit = localStorage.limit || $('#'+obj.table+'_limit_field').val() || '';
+  var limit = (typeof obj.limit != 'undefined')? $('#'+obj.table+'_limit_field').val() || '' : localStorage.limit || '';
   $.ajax({
     url: js_domain+obj.request,
     type: 'post',
@@ -457,7 +457,8 @@ function limit(table, request){
     request: request,
     start: 0,
     scroll: false,
-    height: false
+    height: false,
+    limit: true
   };
   __load(obj);
 }

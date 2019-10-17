@@ -377,7 +377,7 @@ class field extends html{
     if($this->act != 'view'){
     ?>
       <input type="text" value="<?php echo $val; ?>" name="<?php echo $var; ?>" id="<?php echo $var; ?>_input_field" class="form-control input-sm input_field" autocomplete="off">
-      <span id="<?php echo $var; ?>_measure_field_span" class="measure_field_span">
+      <span id="<?php echo $var; ?>_measure_field_span" class="tri_span">
         <span class="triup_span" onclick="triup('<?php echo $this->form; ?>', '<?php echo $var; ?>')">
           <b class="triup"></b>
         </span>
