@@ -135,6 +135,10 @@ Todo:
 
 *** Use only one script tag for a specific component and moved html.php function form_close js to theme and named it as first() because the function about focus on the very first element in a form. - Done.
 
+*** Use localStorage for display limit.
+
+*** Add sort feature in tables.
+
 *** Cancel should also clear preview images in upload input and clear ckeditor texts. Find function cancel(form) in theme then add the needed scripts.
 
 *** Try loading the assets like chosen.js or chosen.css without using inject function, just load it directly as html script.
@@ -150,10 +154,6 @@ Todo:
 *** Change structure, pattern it from skull js, but maybe retain the htaccess and version location inside cms/ because of the share directory (uploaded files).
 
 *** Try to analyse making the page as widget.
-
-*** Add sort feature in tables.
-
-*** Use localStorage for display limit.
 
 *** Update datepicket to datetimepicker.
 

@@ -409,7 +409,7 @@ function file_added(form, request, variable, id, val){
 /* ------------------------------------------------------------------------------------------------ */
 function __load(obj){
   var search = $('#'+obj.table+'_search_field').val() || '';
-  var limit = $('#'+obj.table+'_limit_field').val() || '';
+  var limit = localStorage.limit || $('#'+obj.table+'_limit_field').val() || '';
   $.ajax({
     url: js_domain+obj.request,
     type: 'post',
@@ -424,6 +424,7 @@ function __load(obj){
       if(obj.scroll) scroll(obj.table+'_table_main_div');
       $('#'+obj.table+'_load_main_div').html(response);
       if(obj.height) form_height_load();
+      if(limit && localStorage.limit != limit) localStorage.limit = limit;
     }
   });
 }
