@@ -410,6 +410,7 @@ function file_added(form, request, variable, id, val){
 function __load(obj){
   var search = $('#'+obj.table+'_search_field').val() || '';
   var limit = (typeof obj.limit != 'undefined')? $('#'+obj.table+'_limit_field').val() || '' : localStorage.limit || '';
+  var sort = (typeof obj.sort == 'undefined')? $('#'+obj.table+'_table_main_div td a[class*="sort_"]').attr('id') || '' : obj.sort;
   $.ajax({
     url: js_domain+obj.request,
     type: 'post',
@@ -418,7 +419,8 @@ function __load(obj){
       table: obj.table,
       search: search,
       start: obj.start,
-      limit: limit
+      limit: limit,
+      sort: sort
     },
     success: function(response){
       if(obj.scroll) scroll(obj.table+'_table_main_div');
@@ -486,6 +488,18 @@ function go_to(table, request, page){
     };
     __load(obj);
   }
+}
+
+function sort(table, request, field_sort){
+  var obj = {
+    table: table,
+    request: request,
+    start: 0,
+    scroll: false,
+    height: false,
+    sort: field_sort
+  };
+  __load(obj);
 }
 
 function active(table, request, val, id){

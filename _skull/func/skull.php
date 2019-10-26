@@ -284,6 +284,35 @@ class skull{
   }
 
   function paging($field, $clause){
+    // Sort
+    $find = 'order by ';
+    $findPos = strpos($clause, $find);
+    if($findPos !== false){
+      $afterFind = substr($clause, $findPos + strlen($find), strlen($clause));
+      $afterFindArr = explode(' ', $afterFind);
+      $sortField = $afterFindArr[0];
+      if(isset($afterFindArr[1])){
+        $sortType = ($afterFindArr[1] == 'desc')? $afterFindArr[1] : 'asc';
+      } else {
+        $sortType = 'asc';
+      }
+    } else {
+      $sortField = ''; $sortType = '';
+    }
+
+    if($this->sort){
+      // Trigger Sort
+      $sortArr = explode('_sort_', $this->sort);
+      if($sortField == $sortArr[0] || $sortArr[1]){
+        $replace = (isset($afterFindArr[1]))? $find.$sortField.' '.$sortType : $find.$sortField;
+        $clause = ($sortType)? str_replace($replace, $find.$sortArr[0].' '.$sortArr[1], $clause) : $clause.' '.$find.$sortArr[0].' '.$sortArr[1];
+        $sortField = $sortArr[0]; $sortType = $sortArr[1];
+      }
+    }
+
+    $this->sortField = $sortField; $this->sortType = $sortType;
+    // /Sort
+
     $start = $this->start;
     if(!$this->limit){
       $arr = $this->limit_arr();
@@ -322,10 +351,10 @@ class skull{
     $pages = ceil($total / $limit);
     $arr = array(
       'start' => $start,
-      'back' => $back,
-      'next' => $next,
+      'back'  => $back,
+      'next'  => $next,
       'total' => $total,
-      'list' => $list,
+      'list'  => $list,
       'count' => $count,
       'pages' => $pages
     );

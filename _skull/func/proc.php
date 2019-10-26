@@ -31,6 +31,7 @@ class proc extends skull{
     $this->search = $_POST['search'];
     $this->start = $_POST['start'];
     $this->limit = $_POST['limit'];
+    $this->sort = $_POST['sort'];
     $this->widget('manager');
   }
 

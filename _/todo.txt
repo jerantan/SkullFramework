@@ -137,7 +137,7 @@ Todo:
 
 *** Use localStorage for display limit. - Done.
 
-*** Add sort feature in tables.
+*** Add sort feature in tables. - Done.
 
 *** Cancel should also clear preview images in upload input and clear ckeditor texts. Find function cancel(form) in theme then add the needed scripts.
 

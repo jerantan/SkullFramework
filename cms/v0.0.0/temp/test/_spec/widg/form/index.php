@@ -52,14 +52,14 @@ $this->form_open($this->table);
     $this->div_close();
     $this->div_open(12, 12);
       $this->number_required('Another : Number', '');
-    $this->div_close();
+    $this->div_close();*/
     $this->div_open(12, 12);
       $this->measure('Measure', '');
     $this->div_close();
     $this->div_open(12, 12);
       $this->measure_required('Another : Measure', '');
     $this->div_close();
-    $this->div_open(12, 12);
+    /*$this->div_open(12, 12);
       $this->amount('Amount', '');
     $this->div_close();
     $this->div_open(12, 12);

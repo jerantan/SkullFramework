@@ -169,8 +169,28 @@ class html extends proc{
             } else {
               $title = ucfirst($field_name);
             }
+
+            if($field_name == $this->sortField){
+              $sortType = ' sort_'.$this->sortType;
+              switch($this->sortType){
+                case 'asc':
+                  $nextSort = 'desc';
+                break;
+                case 'desc':
+                  $nextSort = '';
+                break;
+                default:
+                  $nextSort = 'asc';
+                break;
+              }
+            } else {
+              $sortType = ''; $nextSort = 'asc';
+            }
+
+            $onSort = "'$this->table', '$this->request', '{$field_name}_sort_{$nextSort}'";
+            $sortID = ($sortType)? 'id="'.$field_name.'_sort_'.$this->sortType.'"' : '';
             $title = '
-              <a href="">
+              <a '.$sortID.' class="pointer'.$sortType.'" onclick="sort('.$onSort.');">
                 '.$title.'
                 <span class="tri_span">
                   <span class="triup_span">

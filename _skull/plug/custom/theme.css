@@ -285,9 +285,28 @@ html, body{
   white-space: nowrap;
 }
 
-td a,
-td a:hover{
+td a, td a:hover{
   color: #FFF;
+}
+
+td a .triup_span:hover, td a .tridown_span:hover{
+  background: transparent;
+}
+
+.sort_asc .tridown_span{
+  display: none;
+}
+
+.sort_asc .triup{
+  top: 7px;
+}
+
+.sort_desc .triup_span{
+  display: none;
+}
+
+.sort_desc .tridown{
+  top: -2px;
 }
 
 /* Anchor
