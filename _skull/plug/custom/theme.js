@@ -271,21 +271,7 @@ function format(type, val){
 // Upload
 /* ------------------------------------------------------------------------------------------------ */
 function file_remove(form, variable, id, type, animate = ''){
-  var _upload_obj = upload_obj[form][variable];
-  _upload_obj.file_arr[id] = '';
-  if(animate){
-    $(prev(form, variable, id)).delay(js_delay).fadeOut(js_fadeout);
-    setTimeout(function(){
-      $(prev(form, variable, id)).remove();
-      if(type){
-        if(!_upload_obj.file_arr.filter(string).length && !_upload_obj.uip_count){
-          $(error(form, variable)).html(wNone());
-          $(error(form, variable)).css('top', '22px');
-        }
-      }
-      form_height_load();
-    }, 2000);
-  } else {
+  var prevRemove = function(){
     $(prev(form, variable, id)).remove();
     if(type){
       if(!_upload_obj.file_arr.filter(string).length && !_upload_obj.uip_count){
@@ -294,6 +280,17 @@ function file_remove(form, variable, id, type, animate = ''){
       }
     }
     form_height_load();
+  };
+
+  var _upload_obj = upload_obj[form][variable];
+  _upload_obj.file_arr[id] = '';
+  if(animate){
+    $(prev(form, variable, id)).delay(js_delay).fadeOut(js_fadeout);
+    setTimeout(function(){
+      prevRemove();
+    }, 2000);
+  } else {
+    prevRemove();
   }
 }
 
@@ -594,6 +591,12 @@ function scroll(id){
 }
 
 function cancel(form){
+  if(typeof upload_obj[form] != 'undefined'){
+    $('#'+form+'_form div[id*="_prev_"]').remove();
+    for(var variable in upload_obj[form]){
+      upload_obj[form][variable].file_arr = [];
+    }
+  }
   $('#'+form+'_form .input_field').css('border-color', '#CCC');
   $('#'+form+'_form .err_main_div').html('');
 }
@@ -638,12 +641,13 @@ function inject(file){
   switch(ext){
     case 'js':
       elem = document.createElement('script');
-        elem.src = file;
+      elem.src = file;
+      elem.async = false;
     break;
     case 'css':
       elem = document.createElement('link');
-        elem.href = file;
-        elem.rel = 'stylesheet';
+      elem.href = file;
+      elem.rel = 'stylesheet';
     break;
   }
   document.getElementsByTagName('head')[0].appendChild(elem);
@@ -867,7 +871,7 @@ function date_picker(form, variable, min, max, format, month, year){
       maxDate: ((max)? new Date(max) : ''),
       minDate: ((min)? new Date(min) : '')
     });
-  }, js_timeout * 2);
+  }, js_timeout);
 
   $('#'+form+'_form #'+variable+'_addon_main_link').click(function(){
     $(field(form, variable)).focus();

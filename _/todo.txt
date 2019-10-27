@@ -3,6 +3,10 @@ Other:
 *** Update load() to manager(), its because the functionality is only to load manager widget so I have to specify the name to manager() not in general load() because its is not made to load any widget of anything else just manager widget. - Retain load() because this should be overidden in the specific module from php and js to load any widget.
 
 *** If logout or incative user change url to cms.com/login/ and title to Log-in then after logging-in use referer variable to redirect to the recent page. - Not necessary.
+
+*** Check active and inactive if it is waiting for ajax response. This should not wait just update from x to check and vise versa to avoid loading the whole data again every click. - Leave this as is, the reason behind is that to let the data reloaded to always get the updated set because there are instances where multiple users are in the same table. So users always get fresh and updated data.
+
+*** Use localStorage for active or inactive fields that customizes table display so every user can custom their table set or display. - Leave this as is, the reason is that admin or any user who is allowed should can access this feature to prevent exposing sensitive data.
 ---
 
 
@@ -139,13 +143,9 @@ Todo:
 
 *** Add sort feature in tables. - Done.
 
-*** Cancel should also clear preview images in upload input and clear ckeditor texts. Find function cancel(form) in theme then add the needed scripts.
+*** Cancel should also clear preview images in upload input and clear ckeditor texts. Find function cancel(form) in theme then add the needed scripts. Ckeditor should not included because I've read the todo and realized that ckeditor was removed due to serious issues. - Done.
 
-*** Try loading the assets like chosen.js or chosen.css without using inject function, just load it directly as html script.
-
-*** Check active and inactive if it is waiting for ajax response. This should not wait just update from x to check and vise versa to avoid loading the whole data again every click.
-
-*** Use localStorage for active or inactive fields that customizes table display so every user can custom their table set or display.
+*** Try loading the assets like chosen.js or chosen.css without using inject function, just load it directly as html script. Added async false in script tag and fix alignment of function inject script in theme.js. - Done.
 
 *** Update plug/custom to plug/theme
 
