@@ -1244,11 +1244,7 @@ function first(focus){
     input.val(val);
   } else {
     setTimeout(function(){
-      if(focus == 1){
-        $('.'+form_name+'_div .chosen-container input:first').focus();
-      } else {
-        $('.'+form_name+'_div .cke_skin_kama:first').focus();
-      }
+      $('.'+form_name+'_div .chosen-container input:first').focus();
     }, js_timeout);
   }
 }

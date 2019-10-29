@@ -155,6 +155,8 @@ Todo:
 
 *** Move trigger because not working if the page navigation is not loaded because page limit is more than data count. - Done.
 
+*** Removed the remaining script for ckeditor which was in the function first in theme.js. - Done.
+
 *** Update plug/custom to plug/theme
 
 *** Update skullframework/cms to skullframework/app
