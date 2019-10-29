@@ -347,7 +347,7 @@ class html extends proc{
 
   function add_record($table, $request, $type, $caption){
     ?>
-      <a href="<?php $this->link("$request#$table#add"); ?>" id="<?php echo $table; ?>_add_record_link" class="add_record_link" onclick="form0_open('<?php echo $table; ?>', '<?php echo $request; ?>', 'insert'); return false" <?php if(!$caption){ ?> data-toggle="tooltip" data-placement="top" title="Add Record" <?php } ?>>
+      <a href="<?php $this->link("$request#$table/add"); ?>" id="<?php echo $table; ?>_add_record_link" class="add_record_link" onclick="form0_open('<?php echo $table; ?>', '<?php echo $request; ?>', 'insert'); return false" <?php if(!$caption){ ?> data-toggle="tooltip" data-placement="top" title="Add Record" <?php } ?>>
         <?php if($type){ ?>
           <i class="glyphicon glyphicon-plus-sign info"></i>
         <?php } ?>
@@ -361,7 +361,7 @@ class html extends proc{
 
   function view_record($table, $request, $id, $type, $caption = ''){
     ?>
-      <a href="<?php $this->link("$request#$table#view#$id"); ?>" onclick="form0_open('<?php echo $table; ?>', '<?php echo $request; ?>', 'view', '<?php echo $id; ?>'); return false" <?php if(!$caption){ ?> data-toggle="tooltip" data-placement="top" title="View Record" <?php } ?>>
+      <a href="<?php $this->link("$request#$table/view/$id"); ?>" onclick="form0_open('<?php echo $table; ?>', '<?php echo $request; ?>', 'view', '<?php echo $id; ?>'); return false" <?php if(!$caption){ ?> data-toggle="tooltip" data-placement="top" title="View Record" <?php } ?>>
         <?php if($type){ ?>
           <i class="glyphicon glyphicon-folder-open" style="color: orange"></i>
         <?php } ?>
@@ -372,7 +372,7 @@ class html extends proc{
 
   function update_record($table, $request, $id, $type, $caption = ''){
     ?>
-      <a href="<?php $this->link("$request#$table#update#$id"); ?>" onclick="form0_open('<?php echo $table; ?>', '<?php echo $request; ?>', 'update', '<?php echo $id; ?>'); return false" <?php if(!$caption){ ?> data-toggle="tooltip" data-placement="top" title="Update Record" <?php } ?>>
+      <a href="<?php $this->link("$request#$table/update/$id"); ?>" onclick="form0_open('<?php echo $table; ?>', '<?php echo $request; ?>', 'update', '<?php echo $id; ?>'); return false" <?php if(!$caption){ ?> data-toggle="tooltip" data-placement="top" title="Update Record" <?php } ?>>
         <?php if($type){ ?>
           <i class="glyphicon glyphicon-pencil fine"></i>
         <?php } ?>
@@ -394,7 +394,7 @@ class html extends proc{
 
   function setup($table, $request, $type, $caption){
     ?>
-      <a href="<?php $this->link("$request#$table#setup"); ?>" onclick="form1_open('<?php echo $table; ?>', '<?php echo $request; ?>'); return false" <?php if(!$caption){ ?> data-toggle="tooltip" data-placement="top" title="Delete Record" <?php } ?>>
+      <a href="<?php $this->link("$request#$table/setup"); ?>" onclick="form1_open('<?php echo $table; ?>', '<?php echo $request; ?>'); return false" <?php if(!$caption){ ?> data-toggle="tooltip" data-placement="top" title="Delete Record" <?php } ?>>
         <?php if($type){ ?>
           <i class="glyphicon glyphicon-cog"></i>
         <?php } ?>
@@ -639,13 +639,15 @@ class html extends proc{
             <a class="btn btn-sm btn_prop" onclick="go_to('<?php echo $this->table; ?>', '<?php echo $this->request; ?>', '<?php echo $pages; ?>'); return false">Go</a>
           </div>
         </div>
-        <script>
-          if(hash[0] == '<?php echo $this->table; ?>'){
-            trigger('<?php echo $this->request; ?>');
-          }
-        </script>
       <?php
     }
+    echo "
+      <script>
+        if(hash[0] == '$this->table'){
+          trigger('$this->request');
+        }
+      </script>
+    ";
     $this->clear();
   }
 

@@ -5,7 +5,7 @@ var email = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 hash = location.hash;
 if(hash){
   hash = hash.replace('#', '');
-  hash = hash.split('#');
+  hash = hash.split('/');
 } else {
   hash = [];
 }
@@ -642,7 +642,6 @@ function inject(file){
     case 'js':
       elem = document.createElement('script');
       elem.src = file;
-      elem.async = false;
     break;
     case 'css':
       elem = document.createElement('link');
@@ -871,7 +870,7 @@ function date_picker(form, variable, min, max, format, month, year){
       maxDate: ((max)? new Date(max) : ''),
       minDate: ((min)? new Date(min) : '')
     });
-  }, js_timeout);
+  }, js_timeout * 2);
 
   $('#'+form+'_form #'+variable+'_addon_main_link').click(function(){
     $(field(form, variable)).focus();
@@ -1127,11 +1126,11 @@ function form_submit(_table, _request, _act, _form, id, _url, _post_form, _post_
       notice.html(js_notice_fine).delay().fadeIn();
 
       var FormValAfter = '';
-      notice.each(function(){
+      $('#'+_form+'_form .input_field').each(function(){
         FormValAfter += $(this).val();
       });
 
-      if(FormValBefore == FormValAfter && upload == false){
+      if(!FormValBefore || FormValBefore == FormValAfter && upload == false){
         setTimeout(function(){
           notice.html(js_notice_no).delay(js_delay).fadeOut(js_fadeout);
         }, js_timeout);
