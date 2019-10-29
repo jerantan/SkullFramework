@@ -653,7 +653,7 @@ class html extends proc{
 
   function inject($widget){
     $path = str_replace('index.php', '', $widget);
-    $full = $path.'plug/custom/theme';
+    $full = $path.'plug/theme/theme';
     $url = $this->url($full);
     if(file_exists($full.'.js')){ ?><script> inject('<?php echo $url.'.js'; ?>'); </script><?php }
     if(file_exists($full.'.css')){ ?><script> inject('<?php echo $url.'.css'; ?>'); </script><?php }

@@ -23,21 +23,21 @@ Add lines:
        </Directory>
 </VirtualHost>
 <VirtualHost *:80>
-       DocumentRoot "C:/_/JAT/skullframework/cms/"
-       ServerName cms.com
-       <Directory "C:/_/JAT/skullframework/cms/">
+       DocumentRoot "C:/_/JAT/skullframework/app/"
+       ServerName app.com
+       <Directory "C:/_/JAT/skullframework/app/">
               Options Indexes FollowSymLinks Includes ExecCGI
               AllowOverride All
               Require all granted
        </Directory>
 </VirtualHost>
 <VirtualHost *:443>
-       DocumentRoot "C:/_/JAT/skullframework/cms/"
-       ServerName cms.com
+       DocumentRoot "C:/_/JAT/skullframework/app/"
+       ServerName app.com
        SSLEngine On
        SSLCertificateFile "C:/xampp/apache/conf/ssl.crt/server.crt"
        SSLCertificateKeyFile "C:/xampp/apache/conf/ssl.key/server.key"
-       <Directory "C:/_/JAT/skullframework/cms/">
+       <Directory "C:/_/JAT/skullframework/app/">
               Options Indexes FollowSymLinks Includes ExecCGI
               AllowOverride All
               Require all granted
@@ -56,11 +56,11 @@ php_value upload_max_filesize 300M
 
 Add lines:
 127.0.0.1       skull.com
-127.0.0.1       cms.com
+127.0.0.1       app.com
 
 3. Restart Apache
 
-4. Open skullframework\cms\.htaccess
+4. Open skullframework\app\.htaccess
 
 #---------
 #Edit v0.0.0 which refers to the build of App you want to use.
@@ -84,10 +84,10 @@ RewriteRule (.*) - [E=skull_root:%{DOCUMENT_ROOT}skullframework/_skull/]
 RewriteRule (.*) - [E=skull_domain://%{HTTP_HOST}/skullframework/_skull/]
 
 #App Vars
-RewriteRule (.*) - [E=root:%{DOCUMENT_ROOT}skullframework/cms/%{ENV:build}/]
-RewriteRule (.*) - [E=domain://%{HTTP_HOST}/skullframework/cms/]
+RewriteRule (.*) - [E=root:%{DOCUMENT_ROOT}skullframework/app/%{ENV:build}/]
+RewriteRule (.*) - [E=domain://%{HTTP_HOST}/skullframework/app/]
 #---------
 
-5. Open browser and visit http://cms.com or https://cms.com. These are both working because of enabling VirtualHost *:80 and VirtualHost *:443
+5. Open browser and visit http://app.com or https://app.com. These are both working because of enabling VirtualHost *:80 and VirtualHost *:443
 
-6. If has errors check skullframework\cms\v0.0.0\_spec\func\config.php
+6. If has errors check skullframework\app\v0.0.0\_spec\func\config.php

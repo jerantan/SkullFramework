@@ -17,9 +17,9 @@
     });
   </script>
   <!-- Skull Custom -->
-  <?php include skull_root.'plug/custom/theme.php'; ?>
-  <script src="<?php echo skull_domain; ?>plug/custom/theme.js"></script>
-  <link href="<?php echo skull_domain; ?>plug/custom/theme.css" rel="stylesheet">
+  <?php include skull_root.'plug/theme/theme.php'; ?>
+  <script src="<?php echo skull_domain; ?>plug/theme/theme.js"></script>
+  <link href="<?php echo skull_domain; ?>plug/theme/theme.css" rel="stylesheet">
   <!-- Header Custom -->
   <?php include 'plug/custom/theme.php'; ?>
   <link href="<?php echo domain.build.'/'; ?>_spec/widg/header/plug/custom/theme.css" rel="stylesheet">

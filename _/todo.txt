@@ -157,9 +157,9 @@ Todo:
 
 *** Removed the remaining script for ckeditor which was in the function first in theme.js. - Done.
 
-*** Update plug/custom to plug/theme
+*** Update plug/custom to plug/theme. - Done.
 
-*** Update skullframework/cms to skullframework/app
+*** Update skullframework/cms to skullframework/app. - Done.
 
 *** Change structure, pattern it from skull js, but maybe retain the htaccess and version location inside cms/ because of the share directory (uploaded files).
 
