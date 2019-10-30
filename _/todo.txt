@@ -2,7 +2,7 @@ Other:
 ---
 *** Update load() to manager(), its because the functionality is only to load manager widget so I have to specify the name to manager() not in general load() because its is not made to load any widget of anything else just manager widget. - Retain load() because this should be overidden in the specific module from php and js to load any widget.
 
-*** If logout or incative user change url to cms.com/login/ and title to Log-in then after logging-in use referer variable to redirect to the recent page. - Not necessary.
+*** If logout or incative user change url to app.com/login/ and title to Log-in then after logging-in use referer variable to redirect to the recent page. - Not necessary.
 
 *** Check active and inactive if it is waiting for ajax response. This should not wait just update from x to check and vise versa to avoid loading the whole data again every click. - Leave this as is, the reason behind is that to let the data reloaded to always get the updated set because there are instances where multiple users are in the same table. So users always get fresh and updated data.
 
@@ -161,7 +161,7 @@ Todo:
 
 *** Update skullframework/cms to skullframework/app. - Done.
 
-*** Change structure, pattern it from skull js, but maybe retain the htaccess and version location inside cms/ because of the share directory (uploaded files).
+*** Change structure, pattern it from skull js, but maybe retain the htaccess and version location inside app/ because of the share directory (uploaded files).
 
 *** Try to analyse making the page as widget.
 

@@ -3,7 +3,6 @@ class spec extends field{
   function __construct(){
     // Initialize sql class
     $this->sql = new sql;
-
     $sql = $this->sql;
     $sql->field = 'name, level, active';
     $sql->table = 'user';
@@ -21,7 +20,6 @@ class spec extends field{
       )';
       $sql->query($query);
     }
-
     if(method_exists($this, 'init')) $this->init();
   }
 }
