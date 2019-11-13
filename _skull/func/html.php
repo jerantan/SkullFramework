@@ -147,7 +147,8 @@ class html extends proc{
           <?php $this->limit(); ?>
         </div>
         <div class="col-xs-6 align_right">
-          <?php $this->add_record($this->table, $this->request, 0, 'Add Record'); ?>
+          <span class="_opt"><?php $this->option(); ?></span>
+          <span class="_add"><?php $this->add_record($this->table, $this->request, 0, 'Add Record'); ?></span>
         </div>
       </div>
     <?php
@@ -156,7 +157,7 @@ class html extends proc{
   function table_body($rule){
     $this->table_open();
       $this->tr_open(1);
-        $this->td('#');
+        $this->check();
           foreach($this->field_orig_arr as $field_name){
             if(isset($rule[$field_name]['align'])){
               $align = $rule[$field_name]['align'];
@@ -345,7 +346,7 @@ class html extends proc{
     <?php
   }
 
-  function add_record($table, $request, $type, $caption){
+  function add_record($table, $request, $type, $caption = ''){
     ?>
       <a href="<?php $this->link("$request#$table/add"); ?>" id="<?php echo $table; ?>_add_record_link" class="add_record_link" onclick="form0_open('<?php echo $table; ?>', '<?php echo $request; ?>', 'insert'); return false" <?php if(!$caption){ ?> data-toggle="tooltip" data-placement="top" title="Add Record" <?php } ?>>
         <?php if($type){ ?>
@@ -560,6 +561,22 @@ class html extends proc{
     <?php
   }
 
+  function check(){
+    ?>
+      <td>
+        <?php if($this->table != 'field'){ ?>
+          <select class="check_field" onchange="check(this, '<?php echo $this->table; ?>')">
+            <?php foreach($this->check_arr() as $val){ ?>
+              <option><?php echo $val; ?></option>
+            <?php } ?>
+          </select>
+        <?php } else { ?>
+          #
+        <?php } ?>
+      </td>
+    <?php
+  }
+
   function active($val, $id){
     ?>
       <td>
@@ -582,6 +599,12 @@ class html extends proc{
         <?php $this->delete_record($this->table, $this->request, $val, $id, 1); ?>
       </td>
     <?php
+  }
+
+  function option(){
+    $this->add_record($this->table, $this->request, 1);
+    $this->active(1, ''); $this->active(0, '');
+    $this->delete_record($this->table, $this->request, '', '', 1);
   }
 
   function del_box(){

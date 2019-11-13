@@ -75,6 +75,11 @@ html, body{
   bottom: 5px;
 }
 
+.check_field{
+  width: 31px;
+  color: #333;
+}
+
 /* Modal Form
 /* ------------------------------------------------------------------------------------------------ */
 .form0_prop{
@@ -176,7 +181,11 @@ html, body{
   display: none;
 }
 
-.form1_load_div #field_add_record_link{
+.form1_load_div ._add{
+  display: none;
+}
+
+._opt{
   display: none;
 }
 

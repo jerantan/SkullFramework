@@ -216,6 +216,10 @@ class skull{
     return array('10', '25', '50', '100');
   }
 
+  function check_arr(){
+    return array('#', 'Check All', 'Uncheck All');
+  }
+
   function active_arr(){
     $val = array('1', '0');
     $opt = array('Yes', 'No');

@@ -462,6 +462,22 @@ function limit(table, request){
   __load(obj);
 }
 
+function check(self, table){
+  var val = $(self).val();
+  if(val == '#'){
+    $('#'+table+'_load_main_div ._add').show();
+    $('#'+table+'_load_main_div ._opt').hide();
+  } else {
+    $('#'+table+'_load_main_div ._opt').show();
+    $('#'+table+'_load_main_div ._add').hide();
+
+    $($('#'+table+'_load_main_div ._opt a[onclick*="active"]')[0]).attr({'data-toggle': 'tooltip', 'data-placement': 'top', 'data-original-title': 'Activate Selected'});
+    $($('#'+table+'_load_main_div ._opt a[onclick*="active"]')[1]).attr({'data-toggle': 'tooltip', 'data-placement': 'top', 'data-original-title': 'Deactivate Selected'});
+    $('#'+table+'_load_main_div ._opt a[onclick*="del_box"]').attr('data-original-title', 'Delete Selected');
+    $('[data-toggle="tooltip"]').tooltip();
+  }
+}
+
 function back_next(table, request, start){
   var obj = {
     table: table,

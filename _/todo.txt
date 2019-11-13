@@ -169,6 +169,8 @@ Todo:
 
 *** Extend table functions to add multiple selection to delete using checkbox.
 
+*** Move tooltip script at the bottom part because it is redandunt.
+
 *** Update datepicker to datetimepicker.
 
 *** Add datetimepicker from and to and add field in user form, to have time limit for user access.
